@@ -1,0 +1,20 @@
+{
+  "name": "rs_lang_team96",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/svr-by/RS_Lang_team96.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/svr-by/RS_Lang_team96/issues"
+  },
+  "homepage": "https://github.com/svr-by/RS_Lang_team96#readme"
+}
