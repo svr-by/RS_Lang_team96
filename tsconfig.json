@@ -12,7 +12,7 @@
     "sourceMap": true,
     "outDir": "dist",
     "removeComments": true,
-    "noEmit": true,
+    // "noEmit": true,
     "noEmitOnError": true,
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
