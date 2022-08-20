@@ -1,6 +1,8 @@
+import LayoutTextBook from '../textbook/layoutTextBook';
+
 class App {
   async render() {
-    console.log('Hello from App');
+    new LayoutTextBook().renderTextBook();
   }
 }
 
