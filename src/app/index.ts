@@ -1,6 +1,8 @@
+import Games from './games/games';
+
 class App {
   async render() {
-    console.log('Hello from App');
+    new Games(document.body).render();
   }
 }
 

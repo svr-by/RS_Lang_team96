@@ -1,0 +1,340 @@
+/*-----------Game-Audio-levels--------------------------*/
+
+.main__games__audio-challange-levels,
+.main__games__sprint-levels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 400px;
+}
+
+.main__games__audio-challange-levels__head,
+.main__games__sprint-levels__head {
+  font-family: 'Kalam';
+  font-size: 4rem;
+}
+
+.main__games__audio-challange-levels__title,
+.main__games__sprint-levels__title {
+  font-family: 'Roboto';
+  font-size: 2rem;
+}
+
+.main__games__audio-challange-levels__container,
+.main__games__sprint-levels__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 400px;
+}
+
+.main__games__audio-challange-levels-group,
+.main__games__sprint-levels-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 40px;
+  font-family: 'Roboto';
+  font-weight: 900;
+  font-size: 1.5rem;
+  border-radius: 50%;
+  background-color: #A63E00;
+  cursor: pointer;
+}
+
+.main__games__audio-challange-levels-group:hover,
+.main__games__sprint-levels-group:hover {
+  transform: scale(1.5);
+  transition: 0.4s;
+}
+
+.main__games__audio-challange-levels__back,
+.main__games__sprint-levels__back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 120px;
+  font-family: 'Roboto';
+  font-weight: 900;
+  font-size: 1.2rem;
+  background-color: #A63E00;
+  box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
+  cursor: pointer;
+}
+
+
+.lvl-1 {
+  background: #6051c340
+}
+
+.lvl-2 {
+  background: #6051c350
+}
+
+.lvl-3 {
+  background: #6051c360
+}
+
+.lvl-4 {
+  background: #6051c370
+}
+
+.lvl-5 {
+  background: #6051c380
+}
+
+.lvl-6 {
+  background: #6051c390
+}
+
+
+/*-----------Game-Audio--------------------------*/
+
+.main__games__audio-challange {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding-top: 5%;
+  height: 100%;
+}
+
+.main__games__audio-challange-img {
+  width: 390px;
+  height: 260px;
+  background-color: #7375D8;
+}
+
+.sprint__button-sound,
+.main__games__audio-challange-buttonSound {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: no-repeat center url('../src/assets/svg/sound.svg');
+  background-color: #7375D8;
+  box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
+  cursor: pointer;
+}
+
+.sprint__button-sound:hover,
+.main__games__audio-challange-levels__button:hover,
+.main__games__audio-challange-buttonSound:hover,
+.main__games__audio-challange-buttonSkip:hover,
+.main__games__audio-challange-buttonNext:hover,
+.main__games__audio-challange__buttonAnswer:hover {
+  transform: translateY(-3px);
+  transition: 0.4s;
+  box-shadow: 10px 10px 10px 0px rgba(34, 60, 80, 0.55);
+}
+
+.sprint__button-sound:active,
+.main__games__audio-challange-levels__button:active,
+.main__games__audio-challange-buttonSound:active,
+.main__games__audio-challange-buttonSkip:active,
+.main__games__audio-challange-buttonNext:active,
+.main__games__audio-challange__buttonAnswer:active {
+  transform: translateY(5px);
+  transition: 0.1s;
+  box-shadow: 0px 0px 0px 0px rgba(34, 60, 80, 0.55);
+}
+
+
+.main__games__audio-challange-buttonSkip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 40px;
+  font-size: 1.7rem;
+  border-radius: 10px;
+  background-color: #FF4040;
+  box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
+  cursor: pointer;
+}
+
+.main__games__audio-challange-buttonNext {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 40px;
+  font-size: 1.7rem;
+  border-radius: 10px;
+  background-color: #00CC00;
+  box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
+  cursor: pointer;
+}
+
+.main__games__audio-challange__answerBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.main__games__audio-challange__buttonAnswer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 240px;
+  height: 80px;
+  font-size: 1.5rem;
+  text-align: center;
+  border-radius: 10px;
+  background-color: #7375D8;
+  box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
+  cursor: pointer;
+}
+
+.main__games__audio-challange__buttonAnswer[data-answer='yes'] {
+  font-size: 1.3rem;
+  background-color: #00CC00;
+  transform: scale(1.5);
+  transition: 0.2s;
+}
+
+.main__games__audio-challange__buttonAnswer[data-answer='no'] {
+  background-color: #FF0000;
+}
+
+.main__games__audio-challange__containerPanel {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 0 20px;
+  width: 100%;
+}
+
+.main__games__audio-challange__containerPanel-buttonVolume {
+  width: 30px;
+  height: 30px;
+  background: no-repeat center url('../src/assets/svg/volume.svg');
+  cursor: pointer;
+}
+
+.main__games__audio-challange__containerPanel-buttonVolume:hover {
+  transform: scale(1.5);
+  transition: 0.4s;
+}
+
+.main__games__audio-challange__containerPanel-counter {
+  font-size: 2rem;
+}
+
+.main__games__audio-challange__containerPanel-fullScreen {
+  width: 30px;
+  height: 30px;
+  background: no-repeat center url('../src/assets/svg/maximize.svg');
+  cursor: pointer;
+}
+
+.main__games__audio-challange__containerPanel-fullScreen:hover {
+  transform: scale(1.5);
+  transition: 0.4s;
+}
+
+/*------------------------Game-Audio-result--------------------------*/
+
+.result {
+  display: flex;
+  flex-direction: column;
+}
+
+.result__title {
+  font-family: 'Kalam';
+  font-size: 4rem;
+  text-align: center;
+}
+
+.result__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.result__statistic-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.result__accuracy,
+.result__accuracyNum {
+  align-self: center;
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-size: 4rem;
+}
+
+.result__correct,
+.result__in-row,
+.result__wrong {
+  align-self: center;
+  font-family: 'Roboto';
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+.result-answer,
+.result-wrong {
+  display: flex;
+  flex-direction: column;
+}
+
+.result-answer__plus,
+.result-wrong__minus {
+  width: 35px;
+  height: 35px;
+  align-self: center;
+
+}
+
+.result-answer__plus {
+  background-image: url(../src/assets/svg/success.svg);
+}
+
+.result-wrong__minus {
+  background-image: url(../src/assets/svg/wrong.svg);
+}
+
+.result-answer__name,
+.result-wrong__name {
+  align-self: center;
+}
+
+.result-answer__container,
+.result-wrong__container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 32px;
+  font-size: 1.5rem;
+}
+
+.result__sound-wrong,
+.result__sound-answer {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+  border-radius: 2px;
+  background-color: #8c7ecc9a;
+  background-image: url(../src/assets/svg/speaker.svg);
+}
+
+.result__sound-wrong:hover,
+.result__sound-answer:hover {
+  background-color: #67E667;
+}
+
+.result__sound-wrong:active,
+.result__sound-answer:active {
+  background-color: #67E667;
+  transform: scale(0.8);
+}
+
+.result__word {
+  margin-right: 5px;
+}
