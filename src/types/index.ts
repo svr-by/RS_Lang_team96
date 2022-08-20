@@ -55,3 +55,19 @@ export type AggregatedWordsResponse = {
   paginatedResults: AggregatedWord[];
   totalCount: [{ count: number }];
 };
+
+export type UserStatistics = {
+  id: string;
+  learnedWords: number;
+  optional?: Record<string, unknown>;
+};
+
+export type UserStatisticsParams = Pick<UserStatistics, 'learnedWords' | 'optional'>;
+
+export type UserSettings = {
+  id: string;
+  wordsPerDay: number;
+  optional?: Record<string, unknown>;
+};
+
+export type UserSettingsParams = Pick<UserSettings, 'wordsPerDay' | 'optional'>;

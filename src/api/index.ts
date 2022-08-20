@@ -7,10 +7,14 @@ import {
   UserWordParams,
   AggregatedWordsParams,
   AggregatedWordsResponse,
+  UserStatistics,
+  UserStatisticsParams,
+  UserSettings,
+  UserSettingsParams,
 } from '../types/index';
 
 class API {
-  base = 'http://localhost:3000';
+  base = 'http://localhost:8000';
   wordsEndpoint = `${this.base}/words`;
   usersEndpoint = `${this.base}/users`;
   signinEndpoint = `${this.base}/signin`;
@@ -243,6 +247,68 @@ class API {
         'Content-Type': 'application/json',
         /*eslint-enable */
       },
+    });
+    return response.ok ? response.json() : response.text();
+  }
+
+  async getUserStatistics(userId: string): Promise<UserStatistics | string> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/statistics`, {
+      method: 'GET',
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+    });
+    return response.ok ? response.json() : response.text();
+  }
+
+  async upsertUserStatistics(userId: string, body: UserStatisticsParams): Promise<UserStatistics | string> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/statistics`, {
+      method: 'PUT',
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+      body: JSON.stringify(body),
+    });
+    return response.ok ? response.json() : response.text();
+  }
+
+  async getUserSettings(userId: string): Promise<UserSettings | string> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/settings`, {
+      method: 'GET',
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+    });
+    return response.ok ? response.json() : response.text();
+  }
+
+  async upsertUserSettings(userId: string, body: UserSettingsParams): Promise<UserSettings | string> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/settings`, {
+      method: 'PUT',
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+      body: JSON.stringify(body),
     });
     return response.ok ? response.json() : response.text();
   }
