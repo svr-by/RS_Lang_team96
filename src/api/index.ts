@@ -1,4 +1,13 @@
-import { Word, User, UserParams, SignInResponse } from '../types/index';
+import {
+  Word,
+  User,
+  UserParams,
+  SignInResponse,
+  UserWord,
+  UserWordParams,
+  AggregatedWordsParams,
+  AggregatedWordsResponse,
+} from '../types/index';
 
 class API {
   base = 'http://localhost:3000';
@@ -116,6 +125,126 @@ class API {
 
   private getRefreshToken() {
     return localStorage.getItem('refreshToken');
+  }
+
+  async addUserWord(userId: string, wordId: string, body: UserWordParams): Promise<UserWord | string> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
+      method: 'POST',
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+      body: JSON.stringify(body),
+    });
+    return response.ok ? response.json() : response.text();
+  }
+
+  async getUserWords(userId: string): Promise<UserWord[] | string> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/words`, {
+      method: 'GET',
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+    });
+    return response.ok ? response.json() : response.text();
+  }
+
+  async getUserWordByID(userId: string, wordId: string): Promise<UserWord | string> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
+      method: 'GET',
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+    });
+    return response.ok ? response.json() : response.text();
+  }
+
+  async updateUserWord(userId: string, wordId: string, body: UserWordParams): Promise<UserWord | string> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
+      method: 'PUT',
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+      body: JSON.stringify(body),
+    });
+    return response.ok ? response.json() : response.text();
+  }
+
+  async deleteUserWord(userId: string, wordId: string): Promise<UserWord | string> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
+      method: 'DELETE',
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+    });
+    return response.ok ? 'The user word has been deleted' : response.text();
+  }
+
+  async getAggregatedWords(
+    userId: string,
+    wordsParams?: AggregatedWordsParams
+  ): Promise<AggregatedWordsResponse[] | string> {
+    const token = this.getToken();
+    const query = wordsParams ? this.createAggregatedWordsQuery(wordsParams) : '';
+    const response = await fetch(`${this.usersEndpoint}/${userId}/aggregatedWords${query}`, {
+      method: 'GET',
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+    });
+    return response.ok ? response.json() : response.text();
+  }
+
+  private createAggregatedWordsQuery(wordsParams: AggregatedWordsParams) {
+    const query: string[] = [];
+    if (wordsParams.group) query.push(`group=${wordsParams.group}`);
+    if (wordsParams.page) query.push(`page=${wordsParams.group}`);
+    if (wordsParams.wordsPerPage) query.push(`wordsPerPage=${wordsParams.wordsPerPage}`);
+    if (wordsParams.filter) query.push(`filter=${wordsParams.filter}`);
+    return `?${query.join('&')}`;
+  }
+
+  async getAggregatedWordsById(userId: string, wordId: string): Promise<UserWord[] | string> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/aggregatedWords/${wordId}`, {
+      method: 'GET',
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+    });
+    return response.ok ? response.json() : response.text();
   }
 }
 

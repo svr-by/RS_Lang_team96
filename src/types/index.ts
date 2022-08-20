@@ -30,3 +30,28 @@ export type SignInResponse = {
   userId: string;
   name: string;
 };
+
+export type UserWord = {
+  difficulty: string;
+  id: string;
+  wordId: string;
+  optional?: Record<string, unknown>;
+};
+
+export type UserWordParams = Pick<UserWord, 'difficulty' | 'optional'>;
+
+export interface AggregatedWord extends Word {
+  userWord?: UserWordParams;
+}
+
+export type AggregatedWordsParams = {
+  group?: number;
+  page?: number;
+  wordsPerPage?: number;
+  filter?: string;
+};
+
+export type AggregatedWordsResponse = {
+  paginatedResults: AggregatedWord[];
+  totalCount: [{ count: number }];
+};
