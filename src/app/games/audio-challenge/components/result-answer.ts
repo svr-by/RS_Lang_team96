@@ -1,6 +1,5 @@
-import BaseComponent from '../../base-сomponent';
-import IStorage from '../../../interfaces/audio-challenge-storage';
-
+import BaseComponent from 'src/app/games/utility/base_component';
+import IStorage from 'src/app/games/utility/storage';
 export default class StatWordsAnswer {
   readonly statWordsAnswer: HTMLElement;
 
@@ -12,7 +11,7 @@ export default class StatWordsAnswer {
     if (target && target.tagName === 'DIV') {
       const sound = new Audio();
       const ind = target.getAttribute('data-ind');
-      sound.src = this.storage.namesAnswerСorrectSound[+ind!];
+      sound.src = this.storage.namesAnswerCorrectSound[+ind!];
       sound.autoplay = true;
     }
   }
@@ -23,12 +22,12 @@ export default class StatWordsAnswer {
 
     new BaseComponent(this.statWordsAnswer, 'div', ['result-answer__plus']).render();
     new BaseComponent(this.statWordsAnswer, 'h2', ['result-answer__name'], 'Right').render();
-    for (let i = 0; i < this.storage.namesAnswerСorrect.length; i += 1) {
+    for (let i = 0; i < this.storage.namesAnswerCorrect.length; i += 1) {
       new BaseComponent(
         this.statWordsAnswer,
         'section',
         ['result-answer__container'],
-        `<div class = "result__sound-answer" data-ind = "${i}"></div><span class = "result__word">${this.storage.namesAnswerСorrect[i]}</span><span class = "result__translate"> - ${this.storage.namesAnswerСorrectTranslate[i]}</span>`
+        `<div class = "result__sound-answer" data-ind = "${i}"></div><span class = "result__word">${this.storage.namesAnswerCorrect[i]}</span><span class = "result__translate"> - ${this.storage.namesAnswerCorrectTranslate[i]}</span>`
       ).render();
     }
 

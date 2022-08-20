@@ -43,7 +43,7 @@ export default class ResultSprint {
       ['result__accuracyNum'],
       `<span clas = 'result__num'>${
         Math.round(
-          (this.storage.countAnswerСorrect / (this.storage.countAnswerСorrect + this.storage.countAnswerWrong)) * 100
+          (this.storage.countAnswerCorrect / (this.storage.countAnswerCorrect + this.storage.countAnswerWrong)) * 100
         ) || '0'
       }</span> %`
     ).render();
@@ -51,7 +51,7 @@ export default class ResultSprint {
       this.statisticBox,
       'div',
       ['result__correct'],
-      `<span clas = 'result__num'>${this.storage.countAnswerСorrect}</span> - Right answers`
+      `<span clas = 'result__num'>${this.storage.countAnswerCorrect}</span> - Right answers`
     ).render();
     new BaseComponent(
       this.statisticBox,
@@ -76,8 +76,8 @@ export default class ResultSprint {
       let userData = await getUserStatistics(userID, userToken);
       if (typeof userData !== 'boolean') {
         userData = (await getUserStatistics(userID, userToken)) as IStatistic;
-        userData.learnedWords += this.storage.countAnswerСorrect;
-        userData.optional.SprintCountAnswerСorrect += this.storage.countAnswerСorrect;
+        userData.learnedWords += this.storage.countAnswerCorrect;
+        userData.optional.SprintCountAnswerCorrect += this.storage.countAnswerCorrect;
         userData.optional.SprintCountAnswerWrong += this.storage.countAnswerWrong;
         if (this.storage.setInRow.size > userData.optional.SprintInRow) {
           userData.optional.SprintInRow = this.storage.setInRow.size;
@@ -85,10 +85,10 @@ export default class ResultSprint {
         const storage: IStatistic = {
           learnedWords: userData.learnedWords,
           optional: {
-            AudioCountAnswerСorrect: userData.optional.AudioCountAnswerСorrect,
+            AudioCountAnswerCorrect: userData.optional.AudioCountAnswerCorrect,
             AudioCountAnswerWrong: userData.optional.AudioCountAnswerWrong,
             AudioInRow: userData.optional.AudioInRow,
-            SprintCountAnswerСorrect: userData.optional.SprintCountAnswerСorrect,
+            SprintCountAnswerCorrect: userData.optional.SprintCountAnswerCorrect,
             SprintCountAnswerWrong: userData.optional.SprintCountAnswerWrong,
             SprintInRow: userData.optional.SprintInRow,
           },
@@ -98,18 +98,18 @@ export default class ResultSprint {
         const storage: IStatistic = {
           learnedWords: 0,
           optional: {
-            AudioCountAnswerСorrect: 0,
+            AudioCountAnswerCorrect: 0,
             AudioCountAnswerWrong: 0,
             AudioInRow: 0,
-            SprintCountAnswerСorrect: 0,
+            SprintCountAnswerCorrect: 0,
             SprintCountAnswerWrong: 0,
             SprintInRow: 0,
           },
         };
         await saveUserStatistics(userID, userToken, storage);
         userData = (await getUserStatistics(userID, userToken)) as IStatistic;
-        userData.learnedWords += this.storage.countAnswerСorrect;
-        userData.optional.SprintCountAnswerСorrect += this.storage.countAnswerСorrect;
+        userData.learnedWords += this.storage.countAnswerCorrect;
+        userData.optional.SprintCountAnswerCorrect += this.storage.countAnswerCorrect;
         userData.optional.SprintCountAnswerWrong += this.storage.countAnswerWrong;
         if (this.storage.setInRow.size > userData.optional.SprintInRow) {
           userData.optional.SprintInRow = this.storage.setInRow.size;
@@ -117,16 +117,16 @@ export default class ResultSprint {
         await saveUserStatistics(userID, userToken, userData);
       }
     } else {
-      StatisticStorage.learnedWords += this.storage.countAnswerСorrect;
-      StatisticStorage.optional.SprintCountAnswerСorrect += this.storage.countAnswerСorrect;
+      StatisticStorage.learnedWords += this.storage.countAnswerCorrect;
+      StatisticStorage.optional.SprintCountAnswerCorrect += this.storage.countAnswerCorrect;
       StatisticStorage.optional.SprintCountAnswerWrong += this.storage.countAnswerWrong;
       if (this.storage.setInRow.size > StatisticStorage.optional.SprintInRow) {
         StatisticStorage.optional.SprintInRow = this.storage.setInRow.size;
       }
     }
 
-    StatisticStorage.learnedWords += this.storage.countAnswerСorrect;
-    StatisticStorage.optional.SprintCountAnswerСorrect += this.storage.countAnswerСorrect;
+    StatisticStorage.learnedWords += this.storage.countAnswerCorrect;
+    StatisticStorage.optional.SprintCountAnswerCorrect += this.storage.countAnswerCorrect;
     StatisticStorage.optional.SprintCountAnswerWrong += this.storage.countAnswerWrong;
     if (this.storage.setInRow.size > StatisticStorage.optional.SprintInRow) {
       StatisticStorage.optional.SprintInRow = this.storage.setInRow.size;

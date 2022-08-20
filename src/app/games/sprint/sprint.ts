@@ -75,10 +75,10 @@ export default class Sprint {
           if (this.storage.inRow >= 10) {
             this.storage.score += 80;
           }
-          this.storage.countAnswerСorrect += 1;
-          this.storage.namesAnswerСorrect.push(this.currentWord.word);
-          this.storage.namesAnswerСorrectTranslate.push(this.currentWord.wordTranslate);
-          this.storage.namesAnswerСorrectSound.push(`http://localhost:8000/${this.currentWord.audio}`);
+          this.storage.countAnswerCorrect += 1;
+          this.storage.namesAnswerCorrect.push(this.currentWord.word);
+          this.storage.namesAnswerCorrectTranslate.push(this.currentWord.wordTranslate);
+          this.storage.namesAnswerCorrectSound.push(`http://localhost:8000/${this.currentWord.audio}`);
         } else {
           const sound = new Audio();
           sound.src = 'src/app/games/assets/sounds/fail.mp3';
@@ -124,10 +124,10 @@ export default class Sprint {
           if (this.storage.inRow >= 10) {
             this.storage.score += 80;
           }
-          this.storage.countAnswerСorrect += 1;
-          this.storage.namesAnswerСorrect.push(this.currentWord.word);
-          this.storage.namesAnswerСorrectTranslate.push(this.currentWord.wordTranslate);
-          this.storage.namesAnswerСorrectSound.push(`http://localhost:8000/${this.currentWord.audio}`);
+          this.storage.countAnswerCorrect += 1;
+          this.storage.namesAnswerCorrect.push(this.currentWord.word);
+          this.storage.namesAnswerCorrectTranslate.push(this.currentWord.wordTranslate);
+          this.storage.namesAnswerCorrectSound.push(`http://localhost:8000/${this.currentWord.audio}`);
         } else {
           const sound = new Audio();
           sound.src = 'src/app/games/assets/sounds/fail.mp3';
@@ -172,10 +172,10 @@ export default class Sprint {
         if (this.storage.inRow >= 10) {
           this.storage.score += 80;
         }
-        this.storage.countAnswerСorrect += 1;
-        this.storage.namesAnswerСorrect.push(this.currentWord.word);
-        this.storage.namesAnswerСorrectTranslate.push(this.currentWord.wordTranslate);
-        this.storage.namesAnswerСorrectSound.push(`http://localhost:8000/${this.currentWord.audio}`);
+        this.storage.countAnswerCorrect += 1;
+        this.storage.namesAnswerCorrect.push(this.currentWord.word);
+        this.storage.namesAnswerCorrectTranslate.push(this.currentWord.wordTranslate);
+        this.storage.namesAnswerCorrectSound.push(`http://localhost:8000/${this.currentWord.audio}`);
       } else {
         const sound = new Audio();
         sound.src = 'src/app/games/assets/sounds/fail.mp3';
@@ -219,10 +219,10 @@ export default class Sprint {
         if (this.storage.inRow >= 10) {
           this.storage.score += 80;
         }
-        this.storage.countAnswerСorrect += 1;
-        this.storage.namesAnswerСorrect.push(this.currentWord.word);
-        this.storage.namesAnswerСorrectTranslate.push(this.currentWord.wordTranslate);
-        this.storage.namesAnswerСorrectSound.push(`http://localhost:8000/${this.currentWord.audio}`);
+        this.storage.countAnswerCorrect += 1;
+        this.storage.namesAnswerCorrect.push(this.currentWord.word);
+        this.storage.namesAnswerCorrectTranslate.push(this.currentWord.wordTranslate);
+        this.storage.namesAnswerCorrectSound.push(`http://localhost:8000/${this.currentWord.audio}`);
       } else {
         const sound = new Audio();
         sound.src = 'src/app/games/assets/sounds/fail.mp3';

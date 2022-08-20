@@ -1,5 +1,5 @@
-import BaseComponent from '../../base-сomponent';
-import IStorage from '../../../interfaces/audio-challenge-storage';
+import BaseComponent from 'src/app/games/utility/base_component';
+import IStorage from 'src/app/games/utility/storage';
 
 export default class StatWordsWrong {
   readonly statWordsWrong: HTMLElement;

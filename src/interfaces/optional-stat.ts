@@ -1,8 +1,8 @@
 export default interface IOptionalStat {
-  AudioCountAnswerСorrect: number;
+  AudioCountAnswerCorrect: number;
   AudioCountAnswerWrong: number;
   AudioInRow: number;
-  SprintCountAnswerСorrect: number;
+  SprintCountAnswerCorrect: number;
   SprintCountAnswerWrong: number;
   SprintInRow: number;
 }

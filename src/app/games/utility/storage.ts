@@ -1,8 +1,8 @@
 export default interface IStorage {
-  countAnswerСorrect: number;
-  namesAnswerСorrect: string[];
-  namesAnswerСorrectTranslate: string[];
-  namesAnswerСorrectSound: string[];
+  countAnswerCorrect: number;
+  namesAnswerCorrect: string[];
+  namesAnswerCorrectTranslate: string[];
+  namesAnswerCorrectSound: string[];
   inRow: number;
   setInRow: Set<number>;
   countAnswerWrong: number;

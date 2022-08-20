@@ -1,4 +1,4 @@
-import Games from './games/games';
+import Games from 'src/app/games/games';
 
 class App {
   async render() {

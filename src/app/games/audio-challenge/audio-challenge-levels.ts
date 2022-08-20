@@ -20,10 +20,10 @@ export default class AudioChallangeLvl {
     this.container = document.createElement('section');
     this.wordsInGroup = [] as IWord[];
     this.storage = {
-      countAnswerСorrect: 0,
-      namesAnswerСorrect: [],
-      namesAnswerСorrectTranslate: [],
-      namesAnswerСorrectSound: [],
+      countAnswerCorrect: 0,
+      namesAnswerCorrect: [],
+      namesAnswerCorrectTranslate: [],
+      namesAnswerCorrectSound: [],
       inRow: 0,
       setInRow: new Set(),
       countAnswerWrong: 0,

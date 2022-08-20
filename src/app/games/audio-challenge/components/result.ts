@@ -1,11 +1,11 @@
-import BaseComponent from '../../base-сomponent';
+import BaseComponent from 'src/app/games/utility/base_component';
 import StatWordsWrong from './result-wrong';
 import StatWordsAnswer from './result-answer';
-import IStorage from '../../../interfaces/audio-challenge-storage';
-import IStatistic from '../../../interfaces/statistic';
-import StatisticStorage from '../../statistics/statistics-storage';
-import saveUserStatistics from '../../../request/put-statistics';
-import getUserStatistics from '../../../request/get-statistics';
+import IStorage from 'src/app/games/utility/storage';
+import IStatistic from 'src/interfaces/statistic';
+import StatisticStorage from 'src/app/games/utility/statistics-storage';
+import saveUserStatistics from 'src/app/games/api/put-statistics';
+import getUserStatistics from 'src/app/games/api/get-statistics';
 
 export default class Result {
   readonly result: HTMLElement;
@@ -41,13 +41,13 @@ export default class Result {
       this.statisticBox,
       'div',
       ['result__accuracyNum'],
-      `<span clas = 'result__num'>${Math.round((this.storage.countAnswerСorrect / 20) * 100)}</span> %`
+      `<span clas = 'result__num'>${Math.round((this.storage.countAnswerCorrect / 20) * 100)}</span> %`
     ).render();
     new BaseComponent(
       this.statisticBox,
       'div',
       ['result__correct'],
-      `<span clas = 'result__num'>${this.storage.countAnswerСorrect}</span> - Right answers`
+      `<span clas = 'result__num'>${this.storage.countAnswerCorrect}</span> - Right answers`
     ).render();
     new BaseComponent(
       this.statisticBox,
@@ -71,8 +71,8 @@ export default class Result {
       let userData = await getUserStatistics(userID, userToken);
       if (typeof userData !== 'boolean') {
         userData = (await getUserStatistics(userID, userToken)) as IStatistic;
-        userData.learnedWords += this.storage.countAnswerСorrect;
-        userData.optional.AudioCountAnswerСorrect += this.storage.countAnswerСorrect;
+        userData.learnedWords += this.storage.countAnswerCorrect;
+        userData.optional.AudioCountAnswerCorrect += this.storage.countAnswerCorrect;
         userData.optional.AudioCountAnswerWrong += this.storage.countAnswerWrong;
         if (this.storage.setInRow.size > userData.optional.AudioInRow) {
           userData.optional.AudioInRow = this.storage.setInRow.size;
@@ -80,10 +80,10 @@ export default class Result {
         const storage: IStatistic = {
           learnedWords: userData.learnedWords,
           optional: {
-            AudioCountAnswerСorrect: userData.optional.AudioCountAnswerСorrect,
+            AudioCountAnswerCorrect: userData.optional.AudioCountAnswerCorrect,
             AudioCountAnswerWrong: userData.optional.AudioCountAnswerWrong,
             AudioInRow: userData.optional.AudioInRow,
-            SprintCountAnswerСorrect: userData.optional.SprintCountAnswerСorrect,
+            SprintCountAnswerCorrect: userData.optional.SprintCountAnswerCorrect,
             SprintCountAnswerWrong: userData.optional.SprintCountAnswerWrong,
             SprintInRow: userData.optional.SprintInRow,
           },
@@ -93,18 +93,18 @@ export default class Result {
         const storage: IStatistic = {
           learnedWords: 0,
           optional: {
-            AudioCountAnswerСorrect: 0,
+            AudioCountAnswerCorrect: 0,
             AudioCountAnswerWrong: 0,
             AudioInRow: 0,
-            SprintCountAnswerСorrect: 0,
+            SprintCountAnswerCorrect: 0,
             SprintCountAnswerWrong: 0,
             SprintInRow: 0,
           },
         };
         await saveUserStatistics(userID, userToken, storage);
         userData = (await getUserStatistics(userID, userToken)) as IStatistic;
-        userData.learnedWords += this.storage.countAnswerСorrect;
-        userData.optional.AudioCountAnswerСorrect += this.storage.countAnswerСorrect;
+        userData.learnedWords += this.storage.countAnswerCorrect;
+        userData.optional.AudioCountAnswerCorrect += this.storage.countAnswerCorrect;
         userData.optional.AudioCountAnswerWrong += this.storage.countAnswerWrong;
         if (this.storage.setInRow.size > userData.optional.AudioInRow) {
           userData.optional.AudioInRow = this.storage.setInRow.size;
@@ -112,8 +112,8 @@ export default class Result {
         await saveUserStatistics(userID, userToken, userData);
       }
     } else {
-      StatisticStorage.learnedWords += this.storage.countAnswerСorrect;
-      StatisticStorage.optional.AudioCountAnswerСorrect += this.storage.countAnswerСorrect;
+      StatisticStorage.learnedWords += this.storage.countAnswerCorrect;
+      StatisticStorage.optional.AudioCountAnswerCorrect += this.storage.countAnswerCorrect;
       StatisticStorage.optional.AudioCountAnswerWrong += this.storage.countAnswerWrong;
       if (this.storage.setInRow.size > StatisticStorage.optional.AudioInRow) {
         StatisticStorage.optional.AudioInRow = this.storage.setInRow.size;

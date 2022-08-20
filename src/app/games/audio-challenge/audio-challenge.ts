@@ -72,10 +72,10 @@ export default class AudioChallange {
         sound.autoplay = true;
         this.storage.inRow += 1;
         this.storage.setInRow.add(this.storage.inRow);
-        this.storage.countAnswerСorrect += 1;
-        this.storage.namesAnswerСorrect.push(this.currentWord.word);
-        this.storage.namesAnswerСorrectTranslate.push(this.currentWord.wordTranslate);
-        this.storage.namesAnswerСorrectSound.push(`http://localhost:8000/${this.currentWord.audio}`);
+        this.storage.countAnswerCorrect += 1;
+        this.storage.namesAnswerCorrect.push(this.currentWord.word);
+        this.storage.namesAnswerCorrectTranslate.push(this.currentWord.wordTranslate);
+        this.storage.namesAnswerCorrectSound.push(`http://localhost:8000/${this.currentWord.audio}`);
 
         // ПЕРЕРИСОВКА
         const btnSkip: HTMLElement | null = document.querySelector('.main__games__audio-challange-buttonSkip');
