@@ -11,7 +11,7 @@ import {
   UserStatisticsParams,
   UserSettings,
   UserSettingsParams,
-} from '../types/index';
+} from 'src/types/index';
 
 class API {
   base = 'http://localhost:8000';
@@ -19,17 +19,17 @@ class API {
   usersEndpoint = `${this.base}/users`;
   signinEndpoint = `${this.base}/signin`;
 
-  async getWords(group: number, page: number): Promise<Word[]> {
+  async getWords(group: number, page: number): Promise<Word[] | string | void> {
     const response = await fetch(`${this.wordsEndpoint}?group=${group}&page=${page}`);
-    return response.json();
+    return this.handleResponse(response);
   }
 
-  async getWord(wordId: string): Promise<Word> {
+  async getWord(wordId: string): Promise<Word | string | void> {
     const response = await fetch(`${this.wordsEndpoint}/${wordId}`);
-    return response.json();
+    return this.handleResponse(response);
   }
 
-  async createUser(body: User): Promise<User | string> {
+  async createUser(body: User): Promise<User | string | void> {
     const response = await fetch(`${this.usersEndpoint}`, {
       method: 'POST',
       headers: {
@@ -39,10 +39,10 @@ class API {
       },
       body: JSON.stringify(body),
     });
-    return response.ok ? response.json() : response.text();
+    return this.handleResponse(response);
   }
 
-  async signIn(body: UserParams): Promise<SignInResponse | string> {
+  async signIn(body: UserParams): Promise<SignInResponse | string | void> {
     const response = await fetch(`${this.signinEndpoint}`, {
       method: 'POST',
       headers: {
@@ -52,13 +52,12 @@ class API {
       },
       body: JSON.stringify(body),
     });
-    return response.ok ? this.saveTokens(response) : response.text();
+    return this.handleResponse(response);
   }
 
-  async getUser(userId: string): Promise<User | string> {
+  async getUser(userId: string): Promise<User | string | void> {
     const token = this.getToken();
     const response = await fetch(`${this.usersEndpoint}/${userId}`, {
-      method: 'GET',
       headers: {
         /*eslint-disable */
         'Accept': 'application/json',
@@ -67,10 +66,10 @@ class API {
         /*eslint-enable */
       },
     });
-    return response.ok ? response.json() : response.text();
+    return this.handleResponse(response);
   }
 
-  async updateUser(userId: string, body: UserParams): Promise<User | string> {
+  async updateUser(userId: string, body: UserParams): Promise<User | string | void> {
     const token = this.getToken();
     const response = await fetch(`${this.usersEndpoint}/${userId}`, {
       method: 'PUT',
@@ -83,10 +82,10 @@ class API {
       },
       body: JSON.stringify(body),
     });
-    return response.ok ? response.json() : response.text();
+    return this.handleResponse(response);
   }
 
-  async deleteUser(userId: string): Promise<string> {
+  async deleteUser(userId: string): Promise<string | void> {
     const token = this.getToken();
     const response = await fetch(`${this.usersEndpoint}/${userId}`, {
       method: 'DELETE',
@@ -97,13 +96,12 @@ class API {
         /*eslint-enable */
       },
     });
-    return response.ok ? 'The user has been deleted' : response.text();
+    return this.handleResponse(response);
   }
 
-  async getNewTokens(userId: string): Promise<SignInResponse | string> {
+  async getNewTokens(userId: string): Promise<SignInResponse | string | void> {
     const token = this.getRefreshToken();
     const response = await fetch(`${this.usersEndpoint}/${userId}/tokens`, {
-      method: 'GET',
       headers: {
         /*eslint-disable */
         'Accept': 'application/json',
@@ -111,7 +109,208 @@ class API {
         /*eslint-enable */
       },
     });
-    return response.ok ? this.saveTokens(response) : response.text();
+    if (response) {
+      switch (response.status) {
+        case 200:
+          return this.saveTokens(response);
+        case 401:
+          return 'Unauthorized';
+        case 403:
+          return 'Forbidden';
+        default:
+          break;
+      }
+    }
+  }
+
+  async addUserWord(userId: string, wordId: string, body: UserWordParams): Promise<UserWord | string | void> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
+      method: 'POST',
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+      body: JSON.stringify(body),
+    });
+    return this.handleResponse(response);
+  }
+
+  async getUserWords(userId: string): Promise<UserWord[] | string | void> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/words`, {
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+    });
+    return this.handleResponse(response);
+  }
+
+  async getUserWordByID(userId: string, wordId: string): Promise<UserWord | string | void> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+    });
+    return this.handleResponse(response);
+  }
+
+  async updateUserWord(userId: string, wordId: string, body: UserWordParams): Promise<UserWord | string | void> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
+      method: 'PUT',
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+      body: JSON.stringify(body),
+    });
+    return this.handleResponse(response);
+  }
+
+  async deleteUserWord(userId: string, wordId: string): Promise<string | void> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
+      method: 'DELETE',
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+    });
+    return this.handleResponse(response);
+  }
+
+  async getAggregatedWords(
+    userId: string,
+    wordsParams?: AggregatedWordsParams
+  ): Promise<AggregatedWordsResponse[] | string | void> {
+    const token = this.getToken();
+    const query = wordsParams ? this.createAggregatedWordsQuery(wordsParams) : '';
+    const response = await fetch(`${this.usersEndpoint}/${userId}/aggregatedWords${query}`, {
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+    });
+    return this.handleResponse(response);
+  }
+
+  async getAggregatedWordsById(userId: string, wordId: string): Promise<UserWord[] | string | void> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/aggregatedWords/${wordId}`, {
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+    });
+    return this.handleResponse(response);
+  }
+
+  async getUserStatistics(userId: string): Promise<UserStatistics | string | void> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/statistics`, {
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+    });
+    return this.handleResponse(response);
+  }
+
+  async upsertUserStatistics(userId: string, body: UserStatisticsParams): Promise<UserStatistics | string | void> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/statistics`, {
+      method: 'PUT',
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+      body: JSON.stringify(body),
+    });
+    return this.handleResponse(response);
+  }
+
+  async getUserSettings(userId: string): Promise<UserSettings | string | void> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/settings`, {
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+    });
+    return this.handleResponse(response);
+  }
+
+  async upsertUserSettings(userId: string, body: UserSettingsParams): Promise<UserSettings | string | void> {
+    const token = this.getToken();
+    const response = await fetch(`${this.usersEndpoint}/${userId}/settings`, {
+      method: 'PUT',
+      headers: {
+        /*eslint-disable */
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        /*eslint-enable */
+      },
+      body: JSON.stringify(body),
+    });
+    return this.handleResponse(response);
+  }
+
+  private handleResponse(response: Response) {
+    if (response) {
+      switch (response.status) {
+        case 200:
+          return response.json();
+        case 204:
+          return 'Deleted';
+        case 400:
+          return 'Bad request';
+        case 401:
+          return 'Unauthorized';
+        case 403:
+          return 'Forbidden';
+        case 404:
+          return 'Not found';
+        case 422:
+          return 'Incorrect e-mail or password';
+        default:
+          break;
+      }
+    }
   }
 
   private async saveTokens(rawResponse: Response) {
@@ -131,102 +330,6 @@ class API {
     return localStorage.getItem('refreshToken');
   }
 
-  async addUserWord(userId: string, wordId: string, body: UserWordParams): Promise<UserWord | string> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
-      method: 'POST',
-      headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        /*eslint-enable */
-      },
-      body: JSON.stringify(body),
-    });
-    return response.ok ? response.json() : response.text();
-  }
-
-  async getUserWords(userId: string): Promise<UserWord[] | string> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/words`, {
-      method: 'GET',
-      headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        /*eslint-enable */
-      },
-    });
-    return response.ok ? response.json() : response.text();
-  }
-
-  async getUserWordByID(userId: string, wordId: string): Promise<UserWord | string> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
-      method: 'GET',
-      headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        /*eslint-enable */
-      },
-    });
-    return response.ok ? response.json() : response.text();
-  }
-
-  async updateUserWord(userId: string, wordId: string, body: UserWordParams): Promise<UserWord | string> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
-      method: 'PUT',
-      headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        /*eslint-enable */
-      },
-      body: JSON.stringify(body),
-    });
-    return response.ok ? response.json() : response.text();
-  }
-
-  async deleteUserWord(userId: string, wordId: string): Promise<UserWord | string> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
-      method: 'DELETE',
-      headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        /*eslint-enable */
-      },
-    });
-    return response.ok ? 'The user word has been deleted' : response.text();
-  }
-
-  async getAggregatedWords(
-    userId: string,
-    wordsParams?: AggregatedWordsParams
-  ): Promise<AggregatedWordsResponse[] | string> {
-    const token = this.getToken();
-    const query = wordsParams ? this.createAggregatedWordsQuery(wordsParams) : '';
-    const response = await fetch(`${this.usersEndpoint}/${userId}/aggregatedWords${query}`, {
-      method: 'GET',
-      headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        /*eslint-enable */
-      },
-    });
-    return response.ok ? response.json() : response.text();
-  }
-
   private createAggregatedWordsQuery(wordsParams: AggregatedWordsParams) {
     const query: string[] = [];
     if (wordsParams.group) query.push(`group=${wordsParams.group}`);
@@ -234,83 +337,6 @@ class API {
     if (wordsParams.wordsPerPage) query.push(`wordsPerPage=${wordsParams.wordsPerPage}`);
     if (wordsParams.filter) query.push(`filter=${wordsParams.filter}`);
     return `?${query.join('&')}`;
-  }
-
-  async getAggregatedWordsById(userId: string, wordId: string): Promise<UserWord[] | string> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/aggregatedWords/${wordId}`, {
-      method: 'GET',
-      headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        /*eslint-enable */
-      },
-    });
-    return response.ok ? response.json() : response.text();
-  }
-
-  async getUserStatistics(userId: string): Promise<UserStatistics | string> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/statistics`, {
-      method: 'GET',
-      headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        /*eslint-enable */
-      },
-    });
-    return response.ok ? response.json() : response.text();
-  }
-
-  async upsertUserStatistics(userId: string, body: UserStatisticsParams): Promise<UserStatistics | string> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/statistics`, {
-      method: 'PUT',
-      headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        /*eslint-enable */
-      },
-      body: JSON.stringify(body),
-    });
-    return response.ok ? response.json() : response.text();
-  }
-
-  async getUserSettings(userId: string): Promise<UserSettings | string> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/settings`, {
-      method: 'GET',
-      headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        /*eslint-enable */
-      },
-    });
-    return response.ok ? response.json() : response.text();
-  }
-
-  async upsertUserSettings(userId: string, body: UserSettingsParams): Promise<UserSettings | string> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/settings`, {
-      method: 'PUT',
-      headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        /*eslint-enable */
-      },
-      body: JSON.stringify(body),
-    });
-    return response.ok ? response.json() : response.text();
   }
 }
 
