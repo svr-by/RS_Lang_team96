@@ -8,7 +8,7 @@
 
 .nav__list {
   @include flex();
-  margin-right: auto;
+  margin: 0 auto 0 0;
   padding: 1rem;
 }
 

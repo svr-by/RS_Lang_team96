@@ -1,0 +1,51 @@
+.footer {
+  background-color: $color-black-l;
+}
+
+.footer__wrapper {
+  @include flex(space-between);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  color: $color-white;
+}
+
+.github__list {
+  @include flex();
+  margin: 0;
+  padding: 1rem;
+}
+
+.github__item {
+  list-style: none;
+}
+
+.github__link {
+  padding: 0.5rem 1rem;
+  border-radius: 0.3rem;
+  color: $color-white;
+  text-decoration: none;
+  transition: all 0.3s;
+
+  &:hover {
+    color: $color-blue;
+  }
+
+  &::before {
+    content: url('assets/img/github.svg');
+    vertical-align: middle;
+    margin-right: 0.5rem;
+  }
+
+  &:hover::before {
+    filter: invert(53%) sepia(80%) saturate(523%) hue-rotate(150deg) brightness(96%) contrast(89%);
+  }
+}
+
+.rss__img {
+  width: 100px;
+  transition: all 0.3s;
+
+  &:hover {
+    filter: invert(100%);
+  }
+}
