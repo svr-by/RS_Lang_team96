@@ -1,8 +1,8 @@
-import BaseComponent from 'src/app/games/utility/base_component';
-import AudioChallange from 'src/app/games/audio-challenge/audio-challenge';
-import IWord from 'src/interfaces/word';
-import getWords from 'src/app/games/utility/get-words';
-import IStorage from 'src/app/games/utility/storage';
+import BaseComponent from '../utility/base_component';
+import AudioChallange from '../audio-challenge/audio-challenge';
+import IWord from '../../../interfaces/word';
+import getWords from '../utility/get-words';
+import IStorage from '../utility/storage';
 
 export default class AudioChallangeLvl {
   readonly audioChallangeLvl: HTMLElement;

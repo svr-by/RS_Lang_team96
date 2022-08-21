@@ -1,7 +1,6 @@
-import BaseComponent from 'src/app/games/utility/base_component';
-import AudioChallangeLvl from 'src/app/games/audio-challenge/audio-challenge-levels';
-import SprintLvl from 'src/app/games/sprint/sprint-levels';
-import './style.scss';
+import BaseComponent from './utility/base_component';
+import AudioChallangeLvl from './audio-challenge/audio-challenge-levels';
+import SprintLvl from './sprint/sprint-levels';
 
 export default class Games {
   readonly mainGames: HTMLElement;

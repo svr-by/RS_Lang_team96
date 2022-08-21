@@ -1,8 +1,17 @@
-import Games from 'src/app/games/games';
+import Games from './games/games';
 
 class App {
+  main: HTMLElement;
+
+  constructor() {
+    this.main = document.createElement('div');
+  }
+
   async render() {
-    new Games(document.body).render();
+    document.body.appendChild(this.main);
+    this.main.classList.add('main');
+
+    new Games(this.main).render();
   }
 }
 

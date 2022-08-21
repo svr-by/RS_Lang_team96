@@ -1,11 +1,11 @@
-import BaseComponent from 'src/app/games/utility/base_component';
+import BaseComponent from '../../../games/utility/base_component';
 import StatWordsWrong from './result-wrong';
 import StatWordsAnswer from './result-answer';
-import IStorage from 'src/app/games/utility/storage';
-import IStatistic from 'src/interfaces/statistic';
-import StatisticStorage from 'src/app/games/utility/statistics-storage';
-import saveUserStatistics from 'src/app/games/api/put-statistics';
-import getUserStatistics from 'src/app/games/api/get-statistics';
+import IStorage from '../../../games/utility/storage';
+import IStatistic from '../../../../interfaces/statistic';
+import StatisticStorage from '../../../games/utility/statistics-storage';
+import saveUserStatistics from '../../../games/api/put-statistics';
+import getUserStatistics from '../../../games/api/get-statistics';
 
 export default class Result {
   readonly result: HTMLElement;

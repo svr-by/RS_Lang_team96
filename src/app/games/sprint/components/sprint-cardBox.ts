@@ -1,5 +1,5 @@
-import BaseComponent from 'src/app/games/utility/base_component';
-import IWord from 'src/interfaces/word';
+import BaseComponent from '../../../games/utility/base_component';
+import IWord from '../../../../interfaces/word';
 
 export default class CardBox {
   readonly cardBox: HTMLElement;

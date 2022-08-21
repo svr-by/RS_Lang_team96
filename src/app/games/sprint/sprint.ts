@@ -1,10 +1,9 @@
-import BaseComponent from 'src/app/games/utility/base_component';
-import playSound from 'src/app/games/utility/play-sound';
-import CardBox from 'src/app/games/sprint/components/sprint-cardBox';
-import ResultSprint from 'src/app/games/sprint/components/sprint-result';
-import IWord from 'src/interfaces/word';
-import IStorage from 'src/app/games/utility/storage';
-import './style.scss';
+import BaseComponent from '../../games/utility/base_component';
+import playSound from '../../games/utility/play-sound';
+import CardBox from '../../games/sprint/components/sprint-cardBox';
+import ResultSprint from '../../games/sprint/components/sprint-result';
+import IWord from '../../../interfaces/word';
+import IStorage from '../../games/utility/storage';
 
 export default class Sprint {
   readonly sprint: HTMLElement;
@@ -57,9 +56,9 @@ export default class Sprint {
     if (target && target.tagName === 'BUTTON') {
       const textTranslate = document.querySelector('.sprint__translate');
       if (textTranslate) {
-        if (this.currentWord.wordTranslate !== textTranslate!.innerHTML) {
+        if (this.currentWord.wordTranslate !== textTranslate.innerHTML) {
           const sound = new Audio();
-          sound.src = 'src/app/games/assets/sounds/success.mp3';
+          sound.src = 'assets/sounds/success.mp3';
           sound.autoplay = true;
           this.storage.inRow += 1;
           this.storage.setInRow.add(this.storage.inRow);
@@ -81,7 +80,7 @@ export default class Sprint {
           this.storage.namesAnswerCorrectSound.push(`http://localhost:8000/${this.currentWord.audio}`);
         } else {
           const sound = new Audio();
-          sound.src = 'src/app/games/assets/sounds/fail.mp3';
+          sound.src = 'assets/sounds/fail.mp3';
           sound.autoplay = true;
           this.storage.inRow = 0;
           this.storage.countAnswerWrong += 1;
@@ -108,7 +107,7 @@ export default class Sprint {
       if (textTranslate) {
         if (this.currentWord.wordTranslate === textTranslate.innerHTML) {
           const sound = new Audio();
-          sound.src = 'src/app/games/assets/sounds/success.mp3';
+          sound.src = 'assets/sounds/success.mp3';
           sound.autoplay = true;
           this.storage.inRow += 1;
           this.storage.setInRow.add(this.storage.inRow);
@@ -130,7 +129,7 @@ export default class Sprint {
           this.storage.namesAnswerCorrectSound.push(`http://localhost:8000/${this.currentWord.audio}`);
         } else {
           const sound = new Audio();
-          sound.src = 'src/app/games/assets/sounds/fail.mp3';
+          sound.src = 'assets/sounds/fail.mp3';
           sound.autoplay = true;
           this.storage.inRow = 0;
           this.storage.countAnswerWrong += 1;
@@ -154,9 +153,9 @@ export default class Sprint {
   pressLeft = () => {
     const textTranslate = document.querySelector('.sprint__translate');
     if (textTranslate) {
-      if (this.currentWord.wordTranslate !== textTranslate!.innerHTML) {
+      if (this.currentWord.wordTranslate !== textTranslate.innerHTML) {
         const sound = new Audio();
-        sound.src = 'src/app/games/assets/sounds/success.mp3';
+        sound.src = 'assets/sounds/success.mp3';
         sound.autoplay = true;
         this.storage.inRow += 1;
         this.storage.setInRow.add(this.storage.inRow);
@@ -178,7 +177,7 @@ export default class Sprint {
         this.storage.namesAnswerCorrectSound.push(`http://localhost:8000/${this.currentWord.audio}`);
       } else {
         const sound = new Audio();
-        sound.src = 'src/app/games/assets/sounds/fail.mp3';
+        sound.src = 'assets/sounds/fail.mp3';
         sound.autoplay = true;
         this.storage.inRow = 0;
         this.storage.countAnswerWrong += 1;
@@ -203,7 +202,7 @@ export default class Sprint {
     if (textTranslate) {
       if (this.currentWord.wordTranslate === textTranslate.innerHTML) {
         const sound = new Audio();
-        sound.src = 'src/app/games/assets/sounds/success.mp3';
+        sound.src = 'assets/sounds/success.mp3';
         sound.autoplay = true;
         this.storage.inRow += 1;
         this.storage.setInRow.add(this.storage.inRow);
@@ -225,7 +224,7 @@ export default class Sprint {
         this.storage.namesAnswerCorrectSound.push(`http://localhost:8000/${this.currentWord.audio}`);
       } else {
         const sound = new Audio();
-        sound.src = 'src/app/games/assets/sounds/fail.mp3';
+        sound.src = 'assets/sounds/fail.mp3';
         sound.autoplay = true;
         this.storage.inRow = 0;
         this.storage.countAnswerWrong += 1;
@@ -274,15 +273,17 @@ export default class Sprint {
     playSound(this.currentWord);
 
     const imgBox = document.querySelector('.sprint__img-box');
-    imgBox!.innerHTML = '+10';
-    if (this.storage.inRow > 2 && this.storage.inRow <= 5) {
-      imgBox!.innerHTML = '+20';
-    }
-    if (this.storage.inRow > 5 && this.storage.inRow <= 8) {
-      imgBox!.innerHTML = '+40';
-    }
-    if (this.storage.inRow >= 9) {
-      imgBox!.innerHTML = '+80';
+    if (imgBox) {
+      imgBox.innerHTML = '+10';
+      if (this.storage.inRow > 2 && this.storage.inRow <= 5) {
+        imgBox.innerHTML = '+20';
+      }
+      if (this.storage.inRow > 5 && this.storage.inRow <= 8) {
+        imgBox.innerHTML = '+40';
+      }
+      if (this.storage.inRow >= 9) {
+        imgBox.innerHTML = '+80';
+      }
     }
 
     const marks = document.querySelectorAll('.mark');

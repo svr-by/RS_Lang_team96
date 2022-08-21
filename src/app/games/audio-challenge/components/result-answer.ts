@@ -1,5 +1,5 @@
-import BaseComponent from 'src/app/games/utility/base_component';
-import IStorage from 'src/app/games/utility/storage';
+import BaseComponent from '../../../games/utility/base_component';
+import IStorage from '../../../games/utility/storage';
 export default class StatWordsAnswer {
   readonly statWordsAnswer: HTMLElement;
 
@@ -11,7 +11,9 @@ export default class StatWordsAnswer {
     if (target && target.tagName === 'DIV') {
       const sound = new Audio();
       const ind = target.getAttribute('data-ind');
-      sound.src = this.storage.namesAnswerCorrectSound[+ind!];
+      if (ind) {
+        sound.src = this.storage.namesAnswerCorrectSound[+ind];
+      }
       sound.autoplay = true;
     }
   }

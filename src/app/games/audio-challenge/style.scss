@@ -99,7 +99,7 @@
   justify-content: space-around;
   align-items: center;
   padding-top: 5%;
-  height: 100%;
+  height: 980px;
 }
 
 .main__games__audio-challange-img {
@@ -113,7 +113,7 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: no-repeat center url('../src/assets/svg/sound.svg');
+  background: no-repeat center url('assets/svg/sound.svg');
   background-color: #7375D8;
   box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
   cursor: pointer;
@@ -212,7 +212,7 @@
 .main__games__audio-challange__containerPanel-buttonVolume {
   width: 30px;
   height: 30px;
-  background: no-repeat center url('../src/assets/svg/volume.svg');
+  background: no-repeat center url('assets/svg/volume.svg');
   cursor: pointer;
 }
 
@@ -228,7 +228,7 @@
 .main__games__audio-challange__containerPanel-fullScreen {
   width: 30px;
   height: 30px;
-  background: no-repeat center url('../src/assets/svg/maximize.svg');
+  background: no-repeat center url('assets/svg/maximize.svg');
   cursor: pointer;
 }
 
@@ -293,11 +293,11 @@
 }
 
 .result-answer__plus {
-  background-image: url(../src/assets/svg/success.svg);
+  background-image: url(assets/svg/success.svg);
 }
 
 .result-wrong__minus {
-  background-image: url(../src/assets/svg/wrong.svg);
+  background-image: url(assets/svg/wrong.svg);
 }
 
 .result-answer__name,
@@ -321,7 +321,7 @@
   margin-right: 5px;
   border-radius: 2px;
   background-color: #8c7ecc9a;
-  background-image: url(../src/assets/svg/speaker.svg);
+  background-image: url(assets/svg/speaker.svg);
 }
 
 .result__sound-wrong:hover,

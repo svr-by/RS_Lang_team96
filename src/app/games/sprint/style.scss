@@ -72,12 +72,36 @@
   background-color: #fd0000;
   width: 110px;
   height: 50px;
-  border-radius: 5px;
+  font-size: 1.5rem;
+  text-align: center;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
+  cursor: pointer;
 }
 
 .sprint__button-true {
   background-color: #08aa05;
   width: 110px;
   height: 50px;
-  border-radius: 5px;
+  font-size: 1.5rem;
+  text-align: center;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
+  cursor: pointer;
+}
+
+.sprint__button-false:hover,
+.sprint__button-true:hover {
+  transform: translateY(-3px);
+  transition: 0.4s;
+  box-shadow: 10px 10px 10px 0px rgba(34, 60, 80, 0.55);
+}
+
+.sprint__button-false:active,
+.sprint__button-true:active {
+  transform: translateY(5px);
+  transition: 0.1s;
+  box-shadow: 0px 0px 0px 0px rgba(34, 60, 80, 0.55);
 }

@@ -1,4 +1,4 @@
-import IStatistic from 'src/interfaces/statistic';
+import IStatistic from '../../../interfaces/statistic';
 
 export default async function saveUserStatistics(id: string, token: string, storage: IStatistic) {
   const url = `http://localhost:8000/users/${id}/statistics`;

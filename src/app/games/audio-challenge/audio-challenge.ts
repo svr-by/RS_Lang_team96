@@ -1,10 +1,9 @@
-import BaseComponent from 'src/app/games/utility/base_component';
-import AnswerBox from 'src/app/games/audio-challenge/components/answer-box';
-import playSound from 'src/app/games/utility/play-sound';
-import IWord from 'src/interfaces/word';
-import IStorage from 'src/app/games/utility/storage';
-import Result from 'src/app/games/audio-challenge/components/result';
-import './style.scss';
+import BaseComponent from '../utility/base_component';
+import AnswerBox from '../audio-challenge/components/answer-box';
+import playSound from '../utility/play-sound';
+import IWord from '../../../interfaces/word';
+import IStorage from '../utility/storage';
+import Result from '../audio-challenge/components/result';
 
 export default class AudioChallange {
   readonly audioChallange: HTMLElement;
@@ -66,9 +65,11 @@ export default class AudioChallange {
         target.classList.add('answer');
         target.setAttribute('data-answer', 'yes');
         const img = document.querySelector('.main__games__audio-challange-img');
-        img!.setAttribute('src', `http://localhost:8000/${this.currentWord.image}`);
+        if (img) {
+          img.setAttribute('src', `http://localhost:8000/${this.currentWord.image}`);
+        }
         const sound = new Audio();
-        sound.src = '../../../../assets/sounds/success.mp3';
+        sound.src = 'assets/sounds/success.mp3';
         sound.autoplay = true;
         this.storage.inRow += 1;
         this.storage.setInRow.add(this.storage.inRow);
@@ -99,9 +100,11 @@ export default class AudioChallange {
         this.isPush = true;
         target.setAttribute('data-answer', 'no');
         const img = document.querySelector('.main__games__audio-challange-img');
-        img!.setAttribute('src', `http://localhost:8000/${this.currentWord.image}`);
+        if (img) {
+          img.setAttribute('src', `http://localhost:8000/${this.currentWord.image}`);
+        }
         const sound = new Audio();
-        sound.src = '../../../../assets/sounds/fail.mp3';
+        sound.src = 'assets/sounds/fail.mp3';
         sound.autoplay = true;
         this.storage.inRow = 0;
         this.storage.countAnswerWrong += 1;
@@ -118,7 +121,7 @@ export default class AudioChallange {
 
     new BaseComponent(this.audioChallange, 'img', ['main__games__audio-challange-img'])
       .render()
-      .setAttribute('src', '../../../../../assets/svg/question.svg');
+      .setAttribute('src', 'assets/svg/question.svg');
     new BaseComponent(this.audioChallange, 'div', ['main__games__audio-challange-buttonSound']).render();
     new BaseComponent(this.audioChallange, 'div', ['main__games__audio-challange-buttonSkip'], 'SKIP &#10162').render();
     new AnswerBox(this.audioChallange).render();

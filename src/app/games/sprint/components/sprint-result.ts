@@ -1,11 +1,11 @@
-import BaseComponent from 'src/app/games/utility/base_component';
-import StatWordsWrong from 'src/app/games/audio-challenge/components/result-wrong';
-import StatWordsAnswer from 'src/app/games/audio-challenge/components/result-answer';
-import IStorage from 'src/app/games/utility/storage';
-import IStatistic from 'src/interfaces/statistic';
-import StatisticStorage from 'src/app/games/utility/statistics-storage';
-import saveUserStatistics from 'src/app/games/api/put-statistics';
-import getUserStatistics from 'src/app/games/api/get-statistics';
+import BaseComponent from '../../../games/utility/base_component';
+import StatWordsWrong from '../../../games/audio-challenge/components/result-wrong';
+import StatWordsAnswer from '../../../games/audio-challenge/components/result-answer';
+import IStorage from '../../../games/utility/storage';
+import IStatistic from '../../../../interfaces/statistic';
+import StatisticStorage from '../../../games/utility/statistics-storage';
+import saveUserStatistics from '../../../games/api/put-statistics';
+import getUserStatistics from '../../../games/api/get-statistics';
 
 export default class ResultSprint {
   readonly resultSprint: HTMLElement;
@@ -64,6 +64,18 @@ export default class ResultSprint {
       'div',
       ['result__wrong'],
       `<span clas = 'result__num'>${this.storage.countAnswerWrong}</span> - Mistakes`
+    ).render();
+    new BaseComponent(
+      this.statisticBox,
+      'div',
+      ['result__accuracy'],
+      '<span clas = "result__num">Score</span>'
+    ).render();
+    new BaseComponent(
+      this.statisticBox,
+      'div',
+      ['result__accuracyNum'],
+      `<span clas = 'result__num'>${this.storage.score}</span>`
     ).render();
 
     new StatWordsAnswer(this.container, this.storage).render();

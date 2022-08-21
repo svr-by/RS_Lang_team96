@@ -1,7 +1,7 @@
-import BaseComponent from 'src/app/games/utility/base_component';
-import IWord from 'src/interfaces/word';
-import getWords from 'src/app/games/utility/get-words';
-import IStorage from 'src/app/games/utility/storage';
+import BaseComponent from '../../games/utility/base_component';
+import IWord from '../../../interfaces/word';
+import getWords from '../../games/utility/get-words';
+import IStorage from '../../games/utility/storage';
 import Sprint from './sprint';
 
 export default class SprintLvl {
