@@ -1,0 +1,25 @@
+.button {
+  height: 2rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.3rem;
+  color: $color-white;
+  font-size: 14px;
+  text-transform: uppercase;
+  background-color: $color-grey;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:not(:disabled):hover,
+  &.select {
+    background-color: $color-black;
+  }
+ 
+  &.select {
+    color: $color-black;
+  }
+
+  &:disabled {
+    color: $color-grey;
+  }
+}

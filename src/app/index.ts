@@ -1,6 +1,11 @@
+import { MainPage } from '../pages/main';
+
 class App {
-  async render() {
+  mainPage = new MainPage();
+
+  render() {
     console.log('Hello from App');
+    this.mainPage.render();
   }
 }
 
