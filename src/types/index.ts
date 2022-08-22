@@ -1,7 +1,7 @@
-export interface Word {
+export interface IWord {
   id: string;
-  group: 0;
-  page: 0;
+  group: number;
+  page: number;
   word: string;
   image: string;
   audio: string;
@@ -40,7 +40,7 @@ export type UserWord = {
 
 export type UserWordParams = Pick<UserWord, 'difficulty' | 'optional'>;
 
-export interface AggregatedWord extends Word {
+export interface IAggregatedWord extends IWord {
   userWord?: UserWordParams;
 }
 
@@ -52,7 +52,7 @@ export type AggregatedWordsParams = {
 };
 
 export type AggregatedWordsResponse = {
-  paginatedResults: AggregatedWord[];
+  paginatedResults: IAggregatedWord[];
   totalCount: [{ count: number }];
 };
 

@@ -1,5 +1,5 @@
 import {
-  Word,
+  IWord,
   User,
   UserParams,
   SignInResponse,
@@ -19,12 +19,12 @@ class API {
   usersEndpoint = `${this.base}/users`;
   signinEndpoint = `${this.base}/signin`;
 
-  async getWords(group: number, page: number): Promise<Word[] | string | void> {
+  async getWords(group: number, page: number): Promise<IWord[] | string | void> {
     const response = await fetch(`${this.wordsEndpoint}?group=${group}&page=${page}`);
     return this.handleResponse(response);
   }
 
-  async getWord(wordId: string): Promise<Word | string | void> {
+  async getWord(wordId: string): Promise<IWord | string | void> {
     const response = await fetch(`${this.wordsEndpoint}/${wordId}`);
     return this.handleResponse(response);
   }
