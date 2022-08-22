@@ -1,19 +1,4 @@
-export interface IWord {
-  id: string;
-  group: number;
-  page: number;
-  word: string;
-  image: string;
-  audio: string;
-  audioMeaning: string;
-  audioExample: string;
-  textMeaning: string;
-  textExample: string;
-  transcription: string;
-  wordTranslate: string;
-  textMeaningTranslate: string;
-  textExampleTranslate: string;
-}
+import { IAggregatedWord } from '../interfaces';
 
 export type User = {
   name: string;
@@ -39,10 +24,6 @@ export type UserWord = {
 };
 
 export type UserWordParams = Pick<UserWord, 'difficulty' | 'optional'>;
-
-export interface IAggregatedWord extends IWord {
-  userWord?: UserWordParams;
-}
 
 export type AggregatedWordsParams = {
   group?: number;

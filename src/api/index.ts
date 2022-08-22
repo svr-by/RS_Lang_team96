@@ -1,5 +1,5 @@
+import { IWord } from '../shared/interfaces';
 import {
-  IWord,
   User,
   UserParams,
   SignInResponse,
@@ -11,7 +11,7 @@ import {
   UserStatisticsParams,
   UserSettings,
   UserSettingsParams,
-} from 'src/types/index';
+} from '../shared/types';
 
 class API {
   base = 'http://localhost:8000';
@@ -33,8 +33,7 @@ class API {
     const response = await fetch(`${this.usersEndpoint}`, {
       method: 'POST',
       headers: {
-        // eslint-disable-next-line prettier/prettier
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
@@ -46,24 +45,28 @@ class API {
     const response = await fetch(`${this.signinEndpoint}`, {
       method: 'POST',
       headers: {
-        // eslint-disable-next-line prettier/prettier
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
     });
-    return this.handleResponse(response);
+    if (response) {
+      switch (response.status) {
+        case 200:
+          return this.saveUser(response);
+        case 403:
+          return 'Forbidden';
+      }
+    }
   }
 
   async getUser(userId: string): Promise<User | string | void> {
     const token = this.getToken();
     const response = await fetch(`${this.usersEndpoint}/${userId}`, {
       headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        /*eslint-enable */
       },
     });
     return this.handleResponse(response);
@@ -74,11 +77,9 @@ class API {
     const response = await fetch(`${this.usersEndpoint}/${userId}`, {
       method: 'PUT',
       headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        /*eslint-enable */
       },
       body: JSON.stringify(body),
     });
@@ -90,10 +91,8 @@ class API {
     const response = await fetch(`${this.usersEndpoint}/${userId}`, {
       method: 'DELETE',
       headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        /*eslint-enable */
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
       },
     });
     return this.handleResponse(response);
@@ -103,22 +102,18 @@ class API {
     const token = this.getRefreshToken();
     const response = await fetch(`${this.usersEndpoint}/${userId}/tokens`, {
       headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        /*eslint-enable */
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
       },
     });
     if (response) {
       switch (response.status) {
         case 200:
-          return this.saveTokens(response);
+          return this.updateStoredToken(response);
         case 401:
           return 'Unauthorized';
         case 403:
           return 'Forbidden';
-        default:
-          break;
       }
     }
   }
@@ -128,11 +123,9 @@ class API {
     const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
       method: 'POST',
       headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        /*eslint-enable */
       },
       body: JSON.stringify(body),
     });
@@ -143,11 +136,9 @@ class API {
     const token = this.getToken();
     const response = await fetch(`${this.usersEndpoint}/${userId}/words`, {
       headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        /*eslint-enable */
       },
     });
     return this.handleResponse(response);
@@ -157,11 +148,9 @@ class API {
     const token = this.getToken();
     const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
       headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        /*eslint-enable */
       },
     });
     return this.handleResponse(response);
@@ -172,11 +161,9 @@ class API {
     const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
       method: 'PUT',
       headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        /*eslint-enable */
       },
       body: JSON.stringify(body),
     });
@@ -188,11 +175,9 @@ class API {
     const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
       method: 'DELETE',
       headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        /*eslint-enable */
       },
     });
     return this.handleResponse(response);
@@ -206,11 +191,9 @@ class API {
     const query = wordsParams ? this.createAggregatedWordsQuery(wordsParams) : '';
     const response = await fetch(`${this.usersEndpoint}/${userId}/aggregatedWords${query}`, {
       headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        /*eslint-enable */
       },
     });
     return this.handleResponse(response);
@@ -220,11 +203,9 @@ class API {
     const token = this.getToken();
     const response = await fetch(`${this.usersEndpoint}/${userId}/aggregatedWords/${wordId}`, {
       headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        /*eslint-enable */
       },
     });
     return this.handleResponse(response);
@@ -234,11 +215,9 @@ class API {
     const token = this.getToken();
     const response = await fetch(`${this.usersEndpoint}/${userId}/statistics`, {
       headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        /*eslint-enable */
       },
     });
     return this.handleResponse(response);
@@ -249,11 +228,9 @@ class API {
     const response = await fetch(`${this.usersEndpoint}/${userId}/statistics`, {
       method: 'PUT',
       headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        /*eslint-enable */
       },
       body: JSON.stringify(body),
     });
@@ -264,11 +241,9 @@ class API {
     const token = this.getToken();
     const response = await fetch(`${this.usersEndpoint}/${userId}/settings`, {
       headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        /*eslint-enable */
       },
     });
     return this.handleResponse(response);
@@ -279,11 +254,9 @@ class API {
     const response = await fetch(`${this.usersEndpoint}/${userId}/settings`, {
       method: 'PUT',
       headers: {
-        /*eslint-disable */
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        /*eslint-enable */
       },
       body: JSON.stringify(body),
     });
@@ -307,27 +280,43 @@ class API {
           return 'Not found';
         case 422:
           return 'Incorrect e-mail or password';
-        default:
-          break;
       }
     }
   }
 
-  private async saveTokens(rawResponse: Response) {
+  private async saveUser(rawResponse: Response) {
     const response: SignInResponse = await rawResponse.json();
-    const token = response.token;
-    localStorage.setItem('token', token);
-    const refreshToken = response.refreshToken;
-    localStorage.setItem('refreshToken', refreshToken);
+    const user = JSON.stringify(response);
+    localStorage.setItem('user', user);
     return response;
   }
 
-  private getToken() {
-    return localStorage.getItem('token');
+  private async updateStoredToken(rawResponse: Response) {
+    const response: SignInResponse = await rawResponse.json();
+    let userStr = localStorage.getItem('user');
+    const userObj: SignInResponse = userStr ? JSON.parse(userStr) : null;
+    if (userObj) {
+      userObj.token = response.token;
+      userObj.refreshToken = response.refreshToken;
+    }
+    userStr = JSON.stringify(userObj);
+    localStorage.setItem('user', userStr);
+    console.log('token refreshed');
+    return response;
+  }
+
+  private getToken(): string {
+    const userStr = localStorage.getItem('user');
+    const userObj: SignInResponse = userStr ? JSON.parse(userStr) : null;
+    const token = userObj ? userObj.token : '';
+    return token;
   }
 
   private getRefreshToken() {
-    return localStorage.getItem('refreshToken');
+    const userStr = localStorage.getItem('user');
+    const userObj: SignInResponse = userStr ? JSON.parse(userStr) : null;
+    const refreshToken = userObj ? userObj.refreshToken : '';
+    return refreshToken;
   }
 
   private createAggregatedWordsQuery(wordsParams: AggregatedWordsParams) {
