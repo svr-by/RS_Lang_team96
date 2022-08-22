@@ -45,7 +45,6 @@ export default class AudioChallangeLvl {
         }
         const arrOfArrsWords = await Promise.all(arrPromisesFromPages30);
         this.wordsInGroup = arrOfArrsWords.reduce((a, b) => a.concat(b));
-        // ПЕРЕРИСОВКА
         this.audioChallangeLvl.remove();
         new AudioChallange(this.root, this.wordsInGroup, this.currentCountWord, this.storage).render();
       }

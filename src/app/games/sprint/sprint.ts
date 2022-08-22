@@ -88,7 +88,6 @@ export default class Sprint {
           this.storage.namesAnswerWrongTranslate.push(this.currentWord.wordTranslate);
           this.storage.namesAnswerWrongSound.push(`http://localhost:8000/${this.currentWord.audio}`);
         }
-        // ПЕРЕРИСОВКА
         const counterScore = document.querySelector('.sprint__score');
         if (counterScore) {
           counterScore.innerHTML = `${this.storage.score}`;
@@ -137,7 +136,6 @@ export default class Sprint {
           this.storage.namesAnswerWrongTranslate.push(this.currentWord.wordTranslate);
           this.storage.namesAnswerWrongSound.push(`http://localhost:8000/${this.currentWord.audio}`);
         }
-        // ПЕРЕРИСОВКА
         const counterScore = document.querySelector('.sprint__score');
         if (counterScore) {
           counterScore.innerHTML = `${this.storage.score}`;
@@ -185,7 +183,6 @@ export default class Sprint {
         this.storage.namesAnswerWrongTranslate.push(this.currentWord.wordTranslate);
         this.storage.namesAnswerWrongSound.push(`http://localhost:8000/${this.currentWord.audio}`);
       }
-      // ПЕРЕРИСОВКА
       const counterScore = document.querySelector('.sprint__score');
       if (counterScore) {
         counterScore.innerHTML = `${this.storage.score}`;
@@ -232,7 +229,6 @@ export default class Sprint {
         this.storage.namesAnswerWrongTranslate.push(this.currentWord.wordTranslate);
         this.storage.namesAnswerWrongSound.push(`http://localhost:8000/${this.currentWord.audio}`);
       }
-      // ПЕРЕРИСОВКА
       const counterScore = document.querySelector('.sprint__score');
       if (counterScore) {
         counterScore.innerHTML = `${this.storage.score}`;

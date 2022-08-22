@@ -17,7 +17,6 @@ export default class Games {
 
   pushBtnPlayAudio(target: HTMLElement | null): void {
     if (target && target.tagName === 'BUTTON') {
-      // ПЕРЕРИСОВКА
       this.mainGames.remove();
       new AudioChallangeLvl(this.root).render();
     }
@@ -25,7 +24,6 @@ export default class Games {
 
   pushBtnPlaySprint(target: HTMLElement | null): void {
     if (target && target.tagName === 'BUTTON') {
-      // ПЕРЕРИСОВКА
       this.mainGames.remove();
       new SprintLvl(this.root).render();
     }

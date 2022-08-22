@@ -45,7 +45,6 @@ export default class SprintLvl {
         }
         const arrOfArrsWords = await Promise.all(arrPromisesFromPages30);
         this.wordsInGroup = arrOfArrsWords.reduce((a, b) => a.concat(b));
-        // ПЕРЕРИСОВКА
         this.sprintLvl.remove();
         new Sprint(this.root, this.wordsInGroup, this.storage, this.seconds).render();
       }

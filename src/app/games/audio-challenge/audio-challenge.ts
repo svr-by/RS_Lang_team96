@@ -43,7 +43,6 @@ export default class AudioChallange {
 
   pushBtnSkipNext(target: HTMLElement | null): void {
     if (target && target.tagName === 'DIV') {
-      // ПЕРЕРИСОВКА
       const audioChallange: HTMLElement | null = document.querySelector('.main__games__audio-challange');
       const main: HTMLElement | null = document.querySelector('.main');
       if (audioChallange && main) {
@@ -78,7 +77,6 @@ export default class AudioChallange {
         this.storage.namesAnswerCorrectTranslate.push(this.currentWord.wordTranslate);
         this.storage.namesAnswerCorrectSound.push(`http://localhost:8000/${this.currentWord.audio}`);
 
-        // ПЕРЕРИСОВКА
         const btnSkip: HTMLElement | null = document.querySelector('.main__games__audio-challange-buttonSkip');
         if (btnSkip) {
           btnSkip.classList.add('main__games__audio-challange-buttonNext');
