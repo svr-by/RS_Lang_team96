@@ -1,6 +1,8 @@
+import layoutTextBook from './layoutTextBook';
+
 class Level {
   private readonly level: HTMLButtonElement;
-  constructor(name: string, numbers: string, id: string) {
+  constructor(name: string, numbers: string, id: string, index: number) {
     this.level = document.createElement('button');
     this.level.classList.add(`level`);
     this.level.classList.add(`${id}`);
@@ -14,6 +16,9 @@ class Level {
         ${id}
       </div>
     `;
+    this.level.addEventListener('click', () => {
+      new layoutTextBook().addWords(1, index);
+    });
   }
 
   appendTo(parent: HTMLElement) {

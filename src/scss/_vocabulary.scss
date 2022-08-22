@@ -1,0 +1,9 @@
+.header-and-settings {
+ display: flex;
+  &__header {
+    font-size: 1.5rem;
+    border-right: solid 5px #8f8e8e;
+    padding-right: 1rem;
+  }
+
+}
