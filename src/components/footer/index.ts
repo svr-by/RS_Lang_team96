@@ -2,13 +2,9 @@ import { layoutService } from '../../services/layoutService';
 
 export class Footer {
   elem: HTMLElement;
-  // userName: HTMLElement;
-  // loginBtn: Button;
 
   constructor() {
     this.elem = layoutService.createElement({ tag: 'footer', classes: ['footer'] });
-    // this.userName = layoutService.createElement({ tag: 'div', classes: ['login__name'] });
-    // this.loginBtn = new Button('Войти', ['login__btn', 'button']);
     this.render();
   }
 
@@ -36,10 +32,6 @@ export class Footer {
         </a>
       </div>
     `;
-    // const login = layoutService.createElement({ tag: 'div', classes: ['login'] });
-    // login.append(this.userName);
-    // login.append(this.loginBtn.elem);
-    // wrapper.append(login);
     this.elem.append(wrapper);
   }
 }
