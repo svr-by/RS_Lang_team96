@@ -6,7 +6,7 @@ class Word {
     this.newWord.id = id;
     this.newWord.innerHTML = `
         <p class = 'word__english'>${word}</p>
-        <p class = 'word__russian'>${wordTranslate}</p>
+        <p class = 'word__russian russian'>${wordTranslate}</p>
         `;
   }
 

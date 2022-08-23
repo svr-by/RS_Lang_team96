@@ -1,8 +1,9 @@
 @import "variables";
 
 .header-and-settings {
- display: flex;
+  display: flex;
   text-align: center;
+  position: relative;
 
   &__header {
     font-size: 3rem;
@@ -30,8 +31,7 @@
 }
 
 .levels-header {
-  font-size: 1.5rem;
-  font-weight: bold;
+  @include headers;
 }
 
 .levels {
@@ -194,4 +194,60 @@
       background-color: #c9c9c9;
     }
   }
+}
+
+.settings-modal {
+  position: absolute;
+  border-radius: 1rem;
+  top: 0;
+  left: 220px;
+  background-color: $yellow-vocabulary;
+  &__header {
+    @include headers;
+    margin: 1rem 0 1rem 1rem;
+  }
+}
+
+.russian-on-off {
+  display: flex;
+  margin: 1rem;
+  &__description {
+    cursor: pointer;
+    font-size: 1.8rem;
+    padding: 0.1rem;
+    border-radius: 0.5rem;
+  }
+  &__checkbox {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+    &+label {
+      display: inline-flex;
+      align-items: center;
+      user-select: none;
+      cursor: pointer;
+      &:before {
+        content: '';
+        display: inline-block;
+        width: 1.5em;
+        height: 1.5em;
+        flex-shrink: 0;
+        flex-grow: 0;
+        border: 1px solid #adb5bd;
+        border-radius: 0.25em;
+        margin-right: 0.5em;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: 50% 50%;
+      }
+    }
+    &:checked+label::before{
+      border-color: #0b76ef;
+      background-color: #0b76ef;
+    }
+  }
+}
+
+.display-none {
+  display: none;
 }
