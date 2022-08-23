@@ -1,6 +1,6 @@
-import { layoutService } from '../../services/layoutService';
-import { Header } from '../../components/header';
-import { Footer } from '../../components/footer';
+import { layoutService } from '../../shared/services/layoutService';
+import { Header } from '../../shared/components/header';
+import { Footer } from '../../shared/components/footer';
 
 export class MainPage {
   elem: HTMLElement;

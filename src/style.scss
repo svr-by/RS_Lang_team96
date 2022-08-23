@@ -3,8 +3,8 @@
 @import 'scss/normalize';
 @import 'scss/fonts';
 @import 'scss/base';
-@import 'components/button/button';
-@import 'components/header/index';
-@import 'components/footer/index';
-@import 'pages/main/index';
+@import 'shared/components/button/style';
+@import 'shared/components/header/style';
+@import 'shared/components/footer/style';
+@import 'pages/main/style';
 @import 'pages/main/starts';

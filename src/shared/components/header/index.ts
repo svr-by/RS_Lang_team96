@@ -1,5 +1,5 @@
 import { layoutService } from '../../services/layoutService';
-import { Button } from '../button/button';
+import { Button } from '../button';
 
 export class Header {
   elem: HTMLElement;
