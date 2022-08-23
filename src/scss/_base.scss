@@ -5,4 +5,13 @@ html {
 
 * {
   box-sizing: inherit;
+  font-family: "Open Sans";
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 1440px;
+  min-width: 320px;
+  margin: 0 auto;
+  padding: 10px;
 }

@@ -52,3 +52,10 @@ export type UserSettings = {
 };
 
 export type UserSettingsParams = Pick<UserSettings, 'wordsPerDay' | 'optional'>;
+
+export type NewElement = {
+  tag: string;
+  text?: string;
+  classes?: string[];
+  id?: string;
+};
