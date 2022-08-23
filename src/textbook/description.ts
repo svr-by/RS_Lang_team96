@@ -14,21 +14,22 @@ class Description {
     parent.innerHTML = '';
     await this.wordsApi.getWordDescription(id).then((item: WordType) => {
       const newDescription = document.createElement('div');
+      newDescription.className = 'content';
       newDescription.innerHTML = `
-        <img src='https://rslang-team96.herokuapp.com/${item.image}' alt=${item.word}>
-        <p>${item.word}</p>
-        <p>${item.wordTranslate}</p>
+        <img class='content__image' src='https://rslang-team96.herokuapp.com/${item.image}' alt=${item.word}>
+        <p class='content__word'>${item.word}</p>
+        <p class='content__word-translate'>${item.wordTranslate}</p>
         <div class='transcription'>
           <p class='transcription__value'>${item.transcription}</p>
           <audio class='sound' src='https://rslang-team96.herokuapp.com/${item.audio}' id='sound'></audio>
-          ${this.svg.playSvg()}
+          ${this.svg.playSvg('#8f8e8e', 'transcription__play')}
         </div>
-        <h3>Значение</h3>
-        <p>${item.textMeaning}</p>
-        <p>${item.textMeaningTranslate}</p>
-        <h3>Пример</h3>
-        <p>${item.textExample}</p>
-        <p>${item.textExampleTranslate}</p>
+        <h3 class='content__header'>Значение</h3>
+        <p class='content__text'>${item.textMeaning}</p>
+        <p class='content__text'>${item.textMeaningTranslate}</p>
+        <h3 class='content__header'>Пример</h3>
+        <p class='content__text'>${item.textExample}</p>
+        <p class='content__text'>${item.textExampleTranslate}</p>
       `;
       parent.append(newDescription);
     });

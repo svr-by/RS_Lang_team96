@@ -6,6 +6,7 @@ class Pagination {
   constructor() {
     this.svg = new Svg();
     this.pagination = document.createElement('div');
+    this.pagination.className = 'pagination';
     this.pagination.innerHTML = `
       ${this.svg.arrowSvg('grey', 'pagination__arrow-left')}
       <p class='pagination__page' id='pagination-first'>1</p>

@@ -19,4 +19,4 @@ export type WordType = {
   transcription: string;
   word: string;
   wordTranslate: string;
-}
+};
