@@ -18,7 +18,7 @@ class Description {
       newDescription.innerHTML = `
         <img class='content__image' src='https://rslang-team96.herokuapp.com/${item.image}' alt=${item.word}>
         <p class='content__word'>${item.word}</p>
-        <p class='content__word-translate'>${item.wordTranslate}</p>
+        <p class='content__word-translate russian'>${item.wordTranslate}</p>
         <div class='transcription'>
           <p class='transcription__value'>${item.transcription}</p>
           <audio class='sound' src='https://rslang-team96.herokuapp.com/${item.audio}' id='sound'></audio>
@@ -26,10 +26,10 @@ class Description {
         </div>
         <h3 class='content__header'>Значение</h3>
         <p class='content__text'>${item.textMeaning}</p>
-        <p class='content__text'>${item.textMeaningTranslate}</p>
+        <p class='content__text russian'>${item.textMeaningTranslate}</p>
         <h3 class='content__header'>Пример</h3>
         <p class='content__text'>${item.textExample}</p>
-        <p class='content__text'>${item.textExampleTranslate}</p>
+        <p class='content__text russian'>${item.textExampleTranslate}</p>
       `;
       parent.append(newDescription);
     });

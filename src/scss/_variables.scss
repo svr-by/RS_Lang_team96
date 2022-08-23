@@ -3,6 +3,7 @@ $color-black: #000000;
 $background-book-element: #e7e7e7;
 $dark-grey: #8f8e8e;
 $secondary-grey: #c9c9c9;
+$yellow-vocabulary: #FFC53D;
 
 @mixin bookHeaders {
   width: 200px;
@@ -10,4 +11,9 @@ $secondary-grey: #c9c9c9;
   font-size: 2rem;
   font-weight: bold;
   margin: 1rem 0 0.5rem 0.5rem;
+}
+
+@mixin headers {
+  font-size: 1.5rem;
+  font-weight: bold;
 }

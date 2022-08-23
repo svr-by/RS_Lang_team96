@@ -6,6 +6,7 @@ import { WordType } from '../types';
 import Pagination from './pagination';
 import Description from './description';
 import Word from './word';
+import SettingsModal from './settingsModal';
 
 class LayoutTextBook {
   private svg: Svg;
@@ -23,6 +24,7 @@ class LayoutTextBook {
     const parentBook = document.querySelector('body') as HTMLElement;
     const textBook = document.createElement('section') as HTMLElement;
     textBook.className = 'textBook';
+    textBook.id = 'textBook';
     textBook.innerHTML = `
       <div class='header-and-settings'>
         <h2 class='header-and-settings__header'>Учебник</h2>
@@ -62,6 +64,13 @@ class LayoutTextBook {
     (document.getElementById('playSvg') as HTMLElement).addEventListener('click', () => {
       (document.getElementById('sound') as HTMLAudioElement).play();
     });
+
+    new SettingsModal().appendTo(textBook);
+
+    (document.getElementById('settings') as HTMLElement).addEventListener('click', (event) => {
+      event.stopPropagation();
+      this.addSettings();
+    });
   }
 
   addWords(page: number, group: number) {
@@ -72,6 +81,41 @@ class LayoutTextBook {
         new Word(item.id, item.word, item.wordTranslate).appendTo(words);
       });
     });
+  }
+
+  addSettings() {
+    (document.getElementById('settings-modal') as HTMLElement).classList.remove('display-none');
+    (document.getElementById('toggle') as HTMLInputElement).addEventListener('change', (event) => {
+      event.stopPropagation();
+      document.querySelectorAll('.russian').forEach((item) => {
+        item.classList.toggle('display-none');
+      });
+    });
+    document.addEventListener(
+      'click',
+      (event) => {
+        const menu = document.getElementById('settings-modal') as HTMLElement;
+        const menu_is_active = menu.classList.contains('display-none');
+        const target = event.target as HTMLElement;
+        const menuHeader = document.querySelector('.settings-modal__header');
+        const menuRussianCheckbox = document.querySelector('.russian-on-off__checkbox-label');
+        const menuCheckboxDescription = document.querySelector('.russian-on-off__description');
+        const menuCheckbox = document.querySelector('.russian-on-off__checkbox');
+        const its_menu =
+          target === menu ||
+          target === menuHeader ||
+          target === menuRussianCheckbox ||
+          target === menuCheckboxDescription ||
+          target === menuCheckbox;
+
+        console.log(target);
+
+        if (menu && !its_menu && !menu_is_active) {
+          (document.getElementById('settings-modal') as HTMLElement).classList.toggle('display-none');
+        }
+      },
+      false
+    );
   }
 }
 
