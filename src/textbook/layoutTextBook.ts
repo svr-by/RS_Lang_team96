@@ -48,15 +48,18 @@ class LayoutTextBook {
     `;
     parentBook.append(textBook);
 
-    const levels = document.getElementById('levels') as HTMLElement;
-    this.groupNumber.forEach((item, index) => {
-      new Level(item.name, item.numbers, item.id, index).appendTo(levels);
-    });
+    if (!sessionStorage.getItem('level')) {
+      sessionStorage.setItem('level', '0');
+    }
+
+    this.addLevels();
 
     const pagination = document.getElementById('pagination') as HTMLElement;
     new Pagination().appendTo(pagination);
 
-    this.addWords(1, 0);
+    // const levelA1 = document.getElementById('A1') as HTMLElement;
+    // new Level().changeLevel('A1', levelA1);
+    // this.addWords(1, JSON.parse(sessionStorage.getItem('level') as string));
 
     const description = document.getElementById('description') as HTMLElement;
     await this.description.appendTo(description, '5e9f5ee35eb9e72bc21af4b4');
@@ -70,6 +73,13 @@ class LayoutTextBook {
     (document.getElementById('settings') as HTMLElement).addEventListener('click', (event) => {
       event.stopPropagation();
       this.addSettings();
+    });
+  }
+
+  addLevels() {
+    const levels = document.getElementById('levels') as HTMLElement;
+    this.groupNumber.forEach((item, index) => {
+      new Level(item.name, item.numbers, item.id, index).appendTo(levels);
     });
   }
 

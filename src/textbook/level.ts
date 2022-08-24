@@ -1,9 +1,12 @@
 import layoutTextBook from './layoutTextBook';
+import LayoutTextBook from './layoutTextBook';
 
 class Level {
-  private readonly level: HTMLButtonElement;
+  private readonly level: HTMLDivElement;
+  private layoutTextBook: LayoutTextBook;
   constructor(name: string, numbers: string, id: string, index: number) {
-    this.level = document.createElement('button');
+    this.layoutTextBook = new layoutTextBook();
+    this.level = document.createElement('div');
     this.level.classList.add(`level`);
     this.level.classList.add(`${id}`);
     this.level.id = id;
@@ -12,29 +15,117 @@ class Level {
         <h2 class='level__header'>${name}</h2>
         <p class='level__word-number'>${numbers}</p>
       </div>
-      <p class='level__value' style='background-color: ${this.choseColor(index)}'>
+      <p class='level__value' id='value-level'>
         ${id}
       </p>
     `;
+
+    if (index === 0) {
+      sessionStorage.setItem('level', JSON.stringify(0));
+      this.changeLevel(id, this.level);
+    }
+
     this.level.addEventListener('click', () => {
-      new layoutTextBook().addWords(1, index);
+      sessionStorage.setItem('level', JSON.stringify(index));
+      this.changeLevel(id, this.level);
     });
+
+    this.level.addEventListener('mouseover', () => {
+      this.choseColor(index);
+      this.level.style.opacity = '1';
+    });
+
+    this.level.addEventListener('mouseout', () => {
+      this.removeColor(index);
+      if (!JSON.parse(this.level.getAttribute('data-chose') as string)) {
+        this.level.style.opacity = '';
+      }
+    });
+  }
+
+  changeLevel(id: string, levelElement: HTMLElement) {
+    const index = JSON.parse(sessionStorage.getItem('level') as string);
+    console.log(index);
+    this.layoutTextBook.addWords(1, index);
+    this.addPermanentColor(index, id);
+    levelElement.setAttribute('data-chose', 'true');
+    levelElement.style.opacity = '1';
+  }
+
+  addPermanentColor(index: number, id: string) {
+    (document.querySelectorAll('.level') as unknown as HTMLElement[]).forEach((item) => {
+      if (item.id !== id) {
+        (item.querySelector('.level__value') as HTMLElement).classList.remove(`permanent-${item.id.toLowerCase()}`);
+        item.removeAttribute('data-chose');
+        item.style.opacity = '';
+      }
+    });
+
+    switch (index) {
+      case 0:
+        (this.level.querySelector('#value-level') as HTMLElement).classList.add('permanent-a1');
+        break;
+      case 1:
+        (this.level.querySelector('#value-level') as HTMLElement).classList.add('permanent-a2');
+        break;
+      case 2:
+        (this.level.querySelector('#value-level') as HTMLElement).classList.add('permanent-b1');
+        break;
+      case 3:
+        (this.level.querySelector('#value-level') as HTMLElement).classList.add('permanent-b2');
+        break;
+      case 4:
+        (this.level.querySelector('#value-level') as HTMLElement).classList.add('permanent-c1');
+        break;
+      case 5:
+        (this.level.querySelector('#value-level') as HTMLElement).classList.add('permanent-c2');
+        break;
+    }
   }
 
   choseColor(index: number) {
     switch (index) {
       case 0:
-        return '#FFC53D';
+        (this.level.querySelector('#value-level') as HTMLElement).classList.add('hover-a1');
+        break;
       case 1:
-        return '#9CD7F9';
+        (this.level.querySelector('#value-level') as HTMLElement).classList.add('hover-a2');
+        break;
       case 2:
-        return '#4CCBB7';
+        (this.level.querySelector('#value-level') as HTMLElement).classList.add('hover-b1');
+        break;
       case 3:
-        return '#FF7171';
+        (this.level.querySelector('#value-level') as HTMLElement).classList.add('hover-b2');
+        break;
       case 4:
-        return '#5D7CFD';
+        (this.level.querySelector('#value-level') as HTMLElement).classList.add('hover-c1');
+        break;
       case 5:
-        return '#8A78FA';
+        (this.level.querySelector('#value-level') as HTMLElement).classList.add('hover-c2');
+        break;
+    }
+  }
+
+  removeColor(index: number) {
+    switch (index) {
+      case 0:
+        (this.level.querySelector('#value-level') as HTMLElement).classList.remove('hover-a1');
+        break;
+      case 1:
+        (this.level.querySelector('#value-level') as HTMLElement).classList.remove('hover-a2');
+        break;
+      case 2:
+        (this.level.querySelector('#value-level') as HTMLElement).classList.remove('hover-b1');
+        break;
+      case 3:
+        (this.level.querySelector('#value-level') as HTMLElement).classList.remove('hover-b2');
+        break;
+      case 4:
+        (this.level.querySelector('#value-level') as HTMLElement).classList.remove('hover-c1');
+        break;
+      case 5:
+        (this.level.querySelector('#value-level') as HTMLElement).classList.remove('hover-c2');
+        break;
     }
   }
 
