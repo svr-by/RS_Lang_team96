@@ -21,6 +21,7 @@
   border-radius: 0.5rem;
   border: none;
   cursor: pointer;
+  transition: opacity 0.5s;
   &__header {
     @include bookHeaders;
     width: 150px;

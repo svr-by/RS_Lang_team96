@@ -20,8 +20,7 @@ class Level {
       </p>
     `;
 
-    if (index === 0) {
-      sessionStorage.setItem('level', JSON.stringify(0));
+    if (index === JSON.parse(sessionStorage.getItem('level') as string)) {
       this.changeLevel(id, this.level);
     }
 
@@ -39,13 +38,13 @@ class Level {
       this.removeColor(index);
       if (!JSON.parse(this.level.getAttribute('data-chose') as string)) {
         this.level.style.opacity = '';
+        this.level.style.transition = 'opacity 0.5s';
       }
     });
   }
 
   changeLevel(id: string, levelElement: HTMLElement) {
     const index = JSON.parse(sessionStorage.getItem('level') as string);
-    console.log(index);
     this.layoutTextBook.addWords(1, index);
     this.addPermanentColor(index, id);
     levelElement.setAttribute('data-chose', 'true');

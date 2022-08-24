@@ -52,21 +52,10 @@ class LayoutTextBook {
       sessionStorage.setItem('level', '0');
     }
 
-    this.addLevels();
+    await this.addLevels();
 
     const pagination = document.getElementById('pagination') as HTMLElement;
     new Pagination().appendTo(pagination);
-
-    // const levelA1 = document.getElementById('A1') as HTMLElement;
-    // new Level().changeLevel('A1', levelA1);
-    // this.addWords(1, JSON.parse(sessionStorage.getItem('level') as string));
-
-    const description = document.getElementById('description') as HTMLElement;
-    await this.description.appendTo(description, '5e9f5ee35eb9e72bc21af4b4');
-
-    (document.getElementById('playSvg') as HTMLElement).addEventListener('click', () => {
-      (document.getElementById('sound') as HTMLAudioElement).play();
-    });
 
     new SettingsModal().appendTo(textBook);
 
@@ -87,7 +76,12 @@ class LayoutTextBook {
     const words = document.getElementById('words') as HTMLElement;
     words.innerHTML = '';
     this.words.getWords(page, group).then((data) => {
-      data.forEach((item: WordType) => {
+      data.forEach((item: WordType, index: number) => {
+        if (index === 0) {
+          const description = document.getElementById('description') as HTMLElement;
+          this.description.appendTo(description, item.id);
+          sessionStorage.setItem('chosenWordId', item.id);
+        }
         new Word(item.id, item.word, item.wordTranslate).appendTo(words);
       });
     });
@@ -117,8 +111,6 @@ class LayoutTextBook {
           target === menuRussianCheckbox ||
           target === menuCheckboxDescription ||
           target === menuCheckbox;
-
-        console.log(target);
 
         if (menu && !its_menu && !menu_is_active) {
           (document.getElementById('settings-modal') as HTMLElement).classList.toggle('display-none');
