@@ -32,6 +32,10 @@ class Description {
         <p class='content__text russian'>${item.textExampleTranslate}</p>
       `;
       parent.append(newDescription);
+
+      (document.getElementById('playSvg') as HTMLElement).addEventListener('click', () => {
+        (document.getElementById('sound') as HTMLAudioElement).play();
+      });
     });
   }
 }
