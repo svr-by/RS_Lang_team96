@@ -13,11 +13,13 @@
   &__value {
     display: flex;
     flex-wrap: wrap;
-    width: 72%;
+    width: 65%;
     gap: 1rem;
   }
 
   &__description {
+    width: 35%;
+    min-height: 1150px;
     background-color: $background-book-element;
     border-radius: 7rem 0.2rem 0.2rem 0.2rem;
   }
@@ -55,6 +57,7 @@
 
   &__image {
     width: 100%;
+    max-height: 400px;
     border-radius: 7rem 0.2rem;
   }
 

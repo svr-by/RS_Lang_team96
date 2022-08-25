@@ -1,10 +1,13 @@
 import layoutTextBook from './layoutTextBook';
 import LayoutTextBook from './layoutTextBook';
+import Pagination from './pagination';
 
 class Level {
   private readonly level: HTMLDivElement;
   private layoutTextBook: LayoutTextBook;
+  private pagination: Pagination;
   constructor(name: string, numbers: string, id: string, index: number) {
+    this.pagination = new Pagination();
     this.layoutTextBook = new layoutTextBook();
     this.level = document.createElement('div');
     this.level.classList.add(`level`);
@@ -25,6 +28,7 @@ class Level {
     }
 
     this.level.addEventListener('click', () => {
+      sessionStorage.setItem('pageNumber', '1');
       sessionStorage.setItem('level', JSON.stringify(index));
       this.changeLevel(id, this.level);
     });
@@ -45,7 +49,9 @@ class Level {
 
   changeLevel(id: string, levelElement: HTMLElement) {
     const index = JSON.parse(sessionStorage.getItem('level') as string);
-    this.layoutTextBook.addWords(1, index);
+    const firstPage = JSON.parse(sessionStorage.getItem('pageNumber') as string);
+    this.layoutTextBook.addWords(firstPage, index);
+    this.pagination.highlightPage();
     this.addPermanentColor(index, id);
     levelElement.setAttribute('data-chose', 'true');
     levelElement.style.opacity = '1';
