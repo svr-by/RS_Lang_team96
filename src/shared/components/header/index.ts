@@ -1,3 +1,4 @@
+import { Authentication } from '../../../pages/authentication';
 import { layoutService } from '../../services/layoutService';
 import { Button } from '../button';
 
@@ -45,5 +46,13 @@ export class Header {
     login.append(this.loginBtn.elem);
     wrapper.append(login);
     this.elem.append(wrapper);
+    this.addListeners();
+  }
+
+  private addListeners() {
+    this.loginBtn.elem.addEventListener('click', () => {
+      const logiPage = new Authentication();
+      logiPage.show();
+    });
   }
 }
