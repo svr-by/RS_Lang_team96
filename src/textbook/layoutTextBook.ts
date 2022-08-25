@@ -1,59 +1,40 @@
 import Svg from '../textBookSvg/svg';
 import Level from './level';
+import { dataLevels } from './levelsEnglishData';
+import Words from '../api/words';
+import { WordType } from '../types';
+import Pagination from './pagination';
+import Description from './description';
+import Word from './word';
 
 class LayoutTextBook {
   private svg: Svg;
-  private groopNumber: { name: string; numbers: string; id: string }[];
+  private groupNumber: { name: string; numbers: string; id: string }[];
+  private words: Words;
+  private description: Description;
   constructor() {
     this.svg = new Svg();
-    this.groopNumber = [
-      {
-        name: 'Easy',
-        numbers: '1-600',
-        id: 'A1',
-      },
-      {
-        name: 'Easy',
-        numbers: '601-1200',
-        id: 'A2',
-      },
-      {
-        name: 'Medium',
-        numbers: '1201-1800',
-        id: 'B1',
-      },
-      {
-        name: 'Medium',
-        numbers: '1801-2400',
-        id: 'B2',
-      },
-      {
-        name: 'Hard',
-        numbers: '2401-3000',
-        id: 'C1',
-      },
-      {
-        name: 'Hard',
-        numbers: '3001-3600',
-        id: 'C2',
-      },
-    ];
+    this.groupNumber = dataLevels;
+    this.words = new Words();
+    this.description = new Description();
   }
-  renderTextBook() {
+
+  async renderTextBook() {
     const parentBook = document.querySelector('body') as HTMLElement;
     const textBook = document.createElement('section') as HTMLElement;
     textBook.className = 'textBook';
     textBook.innerHTML = `
       <div class='header-and-settings'>
-        <h2 class='header'>Учебник</h2>
+        <h2 class='header-and-settings__header'>Учебник</h2>
         ${this.svg.settingsSvg('#98fc03', 'settings')}
       </div>
       <div class='levels' id='levels'></div>
       <div class='words'>
-        <div class='word__value'></div>
-        <div class='words__description'></div>
+        <h2 class='levels__header'>Слова</h2>
+        <div class='word__value' id='words'></div>
+        <div class='words__description' id='description'></div>
       </div>
-      <div class='pagination'></div>
+      <div class='pagination' id='pagination'></div>
       <div class='games'>
         <h2 class='games__header'>Игры</h2>
         <p class='games__description'>Закрепи новые слова при помощи игр</p>
@@ -63,9 +44,30 @@ class LayoutTextBook {
     parentBook.append(textBook);
 
     const levels = document.getElementById('levels') as HTMLElement;
-    this.groopNumber.forEach((item) => {
-      console.log(123);
-      new Level(item.name, item.numbers, item.id).appendTo(levels);
+    this.groupNumber.forEach((item, index) => {
+      new Level(item.name, item.numbers, item.id, index).appendTo(levels);
+    });
+
+    const pagination = document.getElementById('pagination') as HTMLElement;
+    new Pagination().appendTo(pagination);
+
+    this.addWords(1, 0);
+
+    const description = document.getElementById('description') as HTMLElement;
+    await this.description.appendTo(description, '5e9f5ee35eb9e72bc21af4b4');
+
+    (document.getElementById('playSvg') as HTMLElement).addEventListener('click', () => {
+      (document.getElementById('sound') as HTMLAudioElement).play();
+    });
+  }
+
+  addWords(page: number, group: number) {
+    const words = document.getElementById('words') as HTMLElement;
+    words.innerHTML = '';
+    this.words.getWords(page, group).then((data) => {
+      data.forEach((item: WordType) => {
+        new Word(item.id, item.word, item.wordTranslate).appendTo(words);
+      });
     });
   }
 }
