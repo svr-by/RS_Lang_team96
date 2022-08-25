@@ -55,6 +55,10 @@ class LayoutTextBook {
     await this.addLevels();
 
     const pagination = document.getElementById('pagination') as HTMLElement;
+    if (!sessionStorage.getItem('pageNumber')) {
+      console.log(123);
+      sessionStorage.setItem('pageNumber', '1');
+    }
     new Pagination().appendTo(pagination);
 
     new SettingsModal().appendTo(textBook);
@@ -75,7 +79,7 @@ class LayoutTextBook {
   addWords(page: number, group: number) {
     const words = document.getElementById('words') as HTMLElement;
     words.innerHTML = '';
-    this.words.getWords(page, group).then((data) => {
+    this.words.getWords(page - 1, group).then((data) => {
       data.forEach((item: WordType, index: number) => {
         if (index === 0) {
           const description = document.getElementById('description') as HTMLElement;

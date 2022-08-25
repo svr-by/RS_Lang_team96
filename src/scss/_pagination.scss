@@ -1,0 +1,55 @@
+@import "variables";
+
+.pagination {
+  display: flex;
+  margin: 2rem auto;
+
+  &__arrow-left,
+  &__arrow-right {
+    width: 2rem;
+    border-radius: 50%;
+    cursor: pointer;
+    &:hover {
+      background-color: $background-book-element-hover;
+    }
+  }
+
+  &__arrow-right {
+    transform: rotate(180deg);
+  }
+
+  &__page {
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
+    line-height: 2rem;
+    margin: 0 10px;
+    font-size: 1.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    &:hover {
+      background-color: $background-book-element-hover;
+    }
+  }
+}
+
+.selected-page {
+  background-color: $background-book-element-hover;
+}
+
+.pagination__page + .no-page {
+  background-color: $color-white;
+  cursor: default;
+}
+
+.left-inactive,
+.right-inactive {
+  width: 2rem;
+  fill: $secondary-grey;
+}
+
+.right-inactive {
+  transform: rotate(180deg);
+}
+
+

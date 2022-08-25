@@ -35,31 +35,6 @@
   justify-content: center;
 }
 
-.pagination {
-  display: flex;
-  margin: 0 auto;
-
-  &__arrow-left,
-  &__arrow-right {
-    width: 2rem;
-    cursor: pointer;
-  }
-
-  &__arrow-right {
-    transform: rotate(180deg);
-  }
-
-  &__page {
-    padding: 0 10px;
-    font-size: 1.5rem;
-    border-radius: 50%;
-    cursor: pointer;
-    &:hover {
-      background-color: #c9c9c9;
-    }
-  }
-}
-
 .settings-modal {
   position: absolute;
   border-radius: 1rem;
