@@ -30,44 +30,6 @@
   }
 }
 
-.levels-header {
-  @include headers;
-}
-
-.levels {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-
-.level {
-  display: flex;
-  width: 300px;
-  height: 140px;
-  background-color: $background-book-element;
-  border-radius: 0.5rem;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  &__header {
-    @include bookHeaders;
-  }
-  &__word-number {
-    font-size: 1.1rem;
-    text-align: left;
-    margin-left: 0.5rem;
-  }
-  &__value {
-    width: 100%;
-    height: 100%;
-    line-height: 140px;
-    margin: 0 auto;
-    font-size: 40px;
-    background-color: red;
-    border-radius: 4rem 0.5rem 0.5rem 4rem;
-  }
-}
-
 .words {
   &__header {
     @include bookHeaders;
