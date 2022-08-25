@@ -1,9 +1,197 @@
+@import "variables";
+
 .header-and-settings {
  display: flex;
+  text-align: center;
+
   &__header {
-    font-size: 1.5rem;
-    border-right: solid 5px #8f8e8e;
+    font-size: 3rem;
+    font-weight: bold;
+    border-right: solid 5px $dark-grey;
     padding-right: 1rem;
+    margin: 0;
   }
 
+  &__settings {
+    display: block;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-left: 1rem;
+    cursor: pointer;
+    fill: #FFFFFF;
+    &:hover {
+      fill: $secondary-grey;
+      padding: 2px;
+      background-color: $secondary-grey;
+      box-shadow: 10px 5px 5px  $secondary-grey;
+      border-radius: 0.5rem;
+    }
+  }
+}
+
+.levels-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.levels {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.level {
+  display: flex;
+  width: 300px;
+  height: 140px;
+  background-color: $background-book-element;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  &__header {
+    @include bookHeaders;
+  }
+  &__word-number {
+    font-size: 1.1rem;
+    text-align: left;
+    margin-left: 0.5rem;
+  }
+  &__value {
+    width: 100%;
+    height: 100%;
+    line-height: 140px;
+    margin: 0 auto;
+    font-size: 40px;
+    background-color: red;
+    border-radius: 4rem 0.5rem 0.5rem 4rem;
+  }
+}
+
+.words {
+  &__header {
+    @include bookHeaders;
+  }
+}
+
+.dictionary {
+  display: flex;
+  justify-content: space-between;
+
+  &__value {
+    display: flex;
+    flex-wrap: wrap;
+    width: 72%;
+    gap: 1rem;
+  }
+
+  &__description {
+    background-color: $background-book-element;
+    border-radius: 7rem 0.2rem 0.2rem 0.2rem;
+  }
+}
+
+.word {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  min-width: 250px;
+  min-height: 100px;
+  border-radius: 0.5rem;
+  background-color: $background-book-element;
+  cursor: pointer;
+  &__english {
+    padding: 0.3rem;
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  &__russian {
+    padding: 0.3rem;
+    margin: 0;
+    font-size: 1.5rem;
+  }
+}
+
+.content {
+  border-radius: 7rem 0.2rem 0.2rem 0.2rem;
+
+  &__image {
+    width: 100%;
+    border-radius: 7rem 0.2rem;
+  }
+
+  &__word {
+    padding-left: 1rem;
+    font-weight: bold;
+    font-size: 3rem;
+  }
+
+  &__word-translate {
+    padding-left: 1rem;
+    font-size: 2.5rem;
+  }
+
+  .transcription {
+    display: flex;
+    padding-left: 1rem;
+
+    &__value {
+      font-size: 2.5rem;
+      margin: 5px;
+    }
+
+    &__play {
+      width: 70px;
+      height: 60px;
+      margin-left: 20px;
+      border-radius: 1rem;
+      cursor: pointer;
+      &:hover {
+        background-color: #c9c9c9;
+        box-shadow: 10px 5px 5px  #c9c9c9;
+      }
+    }
+  }
+
+  &__header {
+    padding-left: 1rem;
+    font-size: 1.7rem;
+    font-weight: bold;
+  }
+
+  &__text {
+    padding-left: 1rem;
+    font-size: 1.2rem;
+  }
+}
+
+.page-navigation {
+  display: flex;
+  justify-content: center;
+}
+
+.pagination {
+  display: flex;
+  margin: 0 auto;
+
+  &__arrow-left,
+  &__arrow-right {
+    width: 2rem;
+    cursor: pointer;
+  }
+
+  &__arrow-right {
+    transform: rotate(180deg);
+  }
+
+  &__page {
+    padding: 0 10px;
+    font-size: 1.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    &:hover {
+      background-color: #c9c9c9;
+    }
+  }
 }

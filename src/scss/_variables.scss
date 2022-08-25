@@ -4,3 +4,14 @@ $color-grey-l: #dfdfdf;
 $color-black: #000000;
 $color-black-l: #37383c;
 $color-blue: #16b0e8;
+$background-book-element: #e7e7e7;
+$dark-grey: #8f8e8e;
+$secondary-grey: #c9c9c9;
+
+@mixin bookHeaders {
+  width: 200px;
+  text-align: left;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 1rem 0 0.5rem 0.5rem;
+}

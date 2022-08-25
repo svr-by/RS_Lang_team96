@@ -12,13 +12,30 @@ class Level {
         <h2 class='level__header'>${name}</h2>
         <p class='level__word-number'>${numbers}</p>
       </div>
-      <div class='level__value'>
+      <p class='level__value' style='background-color: ${this.choseColor(index)}'>
         ${id}
-      </div>
+      </p>
     `;
     this.level.addEventListener('click', () => {
       new layoutTextBook().addWords(1, index);
     });
+  }
+
+  choseColor(index: number) {
+    switch (index) {
+      case 0:
+        return '#FFC53D';
+      case 1:
+        return '#9CD7F9';
+      case 2:
+        return '#4CCBB7';
+      case 3:
+        return '#FF7171';
+      case 4:
+        return '#5D7CFD';
+      case 5:
+        return '#8A78FA';
+    }
   }
 
   appendTo(parent: HTMLElement) {

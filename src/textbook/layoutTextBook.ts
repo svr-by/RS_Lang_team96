@@ -26,15 +26,18 @@ class LayoutTextBook {
     textBook.innerHTML = `
       <div class='header-and-settings'>
         <h2 class='header-and-settings__header'>Учебник</h2>
-        ${this.svg.settingsSvg('#98fc03', 'settings')}
+        ${this.svg.settingsSvg('#ffef4f', 'header-and-settings__settings')}
       </div>
+      <h3 class='levels-header'>Уровни сложности слов</h3>
       <div class='levels' id='levels'></div>
       <div class='words'>
-        <h2 class='levels__header'>Слова</h2>
-        <div class='word__value' id='words'></div>
-        <div class='words__description' id='description'></div>
+        <h2 class='words__header'>Слова</h2>
+        <div class='dictionary'>
+          <div class='dictionary__value' id='words'></div>
+          <div class='dictionary__description' id='description'></div>
+        </div>
       </div>
-      <div class='pagination' id='pagination'></div>
+      <div class='page-navigation' id='pagination'></div>
       <div class='games'>
         <h2 class='games__header'>Игры</h2>
         <p class='games__description'>Закрепи новые слова при помощи игр</p>
