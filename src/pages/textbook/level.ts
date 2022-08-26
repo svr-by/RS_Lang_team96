@@ -1,13 +1,18 @@
 import layoutTextBook from './layoutTextBook';
 import LayoutTextBook from './layoutTextBook';
 import Pagination from './pagination';
+import Storage from '../../shared/services/storage';
 
 class Level {
   private readonly level: HTMLDivElement;
   private layoutTextBook: LayoutTextBook;
   private pagination: Pagination;
-  constructor(name: string, numbers: string, id: string, index: number) {
-    this.pagination = new Pagination();
+  private textBook: HTMLElement;
+  private storage: Storage;
+  constructor(name: string, numbers: string, id: string, index: number, textBook: HTMLElement) {
+    this.textBook = textBook;
+    this.storage = new Storage();
+    this.pagination = new Pagination(this.textBook);
     this.layoutTextBook = new layoutTextBook();
     this.level = document.createElement('div');
     this.level.classList.add(`level`);
@@ -23,12 +28,12 @@ class Level {
       </p>
     `;
 
-    if (index === JSON.parse(sessionStorage.getItem('level') as string)) {
+    if (index == this.storage.get('level')) {
       this.changeLevel(id, this.level);
     }
 
     this.level.addEventListener('click', () => {
-      sessionStorage.setItem('pageNumber', '1');
+      this.storage.set('pageNumber', '0');
       sessionStorage.setItem('level', JSON.stringify(index));
       this.changeLevel(id, this.level);
     });
@@ -48,13 +53,18 @@ class Level {
   }
 
   changeLevel(id: string, levelElement: HTMLElement) {
-    const index = JSON.parse(sessionStorage.getItem('level') as string);
-    const firstPage = JSON.parse(sessionStorage.getItem('pageNumber') as string);
-    this.layoutTextBook.addWords(firstPage, index);
-    this.pagination.highlightPage();
-    this.addPermanentColor(index, id);
-    levelElement.setAttribute('data-chose', 'true');
-    levelElement.style.opacity = '1';
+    const indexFromStorage = this.storage.get('level');
+    const index = indexFromStorage && Number(this.storage.get('level'));
+    if (typeof index === 'number') {
+      const firstPage: number | null = this.storage.get('pageNumber');
+      firstPage && this.layoutTextBook.addWords(firstPage, index, this.textBook);
+      this.pagination.highlightPage();
+      this.addPermanentColor(index, id);
+      levelElement.setAttribute('data-chose', 'true');
+      levelElement.style.opacity = '1';
+    } else {
+      throw new Error('Level index not a number');
+    }
   }
 
   addPermanentColor(index: number, id: string) {

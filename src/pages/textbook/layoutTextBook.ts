@@ -7,88 +7,95 @@ import Word from './word';
 import SettingsModal from './settingsModal';
 import { IWord } from '../../shared/interfaces';
 import API from '../../api';
+import Storage from '../../shared/services/storage';
 
 class LayoutTextBook {
   private svg: Svg;
   private groupNumber: { name: string; numbers: string; id: string }[];
   private description: Description;
   private API: API;
+  private storage: Storage;
 
   constructor() {
     this.svg = new Svg();
+    this.storage = new Storage();
     this.groupNumber = dataLevels;
     this.API = new API();
     this.description = new Description();
   }
 
   async renderTextBook() {
-    const parentBook = document.querySelector('body') as HTMLElement;
     const textBook = document.createElement('section') as HTMLElement;
     textBook.className = 'textBook';
     textBook.id = 'textBook';
     textBook.innerHTML = `
-      <div class='header-and-settings'>
-        <h2 class='header-and-settings__header'>Учебник</h2>
-        ${this.svg.settingsSvg('#ffef4f', 'header-and-settings__settings')}
-      </div>
-      <h3 class='levels-header'>Уровни сложности слов</h3>
-      <div class='levels' id='levels'></div>
-      <div class='words'>
-        <h2 class='words__header'>Слова</h2>
-        <div class='dictionary'>
-          <div class='dictionary__value' id='words'></div>
-          <div class='dictionary__description' id='description'></div>
+      <div class='wrapper'>
+        <div class='header-and-settings'>
+          <h2 class='header-and-settings__header'>Учебник</h2>
+          ${this.svg.settingsSvg('#ffef4f', 'header-and-settings__settings')}
+        </div>
+        <h3 class='levels-header'>Уровни сложности слов</h3>
+        <div class='levels' id='levels'></div>
+        <div class='words'>
+          <h2 class='words__header'>Слова</h2>
+          <div class='dictionary'>
+            <div class='dictionary__value' id='words'></div>
+            <div class='dictionary__description' id='description'></div>
+          </div>
+        </div>
+        <div class='page-navigation' id='pagination'></div>
+        <div class='games'>
+          <h2 class='games__header'>Игры</h2>
+          <p class='games__description'>Закрепи новые слова при помощи игр</p>
+          <div class='games__links'></div>
         </div>
       </div>
-      <div class='page-navigation' id='pagination'></div>
-      <div class='games'>
-        <h2 class='games__header'>Игры</h2>
-        <p class='games__description'>Закрепи новые слова при помощи игр</p>
-        <div class='games__links'></div>
-      </div>
     `;
-    parentBook.append(textBook);
 
-    if (!sessionStorage.getItem('level')) {
-      sessionStorage.setItem('level', '0');
+    if (!this.storage.get('level')) {
+      this.storage.set('level', '0');
     }
 
-    await this.addLevels();
-
-    const pagination = document.getElementById('pagination') as HTMLElement;
-    if (!sessionStorage.getItem('pageNumber')) {
-      sessionStorage.setItem('pageNumber', '1');
+    if (!this.storage.get('pageNumber')) {
+      this.storage.set('pageNumber', '0');
     }
-    new Pagination().appendTo(pagination);
+
+    await this.addLevels(textBook);
+
+    const pagination = textBook.querySelector('#pagination') as HTMLElement;
+
+    new Pagination(textBook).appendTo(pagination);
 
     new SettingsModal().appendTo(textBook);
 
-    (document.getElementById('settings') as HTMLElement).addEventListener('click', (event) => {
+    (textBook.querySelector('#settings') as HTMLElement).addEventListener('click', (event) => {
       event.stopPropagation();
-      this.addSettings();
+      this.addSettings(textBook);
     });
+
+    return textBook;
   }
 
-  addLevels() {
-    const levels = document.getElementById('levels') as HTMLElement;
+  addLevels(textBook: HTMLElement) {
+    const levels = textBook.querySelector('#levels') as HTMLElement;
     this.groupNumber.forEach((item, index) => {
-      new Level(item.name, item.numbers, item.id, index).appendTo(levels);
+      new Level(item.name, item.numbers, item.id, index, textBook).appendTo(levels);
     });
   }
 
-  addWords(page: number, group: number) {
-    const words = document.getElementById('words') as HTMLElement;
+  addWords(page: number, group: number, textBook: HTMLElement) {
+    const words = textBook.querySelector('#words') as HTMLElement;
     words.innerHTML = '';
-    this.API.getWords(group, page - 1).then((data) => {
+    this.API.getWords(group, page).then((data) => {
       if (typeof data === 'string') {
         console.log(data);
       }
       if (Array.isArray(data)) {
         data.forEach((item: IWord, index: number) => {
           if (index === 0) {
-            const description = document.getElementById('description') as HTMLElement;
+            const description = textBook.querySelector('#description') as HTMLElement;
             this.description.appendTo(description, item.id);
-            sessionStorage.setItem('chosenWordId', item.id);
+            this.storage.set('chosenWordId', item.id);
           }
           new Word(item.id, item.word, item.wordTranslate).appendTo(words);
         });
@@ -96,9 +103,9 @@ class LayoutTextBook {
     });
   }
 
-  addSettings() {
-    (document.getElementById('settings-modal') as HTMLElement).classList.remove('display-none');
-    (document.getElementById('toggle') as HTMLInputElement).addEventListener('change', (event) => {
+  addSettings(textBook: HTMLElement) {
+    (textBook.querySelector('#settings-modal') as HTMLElement).classList.remove('display-none');
+    (textBook.querySelector('#toggle') as HTMLInputElement).addEventListener('change', (event) => {
       event.stopPropagation();
       document.querySelectorAll('.russian').forEach((item) => {
         item.classList.toggle('display-none');
