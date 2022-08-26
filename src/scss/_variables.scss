@@ -9,16 +9,3 @@ $background-book-element-hover: #ff9999;
 $dark-grey: #8f8e8e;
 $secondary-grey: #c9c9c9;
 $yellow-vocabulary: #FFC53D;
-
-@mixin bookHeaders {
-  width: 200px;
-  text-align: left;
-  font-size: 2rem;
-  font-weight: bold;
-  margin: 1rem 0 0.5rem 0.5rem;
-}
-
-@mixin headers {
-  font-size: 1.5rem;
-  font-weight: bold;
-}

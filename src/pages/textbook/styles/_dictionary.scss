@@ -1,4 +1,5 @@
-@import "variables";
+@import "src/scss/variables";
+@import "mixins";
 
 .words {
   &__header {

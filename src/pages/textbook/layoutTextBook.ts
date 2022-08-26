@@ -1,22 +1,23 @@
-import Svg from '../textBookSvg/svg';
+import Svg from './svg';
 import Level from './level';
 import { dataLevels } from './levelsEnglishData';
-import Words from '../api/words';
-import { WordType } from '../types';
 import Pagination from './pagination';
 import Description from './description';
 import Word from './word';
 import SettingsModal from './settingsModal';
+import { IWord } from '../../shared/interfaces';
+import API from '../../api';
 
 class LayoutTextBook {
   private svg: Svg;
   private groupNumber: { name: string; numbers: string; id: string }[];
-  private words: Words;
   private description: Description;
+  private API: API;
+
   constructor() {
     this.svg = new Svg();
     this.groupNumber = dataLevels;
-    this.words = new Words();
+    this.API = new API();
     this.description = new Description();
   }
 
@@ -56,7 +57,6 @@ class LayoutTextBook {
 
     const pagination = document.getElementById('pagination') as HTMLElement;
     if (!sessionStorage.getItem('pageNumber')) {
-      console.log(123);
       sessionStorage.setItem('pageNumber', '1');
     }
     new Pagination().appendTo(pagination);
@@ -79,15 +79,20 @@ class LayoutTextBook {
   addWords(page: number, group: number) {
     const words = document.getElementById('words') as HTMLElement;
     words.innerHTML = '';
-    this.words.getWords(page - 1, group).then((data) => {
-      data.forEach((item: WordType, index: number) => {
-        if (index === 0) {
-          const description = document.getElementById('description') as HTMLElement;
-          this.description.appendTo(description, item.id);
-          sessionStorage.setItem('chosenWordId', item.id);
-        }
-        new Word(item.id, item.word, item.wordTranslate).appendTo(words);
-      });
+    this.API.getWords(group, page - 1).then((data) => {
+      if (typeof data === 'string') {
+        console.log(data);
+      }
+      if (Array.isArray(data)) {
+        data.forEach((item: IWord, index: number) => {
+          if (index === 0) {
+            const description = document.getElementById('description') as HTMLElement;
+            this.description.appendTo(description, item.id);
+            sessionStorage.setItem('chosenWordId', item.id);
+          }
+          new Word(item.id, item.word, item.wordTranslate).appendTo(words);
+        });
+      }
     });
   }
 

@@ -14,7 +14,7 @@ import {
 } from '../shared/types';
 
 class API {
-  base = 'http://localhost:8000';
+  base = 'https://rslang-team96.herokuapp.com';
   wordsEndpoint = `${this.base}/words`;
   usersEndpoint = `${this.base}/users`;
   signinEndpoint = `${this.base}/signin`;

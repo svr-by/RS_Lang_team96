@@ -1,4 +1,4 @@
-import Svg from '../textBookSvg/svg';
+import Svg from './svg';
 import LayoutTextBook from './layoutTextBook';
 
 class Pagination {

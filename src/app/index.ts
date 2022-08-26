@@ -1,10 +1,12 @@
-import { MainPage } from '../pages/main';
+// import { MainPage } from '../pages/main';
+import LayoutTextBook from '../pages/textbook/layoutTextBook';
 
 class App {
-  mainPage = new MainPage();
+  // mainPage = new MainPage();
+  layoutTextBook = new LayoutTextBook();
 
   render() {
-    this.mainPage.render();
+    this.layoutTextBook.renderTextBook();
   }
 }
 

@@ -1,4 +1,4 @@
-import { LevelType } from '../types';
+import { LevelType } from '../../shared/types';
 
 export const dataLevels: LevelType[] = [
   {
