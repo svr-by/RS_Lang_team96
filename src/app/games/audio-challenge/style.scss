@@ -98,8 +98,9 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  padding-top: 5%;
-  height: 980px;
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
 }
 
 .main__games__audio-challange-img {
@@ -242,9 +243,11 @@
 .result {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .result__title {
+  margin-bottom: 25px;
   font-family: 'Kalam';
   font-size: 4rem;
   text-align: center;

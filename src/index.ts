@@ -1,5 +1,4 @@
 import './style.scss';
-import App from './app/index';
+import { app } from './app';
 
-const app = new App();
 app.render();

@@ -5,4 +5,23 @@ html {
 
 * {
   box-sizing: inherit;
+  font-family: "Open Sans";
+}
+
+body {
+  @include flex(flex-start, stretch, column);
+  min-height: 100vh;
+}
+
+main {
+  flex-grow: 1;
+  @include flex(center, stretch)
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 1440px;
+  min-width: 320px;
+  margin: 0 auto;
+  padding: 10px;
 }

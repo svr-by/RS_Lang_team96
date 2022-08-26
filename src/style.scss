@@ -1,6 +1,13 @@
 @import 'scss/variables';
+@import 'scss/mixins';
 @import 'scss/normalize';
+@import 'scss/fonts';
 @import 'scss/base';
+@import 'shared/components/button/style';
+@import 'shared/components/header/style';
+@import 'shared/components/footer/style';
+@import 'pages/start/style';
+@import 'pages/start/starts';
 @import 'app/games/style.scss';
 @import 'app/games/sprint/style.scss';
 @import 'app/games/audio-challenge/style.scss';

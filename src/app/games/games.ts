@@ -29,7 +29,7 @@ export default class Games {
     }
   }
 
-  render(): void {
+  render() {
     this.root.appendChild(this.mainGames);
     this.mainGames.classList.add('main__games');
 
@@ -58,5 +58,7 @@ export default class Games {
     new BaseComponent(this.sprintGame, 'button', ['game-sprint__play'], 'play')
       .render()
       .addEventListener('click', ({ target }) => this.pushBtnPlaySprint(target as HTMLElement));
+
+    return this.mainGames;
   }
 }
