@@ -1,4 +1,6 @@
 import { layoutService } from '../../services/layoutService';
+import { navigationService } from '../../services/navigationService';
+import { NavLinks } from '../../enums';
 import { Button } from '../button';
 
 export class Header {
@@ -24,19 +26,19 @@ export class Header {
       <div class="nav">
         <ul class="nav__list">
           <li class="nav__item">
-            <a href="/" class="nav__link">Главная</a>
+            <a id="${NavLinks.start}" class="nav__link" href="">Главная</a>
           </li>
           <li class="nav__item">
-            <a href="/textbook" class="nav__link">Учебник</a>
+            <a id="${NavLinks.textbook}" class="nav__link" href="">Учебник</a>
           </li>
           <li class="nav__item">
-            <a href="/games" class="nav__link">Игры</a>
+            <a id="${NavLinks.games}" class="nav__link" href="">Игры</a>
           </li>
           <li class="nav__item">
-            <a href="/statistics" class="nav__link">Статистика</a>
+            <a id="${NavLinks.statistics}" class="nav__link" href="">Статистика</a>
           </li>
           <li class="nav__item">
-            <a href="/developers" class="nav__link">Разработчики</a>
+            <a id="${NavLinks.developers}" class="nav__link" href="">Разработчики</a>
           </li>
         </ul>
     `;
@@ -45,5 +47,22 @@ export class Header {
     login.append(this.loginBtn.elem);
     wrapper.append(login);
     this.elem.append(wrapper);
+    this.addListeners();
+  }
+
+  private addListeners() {
+    this.elem.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+
+      if (target.classList.contains('logo__img')) {
+        event.preventDefault();
+        navigationService.followLink(NavLinks.start);
+      }
+
+      if (target.classList.contains('nav__link')) {
+        event.preventDefault();
+        navigationService.followLink(target.id);
+      }
+    });
   }
 }

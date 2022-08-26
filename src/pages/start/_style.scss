@@ -1,17 +1,11 @@
-.main-page {
-  @include flex(flex-start, stretch, column);
-  min-height: 100vh;
-}
-
-.main {
-  flex-grow: 1;
+.start__wrapper {
+  padding-top: 5rem;
   background: linear-gradient( $color-blue 0%, $color-black-l 100%);
   overflow: hidden;
 }
 
-.main__wrapper {
+.start-content {
   @include flex(flex-start, stretch);
-  padding-top: 5rem;
 }
 
 .text-block {
