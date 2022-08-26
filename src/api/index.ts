@@ -55,7 +55,9 @@ class API {
         case 200:
           return this.saveUser(response);
         case 403:
-          return 'Forbidden';
+          return 'Не верный e-mail или пароль';
+        case 404:
+          return 'Пользователь не найден. Необходимо зарегистрироваться';
       }
     }
   }

@@ -1,11 +1,14 @@
 import { layoutService } from '../../shared/services/layoutService';
 import { Modal } from '../../shared/components/modal';
+import { authService } from './authService';
 
-export class Authentication {
+export class Authorization {
   elem: HTMLElement;
+  modal: Modal;
 
   constructor() {
-    this.elem = layoutService.createElement({ tag: 'div', classes: ['authentication'] });
+    this.elem = layoutService.createElement({ tag: 'div', classes: ['authorization'] });
+    this.modal = new Modal();
     this.renderSigninForm();
   }
 
@@ -45,8 +48,7 @@ export class Authentication {
   }
 
   show() {
-    const modal = new Modal();
-    modal.showModal(this.elem);
+    this.modal.showModal(this.elem);
   }
 
   private addListeners() {
@@ -68,18 +70,27 @@ export class Authentication {
 
     const signinBtn = this.elem.querySelector('#signinBtn');
     if (signinBtn) {
-      signinBtn.addEventListener('click', () => {
-        // event.preventDefault();
-        // const userNameInput = this.elem.querySelector('#userNameInput') as HTMLInputElement;
+      signinBtn.addEventListener('click', async (event) => {
         const userEmailInput = this.elem.querySelector('#userEmailInput') as HTMLInputElement;
         const userPassInput = this.elem.querySelector('#userPassInput') as HTMLInputElement;
-        const formFieldError = this.elem.querySelector('#formFieldError') as HTMLElement;
-        formFieldError.innerHTML = `${userEmailInput.value}`;
-        if (!userEmailInput.validity.valid) {
-          formFieldError.innerHTML = `${userEmailInput.validationMessage}`;
+        if (userEmailInput.validity.valid && userPassInput.validity.valid) {
+          event.preventDefault();
+          const isSigned = await authService.signin();
+          if (isSigned) this.modal.removeModal();
         }
-        if (!userPassInput.validity.valid) {
-          formFieldError.innerHTML = `${userPassInput.validationMessage}`;
+      });
+    }
+
+    const registrBtn = this.elem.querySelector('#registrBtn');
+    if (registrBtn) {
+      registrBtn.addEventListener('click', async (event) => {
+        const userNameInput = this.elem.querySelector('#userNameInput') as HTMLInputElement;
+        const userEmailInput = this.elem.querySelector('#userEmailInput') as HTMLInputElement;
+        const userPassInput = this.elem.querySelector('#userPassInput') as HTMLInputElement;
+        if (userNameInput.validity.valid && userEmailInput.validity.valid && userPassInput.validity.valid) {
+          event.preventDefault();
+          const isRegistered = await authService.signin(); //исправить
+          if (isRegistered) this.modal.removeModal();
         }
       });
     }

@@ -7,7 +7,7 @@ export class Modal {
   }
 
   showModal(content: HTMLElement) {
-    this.checkOtherModal();
+    this.removeModal();
     const wrapper = document.createElement('div');
     wrapper.classList.add('modal__wrapper');
     wrapper.append(content);
@@ -18,18 +18,13 @@ export class Modal {
     this.elem.append(wrapper);
     document.body.append(this.elem);
     document.body.classList.add('noscroll');
-    this.elem.addEventListener('click', (event) => this.closeModal(event));
+    this.elem.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (target?.classList.contains('modal__btn-remove') || target?.classList.value === 'modal') this.removeModal();
+    });
   }
 
-  private closeModal(event: Event) {
-    const target = event.target as HTMLElement;
-    if (target?.classList.contains('modal__btn-remove') || target?.classList.value === 'modal') {
-      this.elem.remove();
-      document.body.classList.remove('noscroll');
-    }
-  }
-
-  private checkOtherModal() {
+  removeModal() {
     const modal = document.querySelector('.modal');
     if (modal) {
       modal.remove();

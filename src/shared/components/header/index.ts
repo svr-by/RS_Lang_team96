@@ -1,4 +1,4 @@
-import { Authentication } from '../../../pages/authentication';
+import { Authorization } from '../../../pages/authorization';
 import { layoutService } from '../../services/layoutService';
 import { Button } from '../button';
 
@@ -51,7 +51,7 @@ export class Header {
 
   private addListeners() {
     this.loginBtn.elem.addEventListener('click', () => {
-      const logiPage = new Authentication();
+      const logiPage = new Authorization();
       logiPage.show();
     });
   }
