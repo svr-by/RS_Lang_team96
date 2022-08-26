@@ -8,6 +8,16 @@ html {
   font-family: "Open Sans";
 }
 
+body {
+  @include flex(flex-start, stretch, column);
+  min-height: 100vh;
+}
+
+main {
+  flex-grow: 1;
+  @include flex(center, stretch)
+}
+
 .wrapper {
   width: 100%;
   max-width: 1440px;
