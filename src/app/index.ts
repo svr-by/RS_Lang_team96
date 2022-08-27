@@ -3,6 +3,7 @@ import { Header } from '../shared/components/header';
 import { Footer } from '../shared/components/footer';
 import { Views } from '../shared/enums';
 import { StartPage } from '../pages/start';
+import Statistic from './statistic/statistic';
 
 class App {
   header: Header;
@@ -34,7 +35,7 @@ class App {
         mainContent = layoutService.createElement({ tag: 'h1', text: 'Страница с играми' });
         break;
       case Views.statistics:
-        mainContent = layoutService.createElement({ tag: 'h1', text: 'Страница статистики' });
+        mainContent = new Statistic(this.main).render();
         break;
       case Views.developers:
         mainContent = layoutService.createElement({ tag: 'h1', text: 'Разработчики' });
@@ -47,7 +48,7 @@ class App {
         mainContent = new StartPage().render();
         break;
     }
-    this.main.append(mainContent);
+    this.main.append(mainContent as HTMLElement);
   }
 }
 
