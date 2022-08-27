@@ -1,57 +1,75 @@
 import { layoutService } from '../../shared/services/layoutService';
+import { userService } from '../../shared/services/userService';
 import { Modal } from '../../shared/components/modal';
-import { authService } from './authService';
 
 export class Authorization {
   elem: HTMLElement;
   modal: Modal;
 
   constructor() {
-    this.elem = layoutService.createElement({ tag: 'div', classes: ['authorization'] });
+    this.elem = layoutService.createElement({ tag: 'form', classes: ['auth-form'], id: 'authForm' });
     this.modal = new Modal();
-    this.renderSigninForm();
+    this.addFormListeners();
   }
 
   private renderSigninForm() {
     this.elem.innerHTML = `
-      <form class="auth-form">
         <h2 class="auth-form__title">Вход в аккаунт</h2>
         <p class="auth-form__message">Вы получите доступ к прогрессу изучения слов, разделу "Сложные слова" и статистике.</p>
         <div class="auth-form__fields">
-          <input id="userEmailInput" class="auth-form__input" type="email" placeholder="E-mail" required="">
-          <input id="userPassInput" class="auth-form__input" type="password" placeholder="Пароль" required="" minlength="8">
+          <input name="email" class="auth-form__input" type="email" placeholder="E-mail" required="">
+          <input name="pass" class="auth-form__input" type="password" placeholder="Пароль" required="" minlength="8">
         </div>
         <p id="formFieldError" class="auth-form__error"></p>
-        <button id="signinBtn" class="button auth-form__btn">Войти</button>
+        <input type="submit" class="button auth-form__btn"  id="authBtn" data-func="login" value="Войти"/>
         <a id="registrLink" class="auth-form__link" href="">Регистрация аккаунта</a>
-      </form>
     `;
-    this.addListeners();
+    this.addLinkListeners();
   }
 
   private renderRegistrForm() {
     this.elem.innerHTML = `
-      <form class="auth-form">
         <h2 class="auth-form__title">Регистрация аккаунта</h2>
         <p class="auth-form__message">Вы получите доступ к прогрессу изучения слов, разделу "Сложные слова" и статистике.</p>
         <div class="auth-form__fields">
-          <input id="userNameInput" class="auth-form__input" type="text" placeholder="Имя" required="">
-          <input id="userEmailInput" class="auth-form__input" type="email" placeholder="E-mail" required="">
-          <input id="userPassInput" class="auth-form__input" type="password" placeholder="Пароль" required="" minlength="8">
+          <input name="userName" class="auth-form__input" type="text" placeholder="Имя" required="">
+          <input name="email" class="auth-form__input" type="email" placeholder="E-mail" required="">
+          <input name="pass" class="auth-form__input" type="password" placeholder="Пароль" required="" minlength="8">
         </div>
         <p id="formFieldError" class="auth-form__error"></p>
-        <button id="registrBtn" class="button auth-form__btn">Регистрация</button>
+        <input type="submit" class="button auth-form__btn"  id="authBtn" data-func="registr" value="Регистрация"/>
         <a id="signinLink" class="auth-form__link" href="">Войти в аккаунт</a>
-      </form>
     `;
-    this.addListeners();
+    this.addLinkListeners();
   }
 
   show() {
+    this.renderSigninForm();
     this.modal.showModal(this.elem);
   }
 
-  private addListeners() {
+  private addFormListeners() {
+    this.elem.addEventListener('submit', async (event) => {
+      const button = this.elem.querySelector('#authBtn') as HTMLElement;
+      if (button) {
+        let isSuccess: boolean;
+        switch (button.dataset.func) {
+          case 'login':
+            event.preventDefault();
+            isSuccess = await userService.signIn();
+            if (isSuccess) this.modal.closeModal();
+            break;
+          case 'registr':
+            event.preventDefault();
+            isSuccess = await userService.registration();
+            if (isSuccess) this.modal.closeModal();
+            break;
+        }
+      }
+    });
+  }
+
+  private addLinkListeners() {
     const registrLink = this.elem.querySelector('#registrLink');
     if (registrLink) {
       registrLink.addEventListener('click', (event) => {
@@ -65,33 +83,6 @@ export class Authorization {
       signinLink.addEventListener('click', (event) => {
         event.preventDefault();
         this.renderSigninForm();
-      });
-    }
-
-    const signinBtn = this.elem.querySelector('#signinBtn');
-    if (signinBtn) {
-      signinBtn.addEventListener('click', async (event) => {
-        const userEmailInput = this.elem.querySelector('#userEmailInput') as HTMLInputElement;
-        const userPassInput = this.elem.querySelector('#userPassInput') as HTMLInputElement;
-        if (userEmailInput.validity.valid && userPassInput.validity.valid) {
-          event.preventDefault();
-          const isSigned = await authService.signin();
-          if (isSigned) this.modal.removeModal();
-        }
-      });
-    }
-
-    const registrBtn = this.elem.querySelector('#registrBtn');
-    if (registrBtn) {
-      registrBtn.addEventListener('click', async (event) => {
-        const userNameInput = this.elem.querySelector('#userNameInput') as HTMLInputElement;
-        const userEmailInput = this.elem.querySelector('#userEmailInput') as HTMLInputElement;
-        const userPassInput = this.elem.querySelector('#userPassInput') as HTMLInputElement;
-        if (userNameInput.validity.valid && userEmailInput.validity.valid && userPassInput.validity.valid) {
-          event.preventDefault();
-          const isRegistered = await authService.signin(); //исправить
-          if (isRegistered) this.modal.removeModal();
-        }
       });
     }
   }

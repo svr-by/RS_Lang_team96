@@ -38,7 +38,16 @@ class API {
       },
       body: JSON.stringify(body),
     });
-    return this.handleResponse(response);
+    if (response) {
+      switch (response.status) {
+        case 200:
+          return response.json();
+        case 417:
+          return 'Пользователь уже существует.';
+        case 422:
+          return 'Не верный e-mail или пароль.';
+      }
+    }
   }
 
   async signIn(body: UserParams): Promise<SignInResponse | string | void> {
@@ -55,9 +64,9 @@ class API {
         case 200:
           return this.saveUser(response);
         case 403:
-          return 'Не верный e-mail или пароль';
+          return 'Не верный e-mail или пароль.';
         case 404:
-          return 'Пользователь не найден. Необходимо зарегистрироваться';
+          return 'Пользователь не найден. Необходимо зарегистрироваться.';
       }
     }
   }
@@ -303,7 +312,6 @@ class API {
     }
     userStr = JSON.stringify(userObj);
     localStorage.setItem('user', userStr);
-    console.log('token refreshed');
     return response;
   }
 

@@ -1,37 +1,35 @@
-.authorization {
-  width: 400px;
-}
-
 .auth-form {
+  max-width: 400px;
   @include flex(flex-start, stretch, column);
   gap: 1rem;
-}
 
-.auth-form__title {
-  align-self: center;
-}
 
-.auth-form__fields {
-  @include flex(flex-start, stretch, column);
-  gap: 1rem;
-}
+  &__title {
+    align-self: center;
+  }
 
-.auth-form__error {
-  text-align: center;
-  color: $color-red;
-}
+  &__fields  {
+    @include flex(flex-start, stretch, column);
+    gap: 1rem;
+  }
 
-.auth-form__btn {
-  text-align: center;
-}
+  &__btn  {
+    text-align: center;
+  }
 
-.auth-form__link {
-  font-size: 0.875rem;
-  align-self: center;
-  text-decoration: none;
-  color: $color-grey;
+  &__error  {
+    text-align: center;
+    color: $color-red;
+  }
 
-  &:hover {
-    text-decoration: underline;
+  &__link  {
+    font-size: 0.875rem;
+    align-self: center;
+    text-decoration: none;
+    color: $color-grey;
+    
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
