@@ -9,6 +9,7 @@ export class Modal {
   }
 
   showModal(content: HTMLElement) {
+    this.closeOtherModal();
     this.elem.innerHTML = '';
     const wrapper = layoutService.createElement({ tag: 'div', classes: ['modal__wrapper'] });
     wrapper.append(content);
@@ -29,5 +30,10 @@ export class Modal {
     if (target?.classList.contains('modal__btn-remove') || target?.classList.value === 'modal') {
       this.closeModal();
     }
+  }
+
+  private closeOtherModal() {
+    const otherModal = document.querySelector('.modal');
+    if (otherModal) otherModal.remove();
   }
 }

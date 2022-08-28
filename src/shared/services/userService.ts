@@ -1,5 +1,7 @@
 import { User, UserParams, SignInResponse } from '../types';
 import { app } from '../../app';
+import { Modal } from '../components/modal';
+import { layoutService } from './layoutService';
 import API from '../../api';
 
 class UserService {
@@ -19,16 +21,22 @@ class UserService {
     return userName;
   }
 
-  signOut() {
-    localStorage.removeItem('user');
-    app.header.renderloginElem();
-  }
-
   async requestUserName() {
     const userid = this.getStoredUserId();
     const userObj = userid ? await this.api.getUser(userid) : '';
     const userName = typeof userObj === 'object' ? userObj.name : '';
     return userName;
+  }
+
+  showAuthorizationMess() {
+    const mess = layoutService.createElement({ tag: 'h3', text: 'Пожалуйста авторизуйтесь' });
+    new Modal().showModal(mess);
+    this.signOut();
+  }
+
+  signOut() {
+    localStorage.removeItem('user');
+    app.header.renderloginElem();
   }
 
   async signIn() {

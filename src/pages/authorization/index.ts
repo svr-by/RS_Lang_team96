@@ -12,6 +12,11 @@ export class Authorization {
     this.addFormListeners();
   }
 
+  show() {
+    this.renderSigninForm();
+    this.modal.showModal(this.elem);
+  }
+
   private renderSigninForm() {
     this.elem.innerHTML = `
         <h2 class="auth-form__title">Вход в аккаунт</h2>
@@ -41,11 +46,6 @@ export class Authorization {
         <a id="signinLink" class="auth-form__link" href="">Войти в аккаунт</a>
     `;
     this.addLinkListeners();
-  }
-
-  show() {
-    this.renderSigninForm();
-    this.modal.showModal(this.elem);
   }
 
   private addFormListeners() {
