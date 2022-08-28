@@ -59,3 +59,9 @@ export type NewElement = {
   classes?: string[];
   id?: string;
 };
+
+export type LevelType = {
+  name: string;
+  numbers: string;
+  id: string;
+};
