@@ -6,5 +6,10 @@
 @import 'shared/components/button/style';
 @import 'shared/components/header/style';
 @import 'shared/components/footer/style';
+@import 'pages/textbook/styles/mixins';
+@import 'pages/textbook/styles/vocabularyLayout';
+@import 'pages/textbook/styles/levelsVocabulary';
+@import 'pages/textbook/styles/dictionary';
+@import 'pages/textbook/styles/pagination';
 @import 'pages/start/style';
 @import 'pages/start/starts';
