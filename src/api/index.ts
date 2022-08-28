@@ -12,12 +12,46 @@ import {
   UserSettings,
   UserSettingsParams,
 } from '../shared/types';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+
+interface AxiosRequestConfigExt extends AxiosRequestConfig {
+  _retry?: boolean;
+  headers: Record<string, string>;
+}
 
 class API {
-  base = 'http://localhost:8000';
-  wordsEndpoint = `${this.base}/words`;
-  usersEndpoint = `${this.base}/users`;
-  signinEndpoint = `${this.base}/signin`;
+  base: string;
+  wordsEndpoint: string;
+  usersEndpoint: string;
+  signinEndpoint: string;
+  axiosInstance: AxiosInstance;
+
+  constructor() {
+    this.base = 'http://localhost:8000';
+    this.wordsEndpoint = `${this.base}/words`;
+    this.usersEndpoint = `${this.base}/users`;
+    this.signinEndpoint = `${this.base}/signin`;
+    this.axiosInstance = axios.create();
+    this.axiosInstance.interceptors.response.use(
+      (res) => {
+        return res;
+      },
+      async (err) => {
+        const originalConfig: AxiosRequestConfigExt = err.config;
+        if (err.response) {
+          if (err.response.status === 401 && !originalConfig._retry) {
+            originalConfig._retry = true;
+            const userId = this.getLocalUserId();
+            const response = await this.getNewTokens(userId);
+            const newToken = response && typeof response != 'string' ? response.token : '';
+            originalConfig.headers['Authorization'] = `Bearer ${newToken}`;
+            return this.axiosInstance(originalConfig);
+          }
+        }
+        return err.response;
+      }
+    );
+  }
 
   async getWords(group: number, page: number): Promise<IWord[] | string | void> {
     const response = await fetch(`${this.wordsEndpoint}?group=${group}&page=${page}`);
@@ -72,21 +106,20 @@ class API {
   }
 
   async getUser(userId: string): Promise<User | string | void> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}`, {
+    const token = this.getLocalToken();
+    const response = await this.axiosInstance.get(`${this.usersEndpoint}/${userId}`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
-    return this.handleResponse(response);
+    return this.handleAxiosResponse(response);
   }
 
   async updateUser(userId: string, body: UserParams): Promise<User | string | void> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}`, {
-      method: 'PUT',
+    const token = this.getLocalToken();
+    const response = await this.axiosInstance.put(`${this.usersEndpoint}/${userId}`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
@@ -94,23 +127,22 @@ class API {
       },
       body: JSON.stringify(body),
     });
-    return this.handleResponse(response);
+    return this.handleAxiosResponse(response);
   }
 
   async deleteUser(userId: string): Promise<string | void> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}`, {
-      method: 'DELETE',
+    const token = this.getLocalToken();
+    const response = await this.axiosInstance.delete(`${this.usersEndpoint}/${userId}`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
       },
     });
-    return this.handleResponse(response);
+    return this.handleAxiosResponse(response);
   }
 
   async getNewTokens(userId: string): Promise<SignInResponse | string | void> {
-    const token = this.getRefreshToken();
+    const token = this.getLocalRefreshToken();
     const response = await fetch(`${this.usersEndpoint}/${userId}/tokens`, {
       headers: {
         Accept: 'application/json',
@@ -120,7 +152,7 @@ class API {
     if (response) {
       switch (response.status) {
         case 200:
-          return this.updateStoredToken(response);
+          return this.updateLocalTokens(response);
         case 401:
           return 'Unauthorized';
         case 403:
@@ -130,9 +162,8 @@ class API {
   }
 
   async addUserWord(userId: string, wordId: string, body: UserWordParams): Promise<UserWord | string | void> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
-      method: 'POST',
+    const token = this.getLocalToken();
+    const response = await this.axiosInstance.post(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
@@ -140,37 +171,36 @@ class API {
       },
       body: JSON.stringify(body),
     });
-    return this.handleResponse(response);
+    return this.handleAxiosResponse(response);
   }
 
   async getUserWords(userId: string): Promise<UserWord[] | string | void> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/words`, {
+    const token = this.getLocalToken();
+    const response = await this.axiosInstance.get(`${this.usersEndpoint}/${userId}/words`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
-    return this.handleResponse(response);
+    return this.handleAxiosResponse(response);
   }
 
   async getUserWordByID(userId: string, wordId: string): Promise<UserWord | string | void> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
+    const token = this.getLocalToken();
+    const response = await this.axiosInstance.get(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
-    return this.handleResponse(response);
+    return this.handleAxiosResponse(response);
   }
 
   async updateUserWord(userId: string, wordId: string, body: UserWordParams): Promise<UserWord | string | void> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
-      method: 'PUT',
+    const token = this.getLocalToken();
+    const response = await this.axiosInstance.put(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
@@ -178,66 +208,64 @@ class API {
       },
       body: JSON.stringify(body),
     });
-    return this.handleResponse(response);
+    return this.handleAxiosResponse(response);
   }
 
   async deleteUserWord(userId: string, wordId: string): Promise<string | void> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
-      method: 'DELETE',
+    const token = this.getLocalToken();
+    const response = await this.axiosInstance.delete(`${this.usersEndpoint}/${userId}/words/${wordId}`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
-    return this.handleResponse(response);
+    return this.handleAxiosResponse(response);
   }
 
   async getAggregatedWords(
     userId: string,
     wordsParams?: AggregatedWordsParams
   ): Promise<AggregatedWordsResponse[] | string | void> {
-    const token = this.getToken();
+    const token = this.getLocalToken();
     const query = wordsParams ? this.createAggregatedWordsQuery(wordsParams) : '';
-    const response = await fetch(`${this.usersEndpoint}/${userId}/aggregatedWords${query}`, {
+    const response = await this.axiosInstance.get(`${this.usersEndpoint}/${userId}/aggregatedWords${query}`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
-    return this.handleResponse(response);
+    return this.handleAxiosResponse(response);
   }
 
   async getAggregatedWordsById(userId: string, wordId: string): Promise<UserWord[] | string | void> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/aggregatedWords/${wordId}`, {
+    const token = this.getLocalToken();
+    const response = await this.axiosInstance.get(`${this.usersEndpoint}/${userId}/aggregatedWords/${wordId}`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
-    return this.handleResponse(response);
+    return this.handleAxiosResponse(response);
   }
 
   async getUserStatistics(userId: string): Promise<UserStatistics | string | void> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/statistics`, {
+    const token = this.getLocalToken();
+    const response = await this.axiosInstance.get(`${this.usersEndpoint}/${userId}/statistics`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
-    return this.handleResponse(response);
+    return this.handleAxiosResponse(response);
   }
 
   async upsertUserStatistics(userId: string, body: UserStatisticsParams): Promise<UserStatistics | string | void> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/statistics`, {
-      method: 'PUT',
+    const token = this.getLocalToken();
+    const response = await this.axiosInstance.put(`${this.usersEndpoint}/${userId}/statistics`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
@@ -245,25 +273,24 @@ class API {
       },
       body: JSON.stringify(body),
     });
-    return this.handleResponse(response);
+    return this.handleAxiosResponse(response);
   }
 
   async getUserSettings(userId: string): Promise<UserSettings | string | void> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/settings`, {
+    const token = this.getLocalToken();
+    const response = await this.axiosInstance.get(`${this.usersEndpoint}/${userId}/settings`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
-    return this.handleResponse(response);
+    return this.handleAxiosResponse(response);
   }
 
   async upsertUserSettings(userId: string, body: UserSettingsParams): Promise<UserSettings | string | void> {
-    const token = this.getToken();
-    const response = await fetch(`${this.usersEndpoint}/${userId}/settings`, {
-      method: 'PUT',
+    const token = this.getLocalToken();
+    const response = await this.axiosInstance.put(`${this.usersEndpoint}/${userId}/settings`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
@@ -271,26 +298,25 @@ class API {
       },
       body: JSON.stringify(body),
     });
-    return this.handleResponse(response);
+    return this.handleAxiosResponse(response);
   }
 
   private handleResponse(response: Response) {
     if (response) {
-      switch (response.status) {
-        case 200:
-          return response.json();
-        case 204:
-          return 'Deleted';
-        case 400:
-          return 'Bad request';
-        case 401:
-          return 'Unauthorized';
-        case 403:
-          return 'Forbidden';
-        case 404:
-          return 'Not found';
-        case 422:
-          return 'Incorrect e-mail or password';
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        return response.statusText;
+      }
+    }
+  }
+
+  private handleAxiosResponse(response: AxiosResponse) {
+    if (response) {
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        return response.statusText;
       }
     }
   }
@@ -302,7 +328,7 @@ class API {
     return response;
   }
 
-  private async updateStoredToken(rawResponse: Response) {
+  private async updateLocalTokens(rawResponse: Response) {
     const response: SignInResponse = await rawResponse.json();
     let userStr = localStorage.getItem('user');
     const userObj: SignInResponse = userStr ? JSON.parse(userStr) : null;
@@ -315,18 +341,25 @@ class API {
     return response;
   }
 
-  private getToken(): string {
+  private getLocalToken(): string {
     const userStr = localStorage.getItem('user');
     const userObj: SignInResponse = userStr ? JSON.parse(userStr) : null;
     const token = userObj ? userObj.token : '';
     return token;
   }
 
-  private getRefreshToken() {
+  private getLocalRefreshToken() {
     const userStr = localStorage.getItem('user');
     const userObj: SignInResponse = userStr ? JSON.parse(userStr) : null;
     const refreshToken = userObj ? userObj.refreshToken : '';
     return refreshToken;
+  }
+
+  private getLocalUserId() {
+    const userStr = localStorage.getItem('user');
+    const userObj: SignInResponse = userStr ? JSON.parse(userStr) : null;
+    const userId = userObj ? userObj.userId : '';
+    return userId;
   }
 
   private createAggregatedWordsQuery(wordsParams: AggregatedWordsParams) {

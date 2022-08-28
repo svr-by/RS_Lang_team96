@@ -19,8 +19,9 @@ class UserService {
     return userName;
   }
 
-  clearStoredUser() {
+  signOut() {
     localStorage.removeItem('user');
+    app.header.renderloginElem();
   }
 
   async requestUserName() {

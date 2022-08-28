@@ -9,6 +9,7 @@ export class Modal {
   }
 
   showModal(content: HTMLElement) {
+    this.elem.innerHTML = '';
     const wrapper = layoutService.createElement({ tag: 'div', classes: ['modal__wrapper'] });
     wrapper.append(content);
     const removeBtn = layoutService.createElement({ tag: 'button', text: '✖', classes: ['modal__btn-remove'] });
@@ -19,15 +20,14 @@ export class Modal {
   }
 
   closeModal() {
-    this.elem.innerHTML = '';
     this.elem.remove();
+    document.body.classList.remove('noscroll');
   }
 
   private closeModalHandler(event: Event) {
     const target = event.target as HTMLElement;
     if (target?.classList.contains('modal__btn-remove') || target?.classList.value === 'modal') {
       this.closeModal();
-      document.body.classList.remove('noscroll');
     }
   }
 }

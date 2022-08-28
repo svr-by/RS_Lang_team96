@@ -79,8 +79,7 @@ export class Header {
         this.loginWindow.show();
       }
       if (this.loginBtn.elem.id === 'logOutBtn') {
-        userService.clearStoredUser();
-        this.renderloginElem();
+        userService.signOut();
       }
     });
   }
