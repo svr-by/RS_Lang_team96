@@ -1,6 +1,6 @@
-import BaseComponent from '../utility/base_component';
+import BaseComponent from '../../../shared/components/base_component';
 import AudioChallange from '../audio-challenge/audio-challenge';
-import IWord from '../../../interfaces/word';
+import IWord from '../../../shared/interfaces/word';
 import getWords from '../utility/get-words';
 import IStorage from '../utility/storage';
 

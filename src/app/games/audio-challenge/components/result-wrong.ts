@@ -1,4 +1,4 @@
-import BaseComponent from '../../../games/utility/base_component';
+import BaseComponent from '../../../../shared/components/base_component';
 import IStorage from '../../../games/utility/storage';
 
 export default class StatWordsWrong {

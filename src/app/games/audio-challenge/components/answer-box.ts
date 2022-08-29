@@ -1,4 +1,4 @@
-import BaseComponent from '../../../games/utility/base_component';
+import BaseComponent from '../../../../shared/components/base_component';
 
 export default class AnswerBox {
   readonly answerBox: HTMLElement;

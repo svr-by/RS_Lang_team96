@@ -1,11 +1,11 @@
-import BaseComponent from '../../../games/utility/base_component';
+import BaseComponent from '../../../../shared/components/base_component';
 import StatWordsWrong from '../../../games/audio-challenge/components/result-wrong';
 import StatWordsAnswer from '../../../games/audio-challenge/components/result-answer';
 import IStorage from '../../../games/utility/storage';
-import IStatistic from '../../../../interfaces/statistic';
+import IStatistic from '../../../../shared/interfaces/statistic';
 import StatisticStorage from '../../../games/utility/statistics-storage';
-import saveUserStatistics from '../../../games/api/put-statistics';
-import getUserStatistics from '../../../games/api/get-statistics';
+import saveUserStatistics from '../../../../api/put-statistics';
+import getUserStatistics from '../../../../api/get-statistics';
 
 export default class ResultSprint {
   readonly resultSprint: HTMLElement;

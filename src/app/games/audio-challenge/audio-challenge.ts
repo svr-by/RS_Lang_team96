@@ -1,7 +1,7 @@
-import BaseComponent from '../utility/base_component';
+import BaseComponent from '../../../shared/components/base_component';
 import AnswerBox from '../audio-challenge/components/answer-box';
 import playSound from '../utility/play-sound';
-import IWord from '../../../interfaces/word';
+import IWord from '../../../shared/interfaces/word';
 import IStorage from '../utility/storage';
 import Result from '../audio-challenge/components/result';
 
@@ -138,10 +138,33 @@ export default class AudioChallange {
     const randomNum = Math.floor(Math.random() * 4);
     const buttonsArray = document.querySelectorAll('.main__games__audio-challange__buttonAnswer');
 
-    buttonsArray[0].innerHTML = this.getRandomWord();
-    buttonsArray[1].innerHTML = this.getRandomWord();
-    buttonsArray[2].innerHTML = this.getRandomWord();
-    buttonsArray[3].innerHTML = this.getRandomWord();
+    do {
+      buttonsArray[0].innerHTML = this.getRandomWord();
+    } while (buttonsArray[0].innerHTML === this.currentWord.wordTranslate);
+
+    do {
+      buttonsArray[1].innerHTML = this.getRandomWord();
+    } while (
+      buttonsArray[1].innerHTML === this.currentWord.wordTranslate ||
+      buttonsArray[1].innerHTML === buttonsArray[0].innerHTML
+    );
+
+    do {
+      buttonsArray[2].innerHTML = this.getRandomWord();
+    } while (
+      buttonsArray[2].innerHTML === this.currentWord.wordTranslate ||
+      buttonsArray[2].innerHTML === buttonsArray[0].innerHTML ||
+      buttonsArray[2].innerHTML === buttonsArray[1].innerHTML
+    );
+
+    do {
+      buttonsArray[3].innerHTML = this.getRandomWord();
+    } while (
+      buttonsArray[3].innerHTML === this.currentWord.wordTranslate ||
+      buttonsArray[3].innerHTML === buttonsArray[0].innerHTML ||
+      buttonsArray[3].innerHTML === buttonsArray[1].innerHTML ||
+      buttonsArray[3].innerHTML === buttonsArray[2].innerHTML
+    );
 
     const btnAnswerRight: HTMLElement | null = document.querySelector(`.answer-${randomNum}`);
     if (btnAnswerRight) {

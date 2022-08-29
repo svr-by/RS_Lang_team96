@@ -1,4 +1,4 @@
-import BaseComponent from './utility/base_component';
+import BaseComponent from '../../shared/components/base_component';
 import AudioChallangeLvl from './audio-challenge/audio-challenge-levels';
 import SprintLvl from './sprint/sprint-levels';
 
