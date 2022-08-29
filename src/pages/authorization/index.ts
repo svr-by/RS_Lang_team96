@@ -12,7 +12,7 @@ export class Authorization {
     this.addFormListeners();
   }
 
-  show() {
+  render() {
     this.renderSigninForm();
     this.modal.showModal(this.elem);
   }
