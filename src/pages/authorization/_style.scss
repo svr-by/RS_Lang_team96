@@ -1,0 +1,35 @@
+.auth-form {
+  max-width: 400px;
+  @include flex(flex-start, stretch, column);
+  gap: 1rem;
+
+
+  &__title {
+    align-self: center;
+  }
+
+  &__fields  {
+    @include flex(flex-start, stretch, column);
+    gap: 1rem;
+  }
+
+  &__btn  {
+    text-align: center;
+  }
+
+  &__error  {
+    text-align: center;
+    color: $color-red;
+  }
+
+  &__link  {
+    font-size: 0.875rem;
+    align-self: center;
+    text-decoration: none;
+    color: $color-grey;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

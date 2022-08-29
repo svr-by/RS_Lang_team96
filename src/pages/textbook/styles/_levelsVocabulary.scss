@@ -1,0 +1,93 @@
+@import "src/scss/variables";
+@import "mixins";
+
+.levels-header {
+  @include headers;
+}
+
+.levels {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 0.5rem;
+}
+
+.level {
+  display: flex;
+  min-width: 120px;
+  height: 100px;
+  padding: 0;
+  opacity: 0.6;
+  background-color: $background-book-element;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.5s;
+  &__header {
+    @include bookHeaders;
+    width: 150px;
+  }
+  &__word-number {
+    font-size: 1.1rem;
+    text-align: left;
+    margin-left: 0.5rem;
+  }
+  &__value {
+    width: 100%;
+    height: 100%;
+    line-height: 100px;
+    margin: 0 auto;
+    font-size: 40px;
+    background-color: #888888;
+    border-radius: 4rem 0.5rem 0.5rem 4rem;
+  }
+}
+
+.hover-a1 {
+  background-color: #FFC53D;
+}
+
+.hover-a2 {
+  background-color: #9CD7F9;
+}
+
+.hover-b1 {
+  background-color: #4CCBB7;
+}
+
+.hover-b2 {
+  background-color: #FF7171;
+}
+
+.hover-c1 {
+  background-color: #5D7CFD;
+}
+
+.hover-c2 {
+  background-color: #8A78FA;
+}
+
+.permanent-a1 {
+  background-color: #FFC53D;
+}
+
+.permanent-a2 {
+  background-color: #9CD7F9;
+}
+
+.permanent-b1 {
+  background-color: #4CCBB7;
+}
+
+.permanent-b2 {
+  background-color: #FF7171;
+}
+
+.permanent-c1 {
+  background-color: #5D7CFD;
+}
+
+.permanent-c2 {
+  background-color: #8A78FA;
+}
+

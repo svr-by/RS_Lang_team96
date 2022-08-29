@@ -1,21 +1,29 @@
+import { Authorization } from '../../../pages/authorization';
 import { layoutService } from '../../services/layoutService';
 import { navigationService } from '../../services/navigationService';
+import { userService } from '../../services/userService';
 import { NavLinks } from '../../enums';
 import { Button } from '../button';
 
 export class Header {
   elem: HTMLElement;
-  userName: HTMLElement;
+  loginElem: HTMLElement;
+  loginWindow: Authorization;
   loginBtn: Button;
 
   constructor() {
     this.elem = layoutService.createElement({ tag: 'header', classes: ['header'] });
-    this.userName = layoutService.createElement({ tag: 'div', classes: ['login__name'] });
+    this.loginElem = layoutService.createElement({ tag: 'div', classes: ['login'] });
     this.loginBtn = new Button('Войти', ['login__btn', 'button']);
+    this.loginWindow = new Authorization();
+    this.addLinkListeners();
+    this.addBtnListeners();
     this.render();
   }
 
   render() {
+    this.elem.innerHTML = '';
+
     const wrapper = layoutService.createElement({ tag: 'div', classes: ['wrapper', 'header__wrapper'] });
     wrapper.innerHTML = `
       <div class="logo">
@@ -42,15 +50,41 @@ export class Header {
           </li>
         </ul>
     `;
-    const login = layoutService.createElement({ tag: 'div', classes: ['login'] });
-    login.append(this.userName);
-    login.append(this.loginBtn.elem);
-    wrapper.append(login);
+
+    this.renderloginElem();
+    wrapper.append(this.loginElem);
     this.elem.append(wrapper);
-    this.addListeners();
   }
 
-  private addListeners() {
+  renderloginElem() {
+    this.loginElem.innerHTML = '';
+
+    const userName = userService.getStoredUserName();
+    const nameElem = layoutService.createElement({ tag: 'div', text: userName, classes: ['login__name'] });
+    this.loginElem.append(nameElem);
+
+    if (!userName) {
+      this.loginBtn.updateText('Войти');
+      this.loginBtn.elem.id = 'logInBtn';
+    } else {
+      this.loginBtn.updateText('Выйти');
+      this.loginBtn.elem.id = 'logOutBtn';
+    }
+    this.loginElem.append(this.loginBtn.elem);
+  }
+
+  private addBtnListeners() {
+    this.loginBtn.elem.addEventListener('click', () => {
+      if (this.loginBtn.elem.id === 'logInBtn') {
+        this.loginWindow.show();
+      }
+      if (this.loginBtn.elem.id === 'logOutBtn') {
+        userService.signOut();
+      }
+    });
+  }
+
+  private addLinkListeners() {
     this.elem.addEventListener('click', (event) => {
       const target = event.target as HTMLElement;
 

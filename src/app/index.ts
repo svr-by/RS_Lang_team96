@@ -4,15 +4,18 @@ import { Footer } from '../shared/components/footer';
 import { Views } from '../shared/enums';
 import { StartPage } from '../pages/start';
 import Games from './games/games';
+import LayoutTextBook from '../pages/textbook/layoutTextBook';
 
 class App {
   header: Header;
   footer: Footer;
   main: HTMLElement;
+  private layoutTextBook: LayoutTextBook;
 
   constructor() {
     this.header = new Header();
     this.footer = new Footer();
+    this.layoutTextBook = new LayoutTextBook();
     this.main = layoutService.createElement({ tag: 'main', classes: ['main'] });
     this.renderMain();
   }
@@ -23,13 +26,13 @@ class App {
     document.body.append(this.footer.elem);
   }
 
-  renderMain() {
+  async renderMain() {
     this.main.innerHTML = '';
     const view = sessionStorage.getItem('view');
     let mainContent: HTMLElement;
     switch (view) {
       case Views.textbook:
-        mainContent = layoutService.createElement({ tag: 'h1', text: 'Страница с учеником' });
+        mainContent = await this.layoutTextBook.renderTextBook();
         break;
       case Views.games:
         mainContent = new Games(this.main).render();
