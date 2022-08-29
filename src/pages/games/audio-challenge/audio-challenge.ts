@@ -1,8 +1,7 @@
 import BaseComponent from '../../../shared/components/base_component';
 import AnswerBox from '../audio-challenge/components/answer-box';
 import playSound from '../utility/play-sound';
-import IWord from '../../../shared/interfaces/word';
-import IStorage from '../utility/storage';
+import { IWord, IStorage } from '../../../shared/interfaces/index';
 import Result from '../audio-challenge/components/result';
 
 export default class AudioChallange {

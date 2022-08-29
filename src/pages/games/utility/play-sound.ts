@@ -1,4 +1,4 @@
-import IWord from '../../../shared/interfaces/word';
+import { IWord } from '../../../shared/interfaces';
 
 export default function playSound(randomWord: IWord): void {
   const sound = new Audio();

@@ -1,8 +1,7 @@
 import BaseComponent from '../../../shared/components/base_component';
 import AudioChallange from '../audio-challenge/audio-challenge';
-import IWord from '../../../shared/interfaces/word';
+import { IWord, IStorage } from '../../../shared/interfaces';
 import getWords from '../utility/get-words';
-import IStorage from '../utility/storage';
 
 export default class AudioChallangeLvl {
   readonly audioChallangeLvl: HTMLElement;

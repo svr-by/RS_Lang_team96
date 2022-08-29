@@ -1,5 +1,5 @@
 import BaseComponent from '../../../../shared/components/base_component';
-import IStorage from '../../../games/utility/storage';
+import { IStorage } from '../../../../shared/interfaces';
 export default class StatWordsAnswer {
   readonly statWordsAnswer: HTMLElement;
 

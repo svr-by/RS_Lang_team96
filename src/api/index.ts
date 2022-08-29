@@ -1,4 +1,4 @@
-import { IWord } from '../shared/interfaces';
+import { IWord, IStatistic } from '../shared/interfaces';
 import {
   User,
   UserParams,
@@ -7,8 +7,6 @@ import {
   UserWordParams,
   AggregatedWordsParams,
   AggregatedWordsResponse,
-  UserStatistics,
-  UserStatisticsParams,
   UserSettings,
   UserSettingsParams,
 } from '../shared/types';
@@ -251,29 +249,72 @@ class API {
     return this.handleAxiosResponse(response);
   }
 
-  async getUserStatistics(userId: string): Promise<UserStatistics | string | void> {
-    const token = this.getLocalToken();
-    const response = await this.axiosInstance.get(`${this.usersEndpoint}/${userId}/statistics`, {
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    return this.handleAxiosResponse(response);
+  // async getUserStatistics(userId: string): Promise<UserStatistics | string | void> {
+  //   const token = this.getLocalToken();
+  //   const response = await this.axiosInstance.get(`${this.usersEndpoint}/${userId}/statistics`, {
+  //     headers: {
+  //       Accept: 'application/json',
+  //       Authorization: `Bearer ${token}`,
+  //       'Content-Type': 'application/json',
+  //     },
+  //   });
+  //   return this.handleAxiosResponse(response);
+  // }
+
+  // async upsertUserStatistics(userId: string, body: UserStatisticsParams): Promise<UserStatistics | string | void> {
+  //   const token = this.getLocalToken();
+  //   const response = await this.axiosInstance.put(`${this.usersEndpoint}/${userId}/statistics`, {
+  //     headers: {
+  //       Accept: 'application/json',
+  //       Authorization: `Bearer ${token}`,
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(body),
+  //   });
+  //   return this.handleAxiosResponse(response);
+  // }
+
+  async getData(path = ''): Promise<IWord[]> {
+    const url = `${this.base}/${path}`;
+
+    return fetch(url)
+      .then((res) => res.json())
+      .then((data) => data);
   }
 
-  async upsertUserStatistics(userId: string, body: UserStatisticsParams): Promise<UserStatistics | string | void> {
-    const token = this.getLocalToken();
-    const response = await this.axiosInstance.put(`${this.usersEndpoint}/${userId}/statistics`, {
+  async getUserStatistics(id: string, token: string) {
+    const url = `${this.usersEndpoint}/${id}/statistics`;
+
+    const response = await fetch(url, {
+      method: 'GET',
       headers: {
-        Accept: 'application/json',
         Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+      },
+    });
+
+    if (response.status === 404) {
+      return false;
+    }
+
+    const answer: IStatistic = await response.json();
+
+    return answer;
+  }
+
+  async saveUserStatistics(id: string, token: string, storage: IStatistic) {
+    const url = `${this.usersEndpoint}/${id}/statistics`;
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(storage),
     });
-    return this.handleAxiosResponse(response);
+    const answer: IStatistic = await response.json();
+    return answer;
   }
 
   async getUserSettings(userId: string): Promise<UserSettings | string | void> {

@@ -1,7 +1,6 @@
 import BaseComponent from '../../../shared/components/base_component';
-import IWord from '../../../shared/interfaces/word';
+import { IWord, IStorage } from '../../../shared/interfaces';
 import getWords from '../../games/utility/get-words';
-import IStorage from '../../games/utility/storage';
 import Sprint from './sprint';
 
 export default class SprintLvl {

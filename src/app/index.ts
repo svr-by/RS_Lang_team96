@@ -3,7 +3,7 @@ import { Header } from '../shared/components/header';
 import { Footer } from '../shared/components/footer';
 import { Views } from '../shared/enums';
 import { StartPage } from '../pages/start';
-import Games from './games/games';
+import Games from '../pages/games/games';
 import LayoutTextBook from '../pages/textbook/layoutTextBook';
 
 class App {

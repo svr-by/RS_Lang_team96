@@ -2,8 +2,7 @@ import BaseComponent from '../../../shared/components/base_component';
 import playSound from '../../games/utility/play-sound';
 import CardBox from '../../games/sprint/components/sprint-cardBox';
 import ResultSprint from '../../games/sprint/components/sprint-result';
-import IWord from '../../../shared/interfaces/word';
-import IStorage from '../../games/utility/storage';
+import { IWord, IStorage } from '../../../shared/interfaces';
 
 export default class Sprint {
   readonly sprint: HTMLElement;

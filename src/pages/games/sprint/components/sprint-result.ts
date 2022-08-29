@@ -1,13 +1,13 @@
 import BaseComponent from '../../../../shared/components/base_component';
 import StatWordsWrong from '../../../games/audio-challenge/components/result-wrong';
 import StatWordsAnswer from '../../../games/audio-challenge/components/result-answer';
-import IStorage from '../../../games/utility/storage';
-import IStatistic from '../../../../shared/interfaces/statistic';
+import { IStatistic, IStorage } from '../../../../shared/interfaces';
 import StatisticStorage from '../../../games/utility/statistics-storage';
-import saveUserStatistics from '../../../../api/put-statistics';
-import getUserStatistics from '../../../../api/get-statistics';
+import API from '../../../../api';
 
 export default class ResultSprint {
+  readonly api: API;
+
   readonly resultSprint: HTMLElement;
 
   readonly container: HTMLElement;
@@ -18,6 +18,7 @@ export default class ResultSprint {
     this.resultSprint = document.createElement('div');
     this.container = document.createElement('div');
     this.statisticBox = document.createElement('div');
+    this.api = new API();
   }
 
   async render() {
@@ -85,9 +86,9 @@ export default class ResultSprint {
     const userID: string | null = localStorage.getItem('id');
 
     if (userToken && userID) {
-      let userData = await getUserStatistics(userID, userToken);
+      let userData = await this.api.getUserStatistics(userID, userToken);
       if (typeof userData !== 'boolean') {
-        userData = (await getUserStatistics(userID, userToken)) as IStatistic;
+        userData = (await this.api.getUserStatistics(userID, userToken)) as IStatistic;
         userData.learnedWords += this.storage.countAnswerCorrect;
         userData.optional.SprintCountAnswerCorrect += this.storage.countAnswerCorrect;
         userData.optional.SprintCountAnswerWrong += this.storage.countAnswerWrong;
@@ -105,7 +106,7 @@ export default class ResultSprint {
             SprintInRow: userData.optional.SprintInRow,
           },
         };
-        await saveUserStatistics(userID, userToken, storage);
+        await this.api.saveUserStatistics(userID, userToken, storage);
       } else {
         const storage: IStatistic = {
           learnedWords: 0,
@@ -118,15 +119,15 @@ export default class ResultSprint {
             SprintInRow: 0,
           },
         };
-        await saveUserStatistics(userID, userToken, storage);
-        userData = (await getUserStatistics(userID, userToken)) as IStatistic;
+        await this.api.saveUserStatistics(userID, userToken, storage);
+        userData = (await this.api.getUserStatistics(userID, userToken)) as IStatistic;
         userData.learnedWords += this.storage.countAnswerCorrect;
         userData.optional.SprintCountAnswerCorrect += this.storage.countAnswerCorrect;
         userData.optional.SprintCountAnswerWrong += this.storage.countAnswerWrong;
         if (this.storage.setInRow.size > userData.optional.SprintInRow) {
           userData.optional.SprintInRow = this.storage.setInRow.size;
         }
-        await saveUserStatistics(userID, userToken, userData);
+        await this.api.saveUserStatistics(userID, userToken, userData);
       }
     } else {
       StatisticStorage.learnedWords += this.storage.countAnswerCorrect;

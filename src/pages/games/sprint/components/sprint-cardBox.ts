@@ -1,5 +1,5 @@
 import BaseComponent from '../../../../shared/components/base_component';
-import IWord from '../../../../shared/interfaces/word';
+import { IWord } from '../../../../shared/interfaces';
 
 export default class CardBox {
   readonly cardBox: HTMLElement;
