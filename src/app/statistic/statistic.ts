@@ -1,5 +1,5 @@
 import BaseComponent from '../../shared/components/base_component';
-import IStatistic from '../../interfaces/statistic';
+import IStatistic from '../../shared/interfaces/statistic';
 import saveUserStatistics from '../../api/put-statistics';
 import getUserStatistics from '../../api/get-statistics';
 import StatisticsBoxGames from '../../app/statistic/components/statistics-boxGames';

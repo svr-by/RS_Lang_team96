@@ -1,5 +1,5 @@
 import BaseComponent from '../../../shared/components/base_component';
-import IStatistic from '../../../interfaces/statistic';
+import IStatistic from '../../../shared/interfaces/statistic';
 
 export default class StatisticsBoxGames {
   readonly statisticsBoxGames: HTMLElement;

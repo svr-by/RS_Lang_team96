@@ -35,7 +35,8 @@ class App {
         mainContent = layoutService.createElement({ tag: 'h1', text: 'Страница с играми' });
         break;
       case Views.statistics:
-        mainContent = new Statistic(this.main).render();
+        new Statistic(this.main).render();
+        mainContent = '';
         break;
       case Views.developers:
         mainContent = layoutService.createElement({ tag: 'h1', text: 'Разработчики' });

@@ -1,0 +1,88 @@
+.main__statistics-title {
+  margin-top: 5%;
+  text-align: center;
+  font-family: 'Roboto';
+  font-size: 6rem;
+
+}
+
+.main__statistics__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-top: 2%;
+}
+
+.main__statistics__containerWords {
+  display: flex;
+  flex-direction: column;
+}
+
+.main__statistics__boxWords-words-count {
+  text-align: center;
+  font-family: 'Roboto';
+  font-weight: 600;
+  font-size: 6rem;
+}
+
+.main__statistics__boxWords-p1 {
+  text-align: center;
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-size: 2rem;
+}
+
+.main__statistics__boxWords-p2 {
+  text-align: center;
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+.main__statistics__boxAccuracy {
+  margin-top: 20%;
+  text-align: center;
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-size: 4rem;
+}
+
+.main__statistics__containerGames {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 800px;
+}
+
+.main__statistics__boxGames {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  text-align: center;
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-size: 2rem;
+}
+
+.main__statistics__boxGames-img {
+  margin: auto;
+  width: 150px;
+  height: 150px;
+  text-align: center;
+  background-color: #A63E00;
+}
+
+.main__statistics__boxGames-nameGame {
+  font-family: 'Kalam';
+  font-size: 40px;
+}
+
+.main__statistics__boxGames-img__sprint {
+  background: no-repeat center url('assets/svg/sprint.svg');
+  background-color: #8b7ee17e;
+}
+
+.main__statistics__boxGames-img__audio {
+  background: no-repeat center url('assets/svg/audio-challenge.svg');
+  background-color: #8b7ee17e;
+}
