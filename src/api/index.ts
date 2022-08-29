@@ -249,31 +249,6 @@ class API {
     return this.handleAxiosResponse(response);
   }
 
-  // async getUserStatistics(userId: string): Promise<UserStatistics | string | void> {
-  //   const token = this.getLocalToken();
-  //   const response = await this.axiosInstance.get(`${this.usersEndpoint}/${userId}/statistics`, {
-  //     headers: {
-  //       Accept: 'application/json',
-  //       Authorization: `Bearer ${token}`,
-  //       'Content-Type': 'application/json',
-  //     },
-  //   });
-  //   return this.handleAxiosResponse(response);
-  // }
-
-  // async upsertUserStatistics(userId: string, body: UserStatisticsParams): Promise<UserStatistics | string | void> {
-  //   const token = this.getLocalToken();
-  //   const response = await this.axiosInstance.put(`${this.usersEndpoint}/${userId}/statistics`, {
-  //     headers: {
-  //       Accept: 'application/json',
-  //       Authorization: `Bearer ${token}`,
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(body),
-  //   });
-  //   return this.handleAxiosResponse(response);
-  // }
-
   async getData(path = ''): Promise<IWord[]> {
     const url = `${this.base}/${path}`;
 
