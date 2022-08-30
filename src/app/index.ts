@@ -3,6 +3,7 @@ import { Header } from '../shared/components/header';
 import { Footer } from '../shared/components/footer';
 import { Views } from '../shared/enums';
 import { StartPage } from '../pages/start';
+import Games from '../pages/games/games';
 import LayoutTextBook from '../pages/textbook/layoutTextBook';
 
 class App {
@@ -28,13 +29,13 @@ class App {
   async renderMain() {
     this.main.innerHTML = '';
     const view = sessionStorage.getItem('view');
-    let mainContent;
+    let mainContent: HTMLElement;
     switch (view) {
       case Views.textbook:
         mainContent = await this.layoutTextBook.renderTextBook();
         break;
       case Views.games:
-        mainContent = layoutService.createElement({ tag: 'h1', text: 'Страница с играми' });
+        mainContent = new Games(this.main).render();
         break;
       case Views.statistics:
         mainContent = layoutService.createElement({ tag: 'h1', text: 'Страница статистики' });
