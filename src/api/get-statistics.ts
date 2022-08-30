@@ -1,4 +1,4 @@
-import IStatistic from '../shared/interfaces/statistic';
+import { IStatistic } from '../shared/interfaces';
 
 export default async function getUserStatistics(id: string, token: string) {
   const url = `https://rslang-learnwords-team20.herokuapp.com/users/${id}/statistics`;

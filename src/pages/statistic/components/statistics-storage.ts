@@ -1,4 +1,4 @@
-import IStatistic from '../../../shared/interfaces/statistic';
+import { IStatistic } from '../../../shared/interfaces';
 
 export default {
   learnedWords: 0,

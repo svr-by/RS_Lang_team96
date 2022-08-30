@@ -3,7 +3,7 @@ import { Header } from '../shared/components/header';
 import { Footer } from '../shared/components/footer';
 import { Views } from '../shared/enums';
 import { StartPage } from '../pages/start';
-import Statistic from './statistic/statistic';
+import Statistic from '../pages/statistic/statistic';
 
 class App {
   header: Header;
