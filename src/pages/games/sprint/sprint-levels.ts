@@ -39,8 +39,8 @@ export default class SprintLvl {
       if (target.dataset.group) {
         const arrPromisesFromPages30: Promise<IWord[]>[] = [];
         for (let i = 0; i < 30; i += 1) {
-          const promisFromPage = getWords(target.dataset.group, `${i}`);
-          arrPromisesFromPages30.push(promisFromPage);
+          const promiseFromPage = getWords(target.dataset.group, `${i}`);
+          arrPromisesFromPages30.push(promiseFromPage);
         }
         const arrOfArrsWords = await Promise.all(arrPromisesFromPages30);
         this.wordsInGroup = arrOfArrsWords.reduce((a, b) => a.concat(b));
