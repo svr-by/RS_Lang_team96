@@ -1,11 +1,12 @@
 import BaseComponent from '../../shared/components/base_component';
 import { IStatistic } from '../../shared/interfaces';
-import saveUserStatistics from '../../api/put-statistics';
-import getUserStatistics from '../../api/get-statistics';
-import StatisticsBoxGames from '../../app/statistic/components/statistics-boxGames';
-import StatisticStorage from '../../app/statistic/components/statistics-storage';
+import API from '../../api/';
+import StatisticsBoxGames from '../../pages/statistic/components/statistics-boxGames';
+import StatisticStorage from '../../pages/statistic/components/statistics-storage';
 
 export default class Statistic {
+  readonly api: API;
+
   readonly mainStatistics: HTMLElement;
 
   readonly container: HTMLElement;
@@ -25,6 +26,7 @@ export default class Statistic {
     this.containerGames = document.createElement('div');
     this.boxWords = document.createElement('div');
     this.boxAccuracy = document.createElement('div');
+    this.api = new API();
   }
 
   async render() {
@@ -32,9 +34,9 @@ export default class Statistic {
     const userID: string | null = localStorage.getItem('id');
 
     if (userToken && userID) {
-      let userData = await getUserStatistics(userID, userToken);
+      let userData = await this.api.getUserStatistics(userID, userToken);
       if (typeof userData !== 'boolean') {
-        userData = (await getUserStatistics(userID, userToken)) as IStatistic;
+        userData = (await this.api.getUserStatistics(userID, userToken)) as IStatistic;
       } else {
         const storage: IStatistic = {
           learnedWords: 0,
@@ -48,8 +50,8 @@ export default class Statistic {
             SprintScore: 0,
           },
         };
-        await saveUserStatistics(userID, userToken, storage);
-        userData = (await getUserStatistics(userID, userToken)) as IStatistic;
+        await this.api.saveUserStatistics(userID, userToken, storage);
+        userData = (await this.api.getUserStatistics(userID, userToken)) as IStatistic;
       }
       const sumNewWords =
         userData.optional.AudioCountAnswerWrong +
