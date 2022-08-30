@@ -186,6 +186,62 @@ export default class AudioChallange {
       btnSkip.addEventListener('click', ({ target }) => this.pushBtnSkipNext(target as HTMLElement));
     }
 
+    const findButton = (event: KeyboardEvent) => {
+      for (let i = 1; i < 5; i++) {
+        if (event.key === `${i}` && (buttonsArray[i - 1] as HTMLElement).dataset.answer !== '0') {
+          if (!this.isPush) {
+            this.isPush = true;
+            buttonsArray[i - 1].setAttribute('data-answer', 'no');
+            const img = document.querySelector('.main__games__audio-challange-img');
+            if (img) {
+              img.setAttribute('src', `http://localhost:8000/${this.currentWord.image}`);
+            }
+            const sound = new Audio();
+            sound.src = 'assets/sounds/fail.mp3';
+            sound.autoplay = true;
+            this.storage.inRow = 0;
+            this.storage.countAnswerWrong += 1;
+            this.storage.namesAnswerWrong.push(this.currentWord.word);
+            this.storage.namesAnswerWrongTranslate.push(this.currentWord.wordTranslate);
+            this.storage.namesAnswerWrongSound.push(`http://localhost:8000/${this.currentWord.audio}`);
+          }
+        }
+        if (event.key === `${i}` && (buttonsArray[i - 1] as HTMLElement).dataset.answer === '0') {
+          if (!this.isPush) {
+            this.isPush = true;
+            buttonsArray[i - 1].classList.add('answer');
+            buttonsArray[i - 1].setAttribute('data-answer', 'yes');
+            const img = document.querySelector('.main__games__audio-challange-img');
+            if (img) {
+              img.setAttribute('src', `http://localhost:8000/${this.currentWord.image}`);
+            }
+            const sound = new Audio();
+            sound.src = 'assets/sounds/success.mp3';
+            sound.autoplay = true;
+            this.storage.inRow += 1;
+            this.storage.setInRow.add(this.storage.inRow);
+            this.storage.countAnswerCorrect += 1;
+            this.storage.namesAnswerCorrect.push(this.currentWord.word);
+            this.storage.namesAnswerCorrectTranslate.push(this.currentWord.wordTranslate);
+            this.storage.namesAnswerCorrectSound.push(`http://localhost:8000/${this.currentWord.audio}`);
+
+            const btnSkip: HTMLElement | null = document.querySelector('.main__games__audio-challange-buttonSkip');
+            if (btnSkip) {
+              btnSkip.classList.add('main__games__audio-challange-buttonNext');
+              btnSkip.innerHTML = 'NEXT';
+              const btnAnswer = buttonsArray[i - 1];
+              btnAnswer.innerHTML = `
+              <p>${this.currentWord.word}</p>
+              <p>${this.currentWord.transcription}</p>
+              <p>${this.currentWord.wordTranslate}</p>
+              `;
+            }
+          }
+        }
+      }
+    };
+    document.addEventListener('keydown', findButton);
+
     return this.audioChallange;
   }
 }
