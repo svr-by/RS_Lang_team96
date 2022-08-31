@@ -35,9 +35,7 @@ export default class Statistic {
 
     if (userToken && userID) {
       let userData = await this.api.getUserStatistics(userID, userToken);
-      if (typeof userData !== 'boolean') {
-        userData = (await this.api.getUserStatistics(userID, userToken)) as IStatistic;
-      } else {
+      if (typeof userData === 'boolean') {
         const storage: IStatistic = {
           learnedWords: 0,
           optional: {
@@ -54,9 +52,7 @@ export default class Statistic {
         userData = (await this.api.getUserStatistics(userID, userToken)) as IStatistic;
       }
       const sumNewWords =
-        userData.optional.AudioCountAnswerWrong +
         userData.optional.AudioCountAnswerCorrect +
-        userData.optional.SprintCountAnswerWrong +
         userData.optional.SprintCountAnswerCorrect;
 
       this.root.appendChild(this.mainStatistics);
@@ -98,9 +94,7 @@ export default class Statistic {
       new StatisticsBoxGames(this.containerGames, 'Audio Challenge', userData).render();
     } else {
       const sumNewWords =
-        StatisticStorage.optional.AudioCountAnswerWrong +
         StatisticStorage.optional.AudioCountAnswerCorrect +
-        StatisticStorage.optional.SprintCountAnswerWrong +
         StatisticStorage.optional.SprintCountAnswerCorrect;
 
       this.root.appendChild(this.mainStatistics);
