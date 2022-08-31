@@ -2,7 +2,7 @@ import { layoutService } from '../../shared/services/layoutService';
 import { navigationService } from '../../shared/services/navigationService';
 import { NavLinks } from '../../shared/enums';
 
-export class StartPage {
+class StartPage {
   elem: HTMLElement;
 
   constructor() {
@@ -70,3 +70,5 @@ export class StartPage {
     });
   }
 }
+
+export default StartPage;

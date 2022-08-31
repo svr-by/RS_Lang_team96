@@ -17,10 +17,23 @@ export type SignInResponse = {
 };
 
 export type UserWord = {
-  difficulty: string;
   id: string;
   wordId: string;
-  optional?: Record<string, unknown>;
+  difficulty: string;
+  optional?: {
+    isLearned?: boolean;
+    addTime?: string;
+    games?: {
+      sprint?: {
+        right?: number;
+        wrong?: number;
+      };
+      audioCall?: {
+        right?: number;
+        wrong?: number;
+      };
+    };
+  };
 };
 
 export type UserWordParams = Pick<UserWord, 'difficulty' | 'optional'>;
