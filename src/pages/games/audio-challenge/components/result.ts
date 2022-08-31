@@ -66,12 +66,15 @@ export default class Result {
     new StatWordsAnswer(this.container, this.storage).render();
     new StatWordsWrong(this.container, this.storage).render();
 
-    const userToken = localStorage.getItem('token');
-    const userID = localStorage.getItem('id');
-    if (userToken && userID) {
+    const userObjLocalStorage = localStorage.getItem('user');
+    let userToken: string;
+    let userID: string;
+
+    if (userObjLocalStorage) {
+      userToken = JSON.parse(userObjLocalStorage).token;
+      userID = JSON.parse(userObjLocalStorage).userId;
       let userData = await this.api.getUserStatistics(userID, userToken);
       if (typeof userData !== 'boolean') {
-        userData = (await this.api.getUserStatistics(userID, userToken)) as IStatistic;
         userData.learnedWords += this.storage.countAnswerCorrect;
         userData.optional.AudioCountAnswerCorrect += this.storage.countAnswerCorrect;
         userData.optional.AudioCountAnswerWrong += this.storage.countAnswerWrong;
@@ -121,9 +124,8 @@ export default class Result {
       if (this.storage.setInRow.size > StatisticStorage.optional.AudioInRow) {
         StatisticStorage.optional.AudioInRow = this.storage.setInRow.size;
       }
-    }
 
-    sessionStorage.setItem('StatisticStorage', JSON.stringify(StatisticStorage));
-    console.log(StatisticStorage);
+      sessionStorage.setItem('StatisticStorage', JSON.stringify(StatisticStorage));
+    }
   }
 }

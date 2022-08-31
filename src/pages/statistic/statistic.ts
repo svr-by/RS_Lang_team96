@@ -38,11 +38,15 @@ export default class Statistic {
       storage = StatisticStorage;
     }
 
-    console.log(storage);
-    const userToken = localStorage.getItem('token');
-    const userID = localStorage.getItem('id');
+    const userObjLocalStorage = localStorage.getItem('user');
+    let userToken: string;
+    let userID: string;
 
-    if (userToken && userID) {
+    if (userObjLocalStorage) {
+      sessionStorage.removeItem('StatisticStorage');
+
+      userToken = JSON.parse(userObjLocalStorage).token;
+      userID = JSON.parse(userObjLocalStorage).userId;
       let userData = await this.api.getUserStatistics(userID, userToken);
       if (typeof userData === 'boolean') {
         const storage: IStatistic = {

@@ -82,13 +82,15 @@ export default class ResultSprint {
     new StatWordsAnswer(this.container, this.storage).render();
     new StatWordsWrong(this.container, this.storage).render();
 
-    const userToken = localStorage.getItem('token');
-    const userID = localStorage.getItem('id');
+    const userObjLocalStorage = localStorage.getItem('user');
+    let userToken: string;
+    let userID: string;
 
-    if (userToken && userID) {
+    if (userObjLocalStorage) {
+      userToken = JSON.parse(userObjLocalStorage).token;
+      userID = JSON.parse(userObjLocalStorage).userId;
       let userData = await this.api.getUserStatistics(userID, userToken);
       if (typeof userData !== 'boolean') {
-        userData = (await this.api.getUserStatistics(userID, userToken)) as IStatistic;
         userData.learnedWords += this.storage.countAnswerCorrect;
         userData.optional.SprintCountAnswerCorrect += this.storage.countAnswerCorrect;
         userData.optional.SprintCountAnswerWrong += this.storage.countAnswerWrong;
@@ -138,9 +140,8 @@ export default class ResultSprint {
       if (this.storage.setInRow.size > StatisticStorage.optional.SprintInRow) {
         StatisticStorage.optional.SprintInRow = this.storage.setInRow.size;
       }
-    }
 
-    sessionStorage.setItem('StatisticStorage', JSON.stringify(StatisticStorage));
-    console.log(StatisticStorage);
+      sessionStorage.setItem('StatisticStorage', JSON.stringify(StatisticStorage));
+    }
   }
 }

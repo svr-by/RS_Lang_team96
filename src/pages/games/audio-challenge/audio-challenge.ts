@@ -240,6 +240,7 @@ export default class AudioChallange {
         }
       }
     };
+
     document.addEventListener('keydown', findButton);
 
     return this.audioChallange;
