@@ -2,28 +2,25 @@ import { User, UserParams, SignInResponse } from '../types';
 import { app } from '../../app';
 import { Modal } from '../components/modal';
 import { layoutService } from './layoutService';
-import API from '../../api';
+import { storageService } from './storageService';
+import { userApiService } from '../../api/userApiService';
 
 class UserService {
-  api = new API();
-
-  getStoredUserId() {
-    const userStr = localStorage.getItem('user');
-    const userObj: SignInResponse = userStr ? JSON.parse(userStr) : '';
-    const userId = userObj ? userObj.userId : '';
+  getStoredUserId(): string {
+    const user = storageService.getLocal<SignInResponse>('user');
+    const userId = user ? user.userId : '';
     return userId;
   }
 
-  getStoredUserName() {
-    const userStr = localStorage.getItem('user');
-    const userObj: SignInResponse = userStr ? JSON.parse(userStr) : '';
-    const userName = userObj ? userObj.name : '';
+  getStoredUserName(): string {
+    const user = storageService.getLocal<SignInResponse>('user');
+    const userName = user ? user.name : '';
     return userName;
   }
 
   async requestUserName() {
     const userid = this.getStoredUserId();
-    const userObj = userid ? await this.api.getUser(userid) : '';
+    const userObj = userid ? await userApiService.getUser(userid) : '';
     const userName = typeof userObj === 'object' ? userObj.name : '';
     return userName;
   }
@@ -34,8 +31,13 @@ class UserService {
     this.signOut();
   }
 
+  showServerDownMess() {
+    const mess = layoutService.createElement({ tag: 'h3', text: 'Ошибка сети' });
+    new Modal().showModal(mess);
+  }
+
   signOut() {
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('user');
     app.header.renderloginElem();
   }
 
@@ -48,7 +50,7 @@ class UserService {
       password: form?.pass?.value || '',
     };
 
-    const result = await this.api.signIn(userParams);
+    const result = await userApiService.signIn(userParams);
 
     if (result) {
       if (typeof result === 'string') {
@@ -57,8 +59,6 @@ class UserService {
         app.header.renderloginElem();
         return true;
       }
-    } else {
-      formErrorMess.innerHTML = 'Извините, непредвиденная ошибка.';
     }
     return false;
   }
@@ -78,18 +78,16 @@ class UserService {
       password: form?.pass?.value || '',
     };
 
-    const result = await this.api.createUser(user);
+    const result = await userApiService.createUser(user);
 
     if (result) {
       if (typeof result === 'string') {
         formErrorMess.innerHTML = result;
       } else {
-        await this.api.signIn(userParams);
+        await userApiService.signIn(userParams);
         app.header.renderloginElem();
         return true;
       }
-    } else {
-      formErrorMess.innerHTML = 'Извините, непредвиденная ошибка.';
     }
     return false;
   }

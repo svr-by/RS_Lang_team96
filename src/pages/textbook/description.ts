@@ -1,19 +1,17 @@
 import Svg from './svg';
 import { IWord } from '../../shared/interfaces';
-import API from '../../api';
+import { wordsApiService } from '../../api/wordsApiService';
 
 class Description {
   private svg: Svg;
-  private API: API;
 
   constructor() {
     this.svg = new Svg();
-    this.API = new API();
   }
 
   async appendTo(parent: HTMLElement, id: string) {
     parent.innerHTML = '';
-    await this.API.getWord(id).then((item: IWord | string | void) => {
+    await wordsApiService.getWord(id).then((item: IWord | string | void) => {
       if (typeof item !== 'string' && item) {
         const newDescription = document.createElement('div');
         newDescription.className = 'content';
