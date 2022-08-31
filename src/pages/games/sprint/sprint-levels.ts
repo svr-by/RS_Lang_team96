@@ -31,7 +31,7 @@ export default class SprintLvl {
       namesAnswerWrongSound: [],
       score: 0,
     };
-    this.seconds = 100;
+    this.seconds = 600;
   }
 
   async addListenerToButtonLvl(target: HTMLElement | null) {

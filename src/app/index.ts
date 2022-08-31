@@ -30,7 +30,7 @@ class App {
   async renderMain() {
     this.main.innerHTML = '';
     const view = sessionStorage.getItem('view');
-    let mainContent: HTMLElement | string;
+    let mainContent: HTMLElement | undefined;
     switch (view) {
       case Views.textbook:
         mainContent = await this.layoutTextBook.renderTextBook();
@@ -39,8 +39,7 @@ class App {
         mainContent = new Games(this.main).render();
         break;
       case Views.statistics:
-        new Statistic(this.main).render();
-        mainContent = '';
+        mainContent = await new Statistic(this.main).render();
         break;
       case Views.developers:
         mainContent = layoutService.createElement({ tag: 'h1', text: 'Разработчики' });
