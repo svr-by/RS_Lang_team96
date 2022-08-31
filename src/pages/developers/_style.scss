@@ -1,0 +1,53 @@
+.devs {
+  margin-bottom: 3rem;
+
+  &__row {
+    margin-bottom: 1rem;
+    @include flex(center, center, row, wrap);
+    gap: 1rem;
+  }
+
+  &__card {
+    width: 25%;
+    min-width: 250px;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    text-align: center;
+
+    &:hover {
+      box-shadow: 0px 5px 10px rgb(0 0 0 / 10%);
+    }
+  }
+
+  &__img-wrap {
+    width: 40%;
+    flex-grow: 1;
+  }
+
+  &__img {
+    width: 100%;
+    border-radius: 50%;
+  }
+
+  &__link {
+    @include flex(center, center, column);
+    text-decoration: none;
+    color: $color-black;
+    transition: all 0.3s;
+
+  }
+
+  &__link:hover &__name{
+    color: $color-blue;
+  }
+
+  &__name {
+    margin: 1rem 0;
+    color: $color-grey;
+  }
+
+  &__resp {
+    margin: 0;
+    font-size: 0.875rem;
+  }
+}

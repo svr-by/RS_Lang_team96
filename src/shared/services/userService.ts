@@ -37,6 +37,7 @@ class UserService {
   signOut() {
     localStorage.removeItem('user');
     app.header.renderloginElem();
+    app.renderMain();
   }
 
   async signIn() {
@@ -55,6 +56,7 @@ class UserService {
         formErrorMess.innerHTML = result;
       } else {
         app.header.renderloginElem();
+        app.renderMain();
         return true;
       }
     } else {
@@ -86,6 +88,7 @@ class UserService {
       } else {
         await this.api.signIn(userParams);
         app.header.renderloginElem();
+        app.renderMain();
         return true;
       }
     } else {
