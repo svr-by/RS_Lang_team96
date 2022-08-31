@@ -140,11 +140,7 @@ export default class ResultSprint {
       }
     }
 
-    StatisticStorage.learnedWords += this.storage.countAnswerCorrect;
-    StatisticStorage.optional.SprintCountAnswerCorrect += this.storage.countAnswerCorrect;
-    StatisticStorage.optional.SprintCountAnswerWrong += this.storage.countAnswerWrong;
-    if (this.storage.setInRow.size > StatisticStorage.optional.SprintInRow) {
-      StatisticStorage.optional.SprintInRow = this.storage.setInRow.size;
-    }
+    sessionStorage.setItem('StatisticStorage', JSON.stringify(StatisticStorage));
+    console.log(StatisticStorage);
   }
 }

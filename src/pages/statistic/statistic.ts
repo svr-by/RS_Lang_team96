@@ -30,6 +30,15 @@ export default class Statistic {
   }
 
   async render() {
+    const statJson = sessionStorage.getItem('StatisticStorage');
+    let storage;
+    if (statJson) {
+      storage = JSON.parse(statJson);
+    } else {
+      storage = StatisticStorage;
+    }
+
+    console.log(storage);
     const userToken = localStorage.getItem('token');
     const userID = localStorage.getItem('id');
 
@@ -53,7 +62,9 @@ export default class Statistic {
       }
       const sumNewWords =
         userData.optional.AudioCountAnswerCorrect +
-        userData.optional.SprintCountAnswerCorrect;
+        userData.optional.AudioCountAnswerWrong +
+        userData.optional.SprintCountAnswerCorrect +
+        userData.optional.SprintCountAnswerWrong;
 
       this.root.appendChild(this.mainStatistics);
       this.mainStatistics.classList.add('main__statistics');
@@ -94,8 +105,10 @@ export default class Statistic {
       new StatisticsBoxGames(this.containerGames, 'Audio Challenge', userData).render();
     } else {
       const sumNewWords =
-        StatisticStorage.optional.AudioCountAnswerCorrect +
-        StatisticStorage.optional.SprintCountAnswerCorrect;
+        storage.optional.AudioCountAnswerCorrect +
+        storage.optional.AudioCountAnswerWrong +
+        storage.optional.SprintCountAnswerCorrect +
+        storage.optional.SprintCountAnswerWrong;
 
       this.root.appendChild(this.mainStatistics);
       this.mainStatistics.classList.add('main__statistics');
@@ -115,7 +128,7 @@ export default class Statistic {
         this.boxWords,
         'div',
         ['main__statistics__boxWords-words-count'],
-        `${StatisticStorage.learnedWords}`
+        `${storage.learnedWords}`
       ).render();
       new BaseComponent(this.boxWords, 'div', ['main__statistics__boxWords-p1'], 'words').render();
       new BaseComponent(this.boxWords, 'div', ['main__statistics__boxWords-p2'], 'were learned').render();
@@ -127,15 +140,13 @@ export default class Statistic {
         this.boxAccuracy,
         'div',
         ['main__statistics__boxAccuracy-percent'],
-        `<span class="accuracy-percent">${
-          Math.trunc((StatisticStorage.learnedWords / sumNewWords) * 100) || '0'
-        }</span>%`
+        `<span class="accuracy-percent">${Math.trunc((storage.learnedWords / sumNewWords) * 100) || '0'}</span>%`
       ).render();
 
       this.container.appendChild(this.containerGames);
       this.containerGames.classList.add('main__statistics__containerGames');
-      new StatisticsBoxGames(this.containerGames, 'Sprint', StatisticStorage).render();
-      new StatisticsBoxGames(this.containerGames, 'Audio Challenge', StatisticStorage).render();
+      new StatisticsBoxGames(this.containerGames, 'Sprint', storage).render();
+      new StatisticsBoxGames(this.containerGames, 'Audio Challenge', storage).render();
 
       return this.mainStatistics;
     }

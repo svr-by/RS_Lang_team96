@@ -122,5 +122,8 @@ export default class Result {
         StatisticStorage.optional.AudioInRow = this.storage.setInRow.size;
       }
     }
+
+    sessionStorage.setItem('StatisticStorage', JSON.stringify(StatisticStorage));
+    console.log(StatisticStorage);
   }
 }
