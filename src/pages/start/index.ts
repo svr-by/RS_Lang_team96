@@ -6,11 +6,12 @@ export class StartPage {
   elem: HTMLElement;
 
   constructor() {
-    this.elem = layoutService.createElement({ tag: 'div', classes: ['wrapper', 'start__wrapper'] });
+    this.elem = layoutService.createElement({ tag: 'div', classes: ['start__wrapper'] });
   }
 
   render() {
     this.elem.innerHTML = `
+    <div class="wrapper">
       <div class="start-content">
         <div class="text-block">
           <h2 class="text-block__title">Учите английский бесплатно, легко и эффективно!</h2>
@@ -48,11 +49,12 @@ export class StartPage {
           </div>
         </div> 
       </div>
-      <div>
-        <div id="starsS"></div>
-        <div id="starsM"></div>
-        <div id="starsL"></div>
-      </div>
+    </div>
+    <div>
+      <div id="starsS"></div>
+      <div id="starsM"></div>
+      <div id="starsL"></div>
+    </div>
     `;
     this.addListeners();
     return this.elem;

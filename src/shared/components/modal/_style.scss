@@ -1,0 +1,50 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100vw;
+  height: 100vh;
+  @include flex(center, center);
+  background: rgba(41, 41, 41, 0.6);
+
+  &__wrapper {
+    position: relative;
+    max-width: 900px;
+    padding: 3rem;
+    @include flex();
+    background-color: $color-white;
+    border-radius: 0.5rem;
+    animation-name: modal-show;
+    animation-duration: 0.5s;  
+  }
+  
+  &__btn-remove {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 0.3rem;
+    color: $color-black;
+    font-size: 14px;
+    text-transform: uppercase;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+  
+    &:hover {
+      background-color: $color-grey;
+    }
+  }
+
+  &__wrapper:not(:hover) &__btn-remove {
+    background-color: $color-grey;
+  }
+}
+
+
+@keyframes modal-show {
+  0%   {transform: scale(0)}
+  100% {transform: scale(1)}
+}

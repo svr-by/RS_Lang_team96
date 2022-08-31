@@ -30,8 +30,8 @@ export default class Statistic {
   }
 
   async render() {
-    const userToken: string | null = localStorage.getItem('token');
-    const userID: string | null = localStorage.getItem('id');
+    const userToken = localStorage.getItem('token');
+    const userID = localStorage.getItem('id');
 
     if (userToken && userID) {
       let userData = await this.api.getUserStatistics(userID, userToken);
