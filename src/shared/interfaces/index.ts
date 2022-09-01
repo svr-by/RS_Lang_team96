@@ -21,3 +21,31 @@ export interface IAggregatedWord extends IWord {
   userWord?: UserWordParams;
   _id: string;
 }
+
+export interface IOptionalStat {
+  AudioCountAnswerCorrect: number;
+  AudioCountAnswerWrong: number;
+  AudioInRow: number;
+  SprintCountAnswerCorrect: number;
+  SprintCountAnswerWrong: number;
+  SprintInRow: number;
+}
+
+export interface IStatistic {
+  learnedWords: number;
+  optional: IOptionalStat;
+}
+
+export interface IStorage {
+  countAnswerCorrect: number;
+  namesAnswerCorrect: string[];
+  namesAnswerCorrectTranslate: string[];
+  namesAnswerCorrectSound: string[];
+  inRow: number;
+  setInRow: Set<number>;
+  countAnswerWrong: number;
+  namesAnswerWrong: string[];
+  namesAnswerWrongTranslate: string[];
+  namesAnswerWrongSound: string[];
+  score: number;
+}

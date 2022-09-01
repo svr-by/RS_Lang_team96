@@ -1,17 +1,15 @@
 import layoutTextBook from './layoutTextBook';
 import LayoutTextBook from './layoutTextBook';
 import Pagination from './pagination';
-import Storage from '../../shared/services/storage';
+import { storageService } from '../../shared/services/storageService';
 
 class Level {
   private readonly level: HTMLDivElement;
   private layoutTextBook: LayoutTextBook;
   private pagination: Pagination;
   private textBook: HTMLElement;
-  private storage: Storage;
   constructor(name: string, numbers: string, id: string, index: number, textBook: HTMLElement) {
     this.textBook = textBook;
-    this.storage = new Storage();
     this.pagination = new Pagination(this.textBook);
     this.layoutTextBook = new layoutTextBook();
     this.level = document.createElement('div');
@@ -28,12 +26,12 @@ class Level {
       </p>
     `;
 
-    if (index == this.storage.get('level')) {
+    if (index == storageService.getSession('level')) {
       this.changeLevel(id, this.level);
     }
 
     this.level.addEventListener('click', () => {
-      this.storage.set('pageNumber', '0');
+      storageService.setSession('pageNumber', '0');
       sessionStorage.setItem('level', JSON.stringify(index));
       this.changeLevel(id, this.level);
     });
@@ -53,11 +51,11 @@ class Level {
   }
 
   changeLevel(id: string, levelElement: HTMLElement) {
-    const indexFromStorage = this.storage.get('level');
-    const index = indexFromStorage && Number(this.storage.get('level'));
+    const indexFromStorage = storageService.getSession('level');
+    const index = indexFromStorage && Number(storageService.getSession('level'));
 
     if (typeof index === 'number') {
-      const pageNumber: number | null = this.storage.get('pageNumber');
+      const pageNumber: number | null = storageService.getSession('pageNumber');
       pageNumber && this.layoutTextBook.addWords(pageNumber, index, this.textBook);
       this.pagination.highlightPage();
       this.addPermanentColor(index, id);

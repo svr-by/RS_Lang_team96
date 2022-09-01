@@ -2,11 +2,12 @@ import { layoutService } from '../../shared/services/layoutService';
 import { navigationService } from '../../shared/services/navigationService';
 import { NavLinks } from '../../shared/enums';
 
-export class StartPage {
+class StartPage {
   elem: HTMLElement;
 
   constructor() {
     this.elem = layoutService.createElement({ tag: 'div', classes: ['start__wrapper'] });
+    this.addListeners();
   }
 
   render() {
@@ -56,12 +57,11 @@ export class StartPage {
       <div id="starsL"></div>
     </div>
     `;
-    this.addListeners();
     return this.elem;
   }
 
   private addListeners() {
-    this.elem.addEventListener('click', (event) => {
+    this.elem.addEventListener('click', async (event) => {
       const target = event.target as HTMLElement;
       if (target.classList.contains('text-block__btn')) {
         event.preventDefault();
@@ -70,3 +70,5 @@ export class StartPage {
     });
   }
 }
+
+export default StartPage;

@@ -1,28 +1,24 @@
 import Svg from './svg';
 import { IWord } from '../../shared/interfaces';
-import API from '../../api';
-import LocalStorage from '../../shared/services/localStorage';
+import { wordsApiService } from '../../api/wordsApiService';
+import { storageService } from '../../shared/services/storageService';
 
 class Description {
   private svg: Svg;
-  private API: API;
-  private localStorage: LocalStorage;
 
   constructor() {
     this.svg = new Svg();
-    this.API = new API();
-    this.localStorage = new LocalStorage();
   }
 
   async appendTo(parent: HTMLElement, id: string) {
     parent.innerHTML = '';
-    await this.API.getWord(id).then((item: IWord | string | void) => {
+    await wordsApiService.getWord(id).then((item: IWord | string | void) => {
       if (typeof item !== 'string' && item) {
         const newDescription = document.createElement('div');
         newDescription.className = 'content';
         newDescription.innerHTML = `
         <img class='content__image' src='https://rslang-team96.herokuapp.com/${item.image}' alt=${item.word}>
-        <div class='${this.localStorage.get('user') ? 'buttons' : 'display-none'}'>
+        <div class='${storageService.getLocal('user') ? 'buttons' : 'display-none'}'>
           <button class='buttons__difficult-button'>В сложные слова</button>
           <button class='buttons__difficult-button'>Слово изученно</button>
         </div>
@@ -39,7 +35,7 @@ class Description {
         <h3 class='content__header'>Пример</h3>
         <p class='content__text'>${item.textExample}</p>
         <p class='content__text russian'>${item.textExampleTranslate}</p>
-        <div class='${this.localStorage.get('user') ? 'gaming-response' : 'display-none'}'>
+        <div class='${storageService.getLocal('user') ? 'gaming-response' : 'display-none'}'>
           <div class='audio-call game'>
             <p class='game__name'>Аудио-вызов</p>
             <div class='game__text'>
