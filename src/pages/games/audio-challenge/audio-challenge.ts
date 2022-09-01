@@ -2,9 +2,9 @@ import BaseComponent from '../../../shared/components/base_component';
 import AnswerBox from '../audio-challenge/components/answer-box';
 import playSound from '../utility/play-sound';
 import { IWord, IStorage } from '../../../shared/interfaces';
-import { UserWord } from '../../../shared/types';
+// import { UserWord } from '../../../shared/types';
 import Result from '../audio-challenge/components/result';
-import API from '../../../api';
+// import { api } from '../../../api/api';
 
 export default class AudioChallange {
   readonly audioChallange: HTMLElement;
@@ -14,8 +14,6 @@ export default class AudioChallange {
   readonly currentWord: IWord;
 
   public isPush: boolean;
-
-  public api: API;
 
   constructor(
     private readonly root: HTMLElement,
@@ -28,7 +26,6 @@ export default class AudioChallange {
     this.wordsInGroup = wordsInGroup;
     this.currentWord = this.getRandomWordInGroup();
     this.isPush = false;
-    this.api = new API();
   }
 
   getRandomWord(): string {
@@ -93,29 +90,29 @@ export default class AudioChallange {
           `;
         }
 
-        const userObjLocalStorage = localStorage.getItem('user');
+        // const userObjLocalStorage = localStorage.getItem('user');
 
-        if (userObjLocalStorage) {
-          let userID: string = JSON.parse(userObjLocalStorage).userId;
-          let wordID: string = this.currentWord.id;
+        // if (userObjLocalStorage) {
+        //   const userID: string = JSON.parse(userObjLocalStorage).userId;
+        //   const wordID: string = this.currentWord.id;
 
-          let userWord = await this.api.getAggregatedWordsById(userID, wordID) as UserWord;
-          if (!userWord) {
-            let body = {
-              difficulty: 'no',
-              optional: {
-                AudioCountAnswerCorrect: 1,
-                AudioCountAnswerWrong: 0,
-                SprintCountAnswerCorrect: 0,
-                SprintCountAnswerWrong: 0,
-              }
-            };
-            await this.api.addUserWord(userID, wordID, body);
-          }
-          
-          userWord.optional.AudioCountAnswerCorrect += 1;
-          this.api.addUserWord(userID, wordID, userWord);
-        }
+        //   const userWord = (await this.api.getAggregatedWordsById(userID, wordID)) as UserWord;
+        //   if (!userWord) {
+        //     const body = {
+        //       difficulty: 'no',
+        //       optional: {
+        //         AudioCountAnswerCorrect: 1,
+        //         AudioCountAnswerWrong: 0,
+        //         SprintCountAnswerCorrect: 0,
+        //         SprintCountAnswerWrong: 0,
+        //       },
+        //     };
+        //     await this.api.addUserWord(userID, wordID, body);
+        //   }
+
+        //   userWord.optional.AudioCountAnswerCorrect += 1;
+        //   this.api.addUserWord(userID, wordID, userWord);
+        // }
       }
     }
   }
