@@ -1,11 +1,11 @@
 import { User, UserParams, SignInResponse } from '../shared/types';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { storageService } from '../shared/services/storageService';
 import { api } from './api';
 
 class UserApiService {
-  async createUser(body: User): Promise<User | string | void> {
-    const response = await axios.post(`${api.usersEndpoint}`, body).catch((error: AxiosError) => {
+  async createUser(body: User): Promise<User | string | undefined> {
+    const response = await api.axiosInstance.post(`${api.usersEndpoint}`, body).catch((error: AxiosError) => {
       switch (error.response?.status) {
         case 417:
           return 'Пользователь уже существует.';
@@ -23,8 +23,8 @@ class UserApiService {
     }
   }
 
-  async signIn(body: UserParams): Promise<SignInResponse | string | void> {
-    const response = await axios.post(`${api.signinEndpoint}`, body).catch((error: AxiosError) => {
+  async signIn(body: UserParams): Promise<SignInResponse | string | undefined> {
+    const response = await api.axiosInstance.post(`${api.signinEndpoint}`, body).catch((error: AxiosError) => {
       switch (error.response?.status) {
         case 403:
           return 'Не верный e-mail или пароль.';
@@ -42,17 +42,17 @@ class UserApiService {
     }
   }
 
-  async getUser(userId: string): Promise<User | string | void> {
+  async getUser(userId: string): Promise<User | undefined> {
     const response = await api.axiosInstance.get(`${api.usersEndpoint}/${userId}`);
     return response.data;
   }
 
-  async updateUser(userId: string, body: UserParams): Promise<User | string | void> {
+  async updateUser(userId: string, body: UserParams): Promise<User | undefined> {
     const response = await api.axiosInstance.put(`${api.usersEndpoint}/${userId}`, body);
     return response.data;
   }
 
-  async deleteUser(userId: string): Promise<string | void> {
+  async deleteUser(userId: string): Promise<string | undefined> {
     const response = await api.axiosInstance.delete(`${api.usersEndpoint}/${userId}`);
     return response.data;
   }

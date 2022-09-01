@@ -40,7 +40,9 @@ class API {
       async (err) => {
         const originalConfig: AxiosRequestConfigExt = err.config;
         if (err.response) {
-          if (err.response.status === 401 && !originalConfig._retry) {
+          if (err.message === 'Network Error') {
+            userService.showServerDownMess();
+          } else if (err.response.status === 401 && !originalConfig._retry) {
             originalConfig._retry = true;
             const userId = this.getLocalUserId();
             await this.getNewTokens(userId);
@@ -49,8 +51,6 @@ class API {
             return this.axiosInstance(originalConfig);
           } else if (err.response.status === 401 && originalConfig._retry) {
             userService.showAuthorizationMess();
-          } else if (err.message === 'Network Error') {
-            userService.showServerDownMess();
           }
         }
         return err;
