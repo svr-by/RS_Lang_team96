@@ -76,7 +76,7 @@ export class Header {
   private addBtnListeners() {
     this.loginBtn.elem.addEventListener('click', () => {
       if (this.loginBtn.elem.id === 'logInBtn') {
-        this.loginWindow.show();
+        this.loginWindow.render();
       }
       if (this.loginBtn.elem.id === 'logOutBtn') {
         userService.signOut();
