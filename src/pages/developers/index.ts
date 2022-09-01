@@ -18,8 +18,8 @@ class DevsPage {
     this.team = [
       new TeamMember({
         name: 'Сергей Рачковский',
-        pesp: 'Интеграция с бэкендом, авторизация и регистрация, стартовая страница',
-        title: 'developer, teamlead',
+        pesp: 'Интеграция с бэкендом, архитектура, дизайн, авторизация',
+        title: 'teamlead, developer',
         githubLink: 'svr-by',
       }),
       new TeamMember({

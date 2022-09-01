@@ -21,9 +21,10 @@ class TeamMember {
     devsCard.innerHTML = `
     <a href="https://github.com/${this.githubLink}" class="devs__link">
       <div class="devs__img-wrap">
-        <img src="assets/img/${this.ava}" alt="developer" class="devs__img">
+        <img src="assets/img/${this.ava}" alt="${this.title}" class="devs__img">
       </div>
       <h4 class="devs__name">${this.name}</h4>
+      <p class="devs__title">${this.title}</p>
       <p class="devs__resp">${this.pesp}</p>
     </a>
     `;

@@ -3,11 +3,9 @@ import StatWordsWrong from './result-wrong';
 import StatWordsAnswer from './result-answer';
 import { IStatistic, IStorage } from '../../../../shared/interfaces';
 import StatisticStorage from '../../../games/utility/statistics-storage';
-import API from '../../../../api';
+import { statisticApiService } from '../../../../api/statisticApiService';
 
 export default class Result {
-  readonly api: API;
-
   readonly result: HTMLElement;
 
   readonly container: HTMLElement;
@@ -18,7 +16,6 @@ export default class Result {
     this.result = document.createElement('div');
     this.container = document.createElement('div');
     this.statisticBox = document.createElement('div');
-    this.api = new API();
   }
 
   async render() {
@@ -69,9 +66,9 @@ export default class Result {
     const userToken: string | null = localStorage.getItem('token');
     const userID: string | null = localStorage.getItem('id');
     if (userToken && userID) {
-      let userData = await this.api.getUserStatistics(userID, userToken);
+      let userData = await statisticApiService.getUserStatistics(userID);
       if (typeof userData !== 'boolean') {
-        userData = (await this.api.getUserStatistics(userID, userToken)) as IStatistic;
+        userData = (await statisticApiService.getUserStatistics(userID)) as IStatistic;
         userData.learnedWords += this.storage.countAnswerCorrect;
         userData.optional.AudioCountAnswerCorrect += this.storage.countAnswerCorrect;
         userData.optional.AudioCountAnswerWrong += this.storage.countAnswerWrong;
@@ -89,7 +86,7 @@ export default class Result {
             SprintInRow: userData.optional.SprintInRow,
           },
         };
-        await this.api.saveUserStatistics(userID, userToken, storage);
+        await statisticApiService.saveUserStatistics(userID, storage);
       } else {
         const storage: IStatistic = {
           learnedWords: 0,
@@ -102,15 +99,15 @@ export default class Result {
             SprintInRow: 0,
           },
         };
-        await this.api.saveUserStatistics(userID, userToken, storage);
-        userData = (await this.api.getUserStatistics(userID, userToken)) as IStatistic;
+        await statisticApiService.saveUserStatistics(userID, storage);
+        userData = (await statisticApiService.getUserStatistics(userID)) as IStatistic;
         userData.learnedWords += this.storage.countAnswerCorrect;
         userData.optional.AudioCountAnswerCorrect += this.storage.countAnswerCorrect;
         userData.optional.AudioCountAnswerWrong += this.storage.countAnswerWrong;
         if (this.storage.setInRow.size > userData.optional.AudioInRow) {
           userData.optional.AudioInRow = this.storage.setInRow.size;
         }
-        await this.api.saveUserStatistics(userID, userToken, userData);
+        await statisticApiService.saveUserStatistics(userID, userData);
       }
     } else {
       StatisticStorage.learnedWords += this.storage.countAnswerCorrect;

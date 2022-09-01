@@ -1,15 +1,13 @@
 import Svg from './svg';
 import LayoutTextBook from './layoutTextBook';
-import Storage from '../../shared/services/storage';
+import { storageService } from '../../shared/services/storageService';
 
 class Pagination {
   private readonly pagination: HTMLDivElement;
   private svg: Svg;
   private layoutTextBook: LayoutTextBook;
   private textBook: HTMLElement;
-  private storage: Storage;
   constructor(textBook: HTMLElement) {
-    this.storage = new Storage();
     this.textBook = textBook;
     this.svg = new Svg();
     this.layoutTextBook = new LayoutTextBook();
@@ -24,50 +22,50 @@ class Pagination {
 
   newPage(event: MouseEvent) {
     event.stopPropagation();
-    const count: number | null = this.storage.get('pageNumber');
+    const count: number | null = storageService.getSession('pageNumber');
 
     if (count !== null) {
       if ((event.target as HTMLElement).id === 'pagination-arrow-left' && count > 0) {
-        this.storage.set('pageNumber', count - 1);
+        storageService.setSession('pageNumber', count - 1);
       }
       if ((event.target as HTMLElement).id === 'pagination-first') {
-        this.storage.set('pageNumber', +(event.target as HTMLElement).innerText - 1);
+        storageService.setSession('pageNumber', +(event.target as HTMLElement).innerText - 1);
       }
       if (
         (event.target as HTMLElement).id === 'pagination-second' &&
         (event.target as HTMLElement).innerText !== '...'
       ) {
-        this.storage.set('pageNumber', +(event.target as HTMLElement).innerText - 1);
+        storageService.setSession('pageNumber', +(event.target as HTMLElement).innerText - 1);
       }
       if ((event.target as HTMLElement).id === 'pagination-third') {
-        this.storage.set('pageNumber', +(event.target as HTMLElement).innerText - 1);
+        storageService.setSession('pageNumber', +(event.target as HTMLElement).innerText - 1);
       }
       if ((event.target as HTMLElement).id === 'pagination-fourth') {
-        this.storage.set('pageNumber', +(event.target as HTMLElement).innerText - 1);
+        storageService.setSession('pageNumber', +(event.target as HTMLElement).innerText - 1);
       }
       if ((event.target as HTMLElement).id === 'pagination-fifth') {
-        this.storage.set('pageNumber', +(event.target as HTMLElement).innerText - 1);
+        storageService.setSession('pageNumber', +(event.target as HTMLElement).innerText - 1);
       }
       if ((event.target as HTMLElement).id === 'pagination-six' && (event.target as HTMLElement).innerText !== '...') {
-        this.storage.set('pageNumber', +(event.target as HTMLElement).innerText - 1);
+        storageService.setSession('pageNumber', +(event.target as HTMLElement).innerText - 1);
       }
       if ((event.target as HTMLElement).id === 'pagination-seven') {
-        this.storage.set('pageNumber', +(event.target as HTMLElement).innerText - 1);
+        storageService.setSession('pageNumber', +(event.target as HTMLElement).innerText - 1);
       }
       if ((event.target as HTMLElement).id === 'pagination-arrow-right' && count < 29) {
-        this.storage.set('pageNumber', count + 1);
+        storageService.setSession('pageNumber', count + 1);
       }
     }
 
     this.render();
     const group = JSON.parse(sessionStorage.getItem('level') as string);
-    const newPage: number | null = this.storage.get('pageNumber');
+    const newPage: number | null = storageService.getSession('pageNumber');
     newPage && this.layoutTextBook.addWords(newPage, group, this.textBook);
   }
 
   render() {
     this.pagination.innerHTML = '';
-    const count: number | null = this.storage.get('pageNumber');
+    const count: number | null = storageService.getSession('pageNumber');
     if (count !== null) {
       if (+count < 4) {
         this.pagination.innerHTML = `
@@ -117,7 +115,7 @@ class Pagination {
   }
 
   highlightPage() {
-    const count: number | null = this.storage.get('pageNumber');
+    const count: number | null = storageService.getSession('pageNumber');
     if (count !== null) {
       (this.textBook.querySelectorAll('.pagination__page') as unknown as HTMLElement[]).forEach((item) => {
         if (+item.innerText === +count + 1) {

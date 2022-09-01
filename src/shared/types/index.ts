@@ -21,8 +21,6 @@ export type UserWord = {
   wordId: string;
   difficulty: string;
   optional?: {
-    isLearned?: boolean;
-    addTime?: string;
     games?: {
       sprint?: {
         right?: number;

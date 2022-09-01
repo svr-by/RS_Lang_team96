@@ -7,6 +7,7 @@ class StartPage {
 
   constructor() {
     this.elem = layoutService.createElement({ tag: 'div', classes: ['start__wrapper'] });
+    this.addListeners();
   }
 
   render() {
@@ -56,12 +57,11 @@ class StartPage {
       <div id="starsL"></div>
     </div>
     `;
-    this.addListeners();
     return this.elem;
   }
 
   private addListeners() {
-    this.elem.addEventListener('click', (event) => {
+    this.elem.addEventListener('click', async (event) => {
       const target = event.target as HTMLElement;
       if (target.classList.contains('text-block__btn')) {
         event.preventDefault();

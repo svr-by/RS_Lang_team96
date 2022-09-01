@@ -6,21 +6,21 @@ import Description from './description';
 import Word from './word';
 import SettingsModal from './settingsModal';
 import { IWord } from '../../shared/interfaces';
-import API from '../../api';
-import Storage from '../../shared/services/storage';
+import { wordsApiService } from '../../api/wordsApiService';
+import { storageService } from '../../shared/services/storageService';
 
 class LayoutTextBook {
   private svg: Svg;
   private groupNumber: { name: string; numbers: string; id: string }[];
   private description: Description;
-  private API: API;
-  private storage: Storage;
+  // private API: API;
+  // private storage: Storage;
 
   constructor() {
     this.svg = new Svg();
-    this.storage = new Storage();
+    // this.storage = new Storage();
     this.groupNumber = dataLevels;
-    this.API = new API();
+    // this.API = new API();
     this.description = new Description();
   }
 
@@ -52,12 +52,12 @@ class LayoutTextBook {
       </div>
     `;
 
-    if (!this.storage.get('level')) {
-      this.storage.set('level', '0');
+    if (!storageService.getSession('level')) {
+      storageService.setSession('level', '0');
     }
 
-    if (!this.storage.get('pageNumber')) {
-      this.storage.set('pageNumber', '0');
+    if (!storageService.getSession('pageNumber')) {
+      storageService.setSession('pageNumber', '0');
     }
 
     await this.addLevels(textBook);
@@ -86,7 +86,7 @@ class LayoutTextBook {
   addWords(page: number, group: number, textBook: HTMLElement) {
     const words = textBook.querySelector('#words') as HTMLElement;
     words.innerHTML = '';
-    this.API.getWords(group, page).then((data) => {
+    wordsApiService.getWords(group, page).then((data) => {
       if (typeof data === 'string') {
         console.log(data);
       }
@@ -95,7 +95,7 @@ class LayoutTextBook {
           if (index === 0) {
             const description = textBook.querySelector('#description') as HTMLElement;
             this.description.appendTo(description, item.id);
-            this.storage.set('chosenWordId', item.id);
+            storageService.setSession('chosenWordId', item.id);
           }
           new Word(item.id, item.word, item.wordTranslate).appendTo(words);
         });
