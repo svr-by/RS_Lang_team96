@@ -38,15 +38,10 @@ class Level {
 
     this.level.addEventListener('mouseover', () => {
       this.choseColor(index);
-      this.level.style.opacity = '1';
     });
 
     this.level.addEventListener('mouseout', () => {
       this.removeColor(index);
-      if (!JSON.parse(this.level.getAttribute('data-chose') as string)) {
-        this.level.style.opacity = '';
-        this.level.style.transition = 'opacity 0.5s';
-      }
     });
   }
 
@@ -68,7 +63,7 @@ class Level {
   addPermanentColor(index: number, id: string) {
     (document.querySelectorAll('.level') as unknown as HTMLElement[]).forEach((item) => {
       if (item.id !== id) {
-        (item.querySelector('.level__value') as HTMLElement).classList.remove(`permanent-${item.id.toLowerCase()}`);
+        item.classList.remove(`permanent-${item.id.toLowerCase()}`);
         item.removeAttribute('data-chose');
         item.style.opacity = '';
       }
@@ -76,22 +71,22 @@ class Level {
 
     switch (index) {
       case 0:
-        (this.level.querySelector('#value-level') as HTMLElement).classList.add('permanent-a1');
+        this.level.classList.add('permanent-a1');
         break;
       case 1:
-        (this.level.querySelector('#value-level') as HTMLElement).classList.add('permanent-a2');
+        this.level.classList.add('permanent-a2');
         break;
       case 2:
-        (this.level.querySelector('#value-level') as HTMLElement).classList.add('permanent-b1');
+        this.level.classList.add('permanent-b1');
         break;
       case 3:
-        (this.level.querySelector('#value-level') as HTMLElement).classList.add('permanent-b2');
+        this.level.classList.add('permanent-b2');
         break;
       case 4:
-        (this.level.querySelector('#value-level') as HTMLElement).classList.add('permanent-c1');
+        this.level.classList.add('permanent-c1');
         break;
       case 5:
-        (this.level.querySelector('#value-level') as HTMLElement).classList.add('permanent-c2');
+        this.level.classList.add('permanent-c2');
         break;
     }
   }
