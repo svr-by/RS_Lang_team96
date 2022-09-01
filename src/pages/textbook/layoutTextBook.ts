@@ -8,19 +8,16 @@ import SettingsModal from './settingsModal';
 import { IAggregatedWord, IWord } from '../../shared/interfaces';
 import { wordsApiService } from '../../api/wordsApiService';
 import { storageService } from '../../shared/services/storageService';
+import { SignInResponse } from '../../shared/types';
 
 class LayoutTextBook {
   private svg: Svg;
   private groupNumber: { name: string; numbers: string; id: string }[];
   private description: Description;
-  // private API: API;
-  // private storage: Storage;
 
   constructor() {
     this.svg = new Svg();
-    // this.storage = new Storage();
     this.groupNumber = dataLevels;
-    // this.API = new API();
     this.description = new Description();
   }
 
@@ -140,11 +137,24 @@ class LayoutTextBook {
     });
   }
 
-  addWords(page: number, group: number, textBook: HTMLElement) {
+  async addWords(page: number, group: number, textBook: HTMLElement) {
     const words = textBook.querySelector('#words') as HTMLElement;
     words.innerHTML = '';
-    if (storageService.getLocal('user')) {
-      wordsApiService.getAggregatedUserWords('630c2e10a22d8d0016318977', 0, 0, 20).then((data) => {
+    const userData: null | SignInResponse = storageService.getLocal('user');
+    if (userData) {
+      const hardWords = await wordsApiService.getUserHardWords(userData.userId).then((item) => {
+        if (item) {
+          return [...item][0].paginatedResults;
+        }
+      });
+
+      const learnedWords = await wordsApiService.getUserLearnedWords(userData.userId).then((item) => {
+        if (item) {
+          return [...item][0].paginatedResults;
+        }
+      });
+
+      wordsApiService.getAggregatedUserWords(userData.userId, page, group, 20).then((data) => {
         if (Array.isArray(data)) {
           const wordsData = data[0].paginatedResults;
           wordsData.forEach((item: IAggregatedWord, index: number) => {
@@ -153,7 +163,7 @@ class LayoutTextBook {
               this.description.appendTo(description, item._id);
               storageService.setSession('chosenWordId', item._id);
             }
-            new Word(item._id, item.word, item.wordTranslate).appendTo(words);
+            new Word(item._id, item.word, item.wordTranslate, hardWords, learnedWords).appendTo(words);
           });
         }
       });

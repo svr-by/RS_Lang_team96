@@ -2,12 +2,15 @@ import Svg from './svg';
 import { IWord } from '../../shared/interfaces';
 import { wordsApiService } from '../../api/wordsApiService';
 import { storageService } from '../../shared/services/storageService';
+import { SignInResponse } from '../../shared/types';
 
 class Description {
   private svg: Svg;
+  private userData: null | SignInResponse;
 
   constructor() {
     this.svg = new Svg();
+    this.userData = storageService.getLocal('user');
   }
 
   async appendTo(parent: HTMLElement, id: string) {
@@ -19,8 +22,8 @@ class Description {
         newDescription.innerHTML = `
         <img class='content__image' src='https://rslang-team96.herokuapp.com/${item.image}' alt=${item.word}>
         <div class='${storageService.getLocal('user') ? 'buttons' : 'display-none'}'>
-          <button class='buttons__difficult-button'>В сложные слова</button>
-          <button class='buttons__difficult-button'>Слово изученно</button>
+          <button class='buttons__difficult-button' id='in-difficult'>В сложные слова</button>
+          <button class='buttons__difficult-button' id='in-learning'>Слово изученно</button>
         </div>
         <p class='content__word'>${item.word}</p>
         <p class='content__word-translate russian'>${item.wordTranslate}</p>
@@ -68,7 +71,63 @@ class Description {
       (document.getElementById('playSvg') as HTMLElement).addEventListener('click', () => {
         (document.getElementById('sound') as HTMLAudioElement).play();
       });
+
+      const buttonInDifficult = document.getElementById('in-difficult');
+      buttonInDifficult &&
+        buttonInDifficult.addEventListener('click', () => {
+          this.addToDifficultWords(id);
+        });
+
+      const buttonInLearning = document.getElementById('in-learning');
+      buttonInLearning &&
+        buttonInLearning.addEventListener('click', () => {
+          this.addToLearningWords(id);
+        });
     });
+  }
+
+  addToDifficultWords(id: string) {
+    const word = document.getElementById(id);
+    if (word) {
+      if (word.classList.contains('learned-word')) {
+        this.userData && wordsApiService.updateUserWord(this.userData.userId, id, { difficulty: 'hard' });
+        document.querySelectorAll('.word').forEach((item) => {
+          if (item.id === id) {
+            item.classList.remove('learned-word');
+            item.classList.add('hard-word');
+          }
+        });
+      } else {
+        this.userData && wordsApiService.addUserWord(this.userData.userId, id, { difficulty: 'hard' });
+        document.querySelectorAll('.word').forEach((item) => {
+          if (item.id === id) {
+            item.classList.add('hard-word');
+          }
+        });
+      }
+    }
+  }
+
+  addToLearningWords(id: string) {
+    const word = document.getElementById(id);
+    if (word) {
+      if (word.classList.contains('hard-word')) {
+        this.userData && wordsApiService.updateUserWord(this.userData.userId, id, { difficulty: 'learned' });
+        document.querySelectorAll('.word').forEach((item) => {
+          if (item.id === id) {
+            item.classList.remove('hard-word');
+            item.classList.add('learned-word');
+          }
+        });
+      } else {
+        this.userData && wordsApiService.addUserWord(this.userData.userId, id, { difficulty: 'learned' });
+        document.querySelectorAll('.word').forEach((item) => {
+          if (item.id === id) {
+            item.classList.add('learned-word');
+          }
+        });
+      }
+    }
   }
 }
 

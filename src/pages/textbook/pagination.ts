@@ -60,7 +60,7 @@ class Pagination {
     this.render();
     const group = JSON.parse(sessionStorage.getItem('level') as string);
     const newPage: number | null = storageService.getSession('pageNumber');
-    newPage && this.layoutTextBook.addWords(newPage, group, this.textBook);
+    (newPage || newPage === 0) && this.layoutTextBook.addWords(newPage, group, this.textBook);
   }
 
   render() {

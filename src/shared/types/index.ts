@@ -76,11 +76,3 @@ export type LevelType = {
   numbers: string;
   id: string;
 };
-
-export type LocalUser = {
-  message: string;
-  name: string;
-  refreshToken: string;
-  token: string;
-  userId: string;
-};
