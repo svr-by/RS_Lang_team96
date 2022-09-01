@@ -27,7 +27,7 @@ class API {
   axiosInstance: AxiosInstance;
 
   constructor() {
-    this.base = 'http://localhost:8000';
+    this.base = 'https://rslang-team96.herokuapp.com';
     this.wordsEndpoint = `${this.base}/words`;
     this.usersEndpoint = `${this.base}/users`;
     this.signinEndpoint = `${this.base}/signin`;
@@ -364,8 +364,8 @@ class API {
 
   private createAggregatedWordsQuery(wordsParams: AggregatedWordsParams) {
     const query: string[] = [];
-    if (wordsParams.group) query.push(`group=${wordsParams.group}`);
-    if (wordsParams.page) query.push(`page=${wordsParams.group}`);
+    if (wordsParams.group || wordsParams.group === 0) query.push(`group=${wordsParams.group}`);
+    if (wordsParams.page || wordsParams.page === 0) query.push(`page=${wordsParams.page}`);
     if (wordsParams.wordsPerPage) query.push(`wordsPerPage=${wordsParams.wordsPerPage}`);
     if (wordsParams.filter) query.push(`filter=${wordsParams.filter}`);
     return `?${query.join('&')}`;

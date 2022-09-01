@@ -1,14 +1,17 @@
 import Svg from './svg';
 import { IWord } from '../../shared/interfaces';
 import API from '../../api';
+import LocalStorage from '../../shared/services/localStorage';
 
 class Description {
   private svg: Svg;
   private API: API;
+  private localStorage: LocalStorage;
 
   constructor() {
     this.svg = new Svg();
     this.API = new API();
+    this.localStorage = new LocalStorage();
   }
 
   async appendTo(parent: HTMLElement, id: string) {
@@ -19,6 +22,10 @@ class Description {
         newDescription.className = 'content';
         newDescription.innerHTML = `
         <img class='content__image' src='https://rslang-team96.herokuapp.com/${item.image}' alt=${item.word}>
+        <div class='${this.localStorage.get('user') ? 'buttons' : 'display-none'}'>
+          <button class='buttons__difficult-button'>В сложные слова</button>
+          <button class='buttons__difficult-button'>Слово изученно</button>
+        </div>
         <p class='content__word'>${item.word}</p>
         <p class='content__word-translate russian'>${item.wordTranslate}</p>
         <div class='transcription'>
@@ -32,6 +39,30 @@ class Description {
         <h3 class='content__header'>Пример</h3>
         <p class='content__text'>${item.textExample}</p>
         <p class='content__text russian'>${item.textExampleTranslate}</p>
+        <div class='${this.localStorage.get('user') ? 'gaming-response' : 'display-none'}'>
+          <div class='audio-call game'>
+            <p class='game__name'>Аудио-вызов</p>
+            <div class='game__text'>
+              <p class='game__correct-text'>Угаданно верно:</p>
+              <p class='game__correct-number' id='audio-call-correct'>0</p>
+            </div>
+            <div class='game__text'>
+              <p class='game__correct-text'>Ошибался:</p>
+              <p class='game__correct-number' id='audio-call-was-wrong'>0</p>
+            </div>
+          </div>
+          <div class='sprint game'>
+            <p class='game__name'>Спринт</p>
+            <div class='game__text'>
+              <p class='game__correct-text'>Угаданно верно:</p>
+              <p class='game__correct-number' id='sprint-correct'>0</p>
+            </div>
+            <div class='game__text'>
+              <p class='game__correct-text'>Ошибался:</p>
+              <p class='game__correct-number' id='sprint-was-wrong'>0</p>
+            </div>
+          </div>
+        </div>
       `;
         parent.append(newDescription);
       } else {

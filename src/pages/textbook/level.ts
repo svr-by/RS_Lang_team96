@@ -55,9 +55,10 @@ class Level {
   changeLevel(id: string, levelElement: HTMLElement) {
     const indexFromStorage = this.storage.get('level');
     const index = indexFromStorage && Number(this.storage.get('level'));
+
     if (typeof index === 'number') {
-      const firstPage: number | null = this.storage.get('pageNumber');
-      firstPage && this.layoutTextBook.addWords(firstPage, index, this.textBook);
+      const pageNumber: number | null = this.storage.get('pageNumber');
+      pageNumber && this.layoutTextBook.addWords(pageNumber, index, this.textBook);
       this.pagination.highlightPage();
       this.addPermanentColor(index, id);
       levelElement.setAttribute('data-chose', 'true');
