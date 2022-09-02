@@ -6,6 +6,7 @@ import StartPage from '../pages/start';
 import Games from '../pages/games/games';
 import LayoutTextBook from '../pages/textbook/layoutTextBook';
 import DevsPage from '../pages/developers';
+import StatsPage from '../pages/statistics';
 
 class App {
   header: Header;
@@ -14,6 +15,7 @@ class App {
   startPage: StartPage;
   private layoutTextBook: LayoutTextBook;
   devsPage: DevsPage;
+  statsPage: StatsPage;
 
   constructor() {
     this.header = new Header();
@@ -22,6 +24,7 @@ class App {
     this.startPage = new StartPage();
     this.layoutTextBook = new LayoutTextBook();
     this.devsPage = new DevsPage();
+    this.statsPage = new StatsPage();
     this.renderMain();
   }
 
@@ -43,7 +46,7 @@ class App {
         mainContent = new Games(this.main).render();
         break;
       case Views.statistics:
-        mainContent = layoutService.createElement({ tag: 'h1', text: 'Страница статистики' });
+        mainContent = this.statsPage.render();
         break;
       case Views.developers:
         mainContent = this.devsPage.render();

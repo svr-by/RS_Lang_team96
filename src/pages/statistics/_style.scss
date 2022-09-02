@@ -1,0 +1,86 @@
+.stats {
+  &__numbers {
+    @include flex(center, center);
+  }
+
+  &__index {
+    margin: 0 4rem;
+    padding-top: 2rem;
+    @include flex(center, center, column);
+    font-family: Fira Sans,sans-serif;
+    font-weight: 600;
+  }
+
+  &__digit {
+    margin: 0 0 0.5rem 0;
+    font-family: "Gilroy";
+    font-size: 6rem;
+  }
+
+  &__name {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+  }
+
+  &__games {
+    padding: 4rem 0;
+    @include flex(center, center, row, wrap);
+    gap: 5rem;
+  }
+}
+
+.game-stat {
+  width: 300px;
+  background-color: $color-grey-xl;
+  border-radius: 1rem;
+
+
+  &__name {
+    margin: 0 0 1.5rem 0;
+    padding: 1rem 0;
+    border-radius: 1rem 1rem 0 0;
+    font-size: 1.5rem;
+    color: $color-white;
+    background-color: $color-green;
+    text-align: center;
+  }
+
+  &__words,
+  &__right,
+  &__series {
+    @include flex();
+    margin: 0 0 1rem 0;
+    padding: 0 0.5rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    vertical-align: middle;
+
+    &::before {
+      content: '';
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: inline-block;
+      width: 1.5rem;
+      height: 1.5rem;
+      object-fit: cover;
+      margin-right: 0.5rem;
+    }
+  }
+
+  &__words {
+    &::before {
+      background-image: url('assets/img/new-word.png');
+    }
+  }
+  &__right {
+    &::before {
+      background-image: url('assets/img/right-word.png');
+    }
+  }
+  &__series {
+    &::before {
+      background-image: url('assets/img/series-word.png');
+    }
+  }
+}
