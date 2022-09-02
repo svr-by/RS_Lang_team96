@@ -2,9 +2,11 @@ import BaseComponent from '../../../shared/components/base_component';
 import AnswerBox from '../audio-challenge/components/answer-box';
 import playSound from '../utility/play-sound';
 import { IWord, IStorage } from '../../../shared/interfaces';
+import { userService } from '../../../shared/services/userService';
+import { wordsApiService } from '../../../api/wordsApiService';
+import { statisticApiService } from '../../../api/statisticApiService';
 // import { UserWord } from '../../../shared/types';
 import Result from '../audio-challenge/components/result';
-// import { api } from '../../../api/api';
 
 export default class AudioChallange {
   audioChallange: HTMLElement;
@@ -14,7 +16,7 @@ export default class AudioChallange {
   currentWord: IWord;
 
   isPush: boolean;
-
+  
   constructor(
     private readonly root: HTMLElement,
     public wordsInGroup: IWord[],
@@ -26,11 +28,6 @@ export default class AudioChallange {
     this.wordsInGroup = wordsInGroup;
     this.currentWord = this.getRandomWordInGroup();
     this.isPush = false;
-  }
-
-  getRandomWord(): string {
-    const randomIndex = Math.floor(Math.random() * 600);
-    return this.wordsInGroup[randomIndex].wordTranslate;
   }
 
   getRandomWordInGroup(): IWord {
@@ -138,7 +135,7 @@ export default class AudioChallange {
     }
   }
 
-  render(): HTMLElement {
+  async render() {
     this.root.appendChild(this.audioChallange);
     this.audioChallange.classList.add('main__games__audio-challange');
 
@@ -160,22 +157,51 @@ export default class AudioChallange {
 
     playSound(this.currentWord);
 
+    const userId = userService.getStoredUserId();
+    if (userId) {
+      const newWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
+      if (!newWord) {
+        let body = {
+          difficulty: 'easy',
+          optional: {
+            games: {
+              sprint: {
+                right: 0,
+                wrong: 0,
+              },
+              audioCall: {
+                right: 0,
+                wrong: 0,
+              },
+            },
+          },
+        }
+        await wordsApiService.addUserWord(userId, this.currentWord.id, body);
+        let userStatObj = await statisticApiService.getUserStatistics(userId);
+        
+        if (userStatObj) {
+          await statisticApiService.saveUserStatistics(userId, userStatObj);
+        }
+        
+      }
+    }
+
     const randomNum = Math.floor(Math.random() * 4);
     const buttonsArray = document.querySelectorAll('.main__games__audio-challange__buttonAnswer');
 
     do {
-      buttonsArray[0].innerHTML = this.getRandomWord();
+      buttonsArray[0].innerHTML = this.getRandomWordInGroup().wordTranslate;
     } while (buttonsArray[0].innerHTML === this.currentWord.wordTranslate);
 
     do {
-      buttonsArray[1].innerHTML = this.getRandomWord();
+      buttonsArray[1].innerHTML = this.getRandomWordInGroup().wordTranslate;
     } while (
       buttonsArray[1].innerHTML === this.currentWord.wordTranslate ||
       buttonsArray[1].innerHTML === buttonsArray[0].innerHTML
     );
 
     do {
-      buttonsArray[2].innerHTML = this.getRandomWord();
+      buttonsArray[2].innerHTML = this.getRandomWordInGroup().wordTranslate;
     } while (
       buttonsArray[2].innerHTML === this.currentWord.wordTranslate ||
       buttonsArray[2].innerHTML === buttonsArray[0].innerHTML ||
@@ -183,7 +209,7 @@ export default class AudioChallange {
     );
 
     do {
-      buttonsArray[3].innerHTML = this.getRandomWord();
+      buttonsArray[3].innerHTML = this.getRandomWordInGroup().wordTranslate;
     } while (
       buttonsArray[3].innerHTML === this.currentWord.wordTranslate ||
       buttonsArray[3].innerHTML === buttonsArray[0].innerHTML ||
