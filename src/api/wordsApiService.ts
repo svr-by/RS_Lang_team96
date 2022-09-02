@@ -59,12 +59,12 @@ class WordsApiService {
 
   async getUserHardWords(userId: string): Promise<AggregatedWordsResponse[] | undefined> {
     const targetPage = `{"userWord.difficulty":"hard"}`;
-    return this.getAggregatedWords(userId, { filter: targetPage });
+    return this.getAggregatedWords(userId, { wordsPerPage: 600, filter: targetPage });
   }
 
   async getUserLearnedWords(userId: string): Promise<AggregatedWordsResponse[] | undefined> {
     const targetPage = `{"userWord.difficulty":"learned"}`;
-    return this.getAggregatedWords(userId, { filter: targetPage });
+    return this.getAggregatedWords(userId, { wordsPerPage: 600, filter: targetPage });
   }
 
   async getAggregatedWordsById(userId: string, wordId: string): Promise<UserWord[] | undefined> {

@@ -22,8 +22,12 @@ class Description {
         newDescription.innerHTML = `
         <img class='content__image' src='https://rslang-team96.herokuapp.com/${item.image}' alt=${item.word}>
         <div class='${storageService.getLocal('user') ? 'buttons' : 'display-none'}'>
-          <button class='buttons__difficult-button' id='in-difficult'>В сложные слова</button>
-          <button class='buttons__difficult-button' id='in-learning'>Слово изученно</button>
+          <button class='${
+            storageService.getSession('sect') === 'difficult words' ? 'display-none' : 'buttons__difficult-button'
+          }' id='in-difficult'>В сложные слова</button>
+          <button class='${
+            storageService.getSession('sect') === 'studied words' ? 'display-none' : 'buttons__difficult-button'
+          }' id='in-learning'>Слово изученно</button>
         </div>
         <p class='content__word'>${item.word}</p>
         <p class='content__word-translate russian'>${item.wordTranslate}</p>
@@ -84,6 +88,7 @@ class Description {
           this.addToLearningWords(id);
         });
     });
+    this.addStyleForPage();
   }
 
   addToDifficultWords(id: string) {
@@ -105,6 +110,16 @@ class Description {
           }
         });
       }
+      this.addStyleForPage();
+    }
+
+    if (storageService.getSession('sect') === 'studied words') {
+      this.userData && wordsApiService.updateUserWord(this.userData.userId, id, { difficulty: 'hard' });
+      document.querySelectorAll('.word').forEach((item) => {
+        if (item.id === id) {
+          item.classList.add('display-none');
+        }
+      });
     }
   }
 
@@ -127,6 +142,30 @@ class Description {
           }
         });
       }
+      this.addStyleForPage();
+    }
+
+    if (storageService.getSession('sect') === 'difficult words') {
+      this.userData && wordsApiService.updateUserWord(this.userData.userId, id, { difficulty: 'learned' });
+      document.querySelectorAll('.word').forEach((item) => {
+        if (item.id === id) {
+          item.classList.add('display-none');
+        }
+      });
+    }
+  }
+
+  addStyleForPage() {
+    const hardWords = document.querySelectorAll('.hard-word');
+    const learnedWords = document.querySelectorAll('.learned-word');
+    const numberElements = hardWords.length + learnedWords.length;
+    const words = document.querySelector('.words');
+    if (numberElements === 20) {
+      const selectedPage = document.querySelector('.selected-page');
+      selectedPage && selectedPage.classList.add('learned-page');
+      words && words.classList.add('learned-words-background');
+    } else {
+      words && words.classList.remove('learned-words-background');
     }
   }
 }

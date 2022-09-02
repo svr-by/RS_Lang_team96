@@ -70,8 +70,8 @@ class LayoutTextBook {
     this.highlightSelectedPartition(textBook);
 
     if (storageService.getSession('sect') === 'text-book') await this.addLevels(textBook);
-    if (storageService.getSession('sect') === 'difficult words') this.addDifficultWords(textBook);
-    if (storageService.getSession('sect') === 'studied words') this.addTextbookWords(textBook);
+    if (storageService.getSession('sect') === 'difficult words') await this.addDifficultWords(textBook);
+    if (storageService.getSession('sect') === 'studied words') await this.addLearnedWords(textBook);
 
     const pagination = textBook.querySelector('#pagination') as HTMLElement;
 
@@ -102,11 +102,11 @@ class LayoutTextBook {
 
       if (event.target.id === 'difficult-words') this.addDifficultWords(textBook);
 
-      if (event.target.id === 'studied-words') this.addTextbookWords(textBook);
+      if (event.target.id === 'studied-words') this.addLearnedWords(textBook);
     }
   }
 
-  addDifficultWords(textBook: HTMLElement) {
+  async addDifficultWords(textBook: HTMLElement) {
     storageService.setSession('sect', 'difficult words');
     this.highlightSelectedPartition(textBook);
     const levels = textBook.querySelector('#levels');
@@ -114,10 +114,16 @@ class LayoutTextBook {
       levels.innerHTML = '';
     }
     const words = textBook.querySelector('#words') as HTMLElement;
-    words.innerHTML = 'Сложные слова';
+    words.innerHTML = '';
+    const hardWords = await this.getHardWords();
+    if (hardWords) {
+      hardWords.forEach((item: IAggregatedWord, index: number) => {
+        this.addWordAndDescription(item, index, textBook, words);
+      });
+    }
   }
 
-  addTextbookWords(textBook: HTMLElement) {
+  async addLearnedWords(textBook: HTMLElement) {
     storageService.setSession('sect', 'studied words');
     this.highlightSelectedPartition(textBook);
     const levels = textBook.querySelector('#levels');
@@ -125,7 +131,22 @@ class LayoutTextBook {
       levels.innerHTML = '';
     }
     const words = textBook.querySelector('#words') as HTMLElement;
-    words.innerHTML = 'Изученные слова';
+    words.innerHTML = '';
+    const learnedWords = await this.getLearnedWords();
+    if (learnedWords) {
+      learnedWords.forEach((item: IAggregatedWord, index: number) => {
+        this.addWordAndDescription(item, index, textBook, words);
+      });
+    }
+  }
+
+  addWordAndDescription(item: IAggregatedWord, index: number, textBook: HTMLElement, words: HTMLElement) {
+    if (index === 0) {
+      const description = textBook.querySelector('#description') as HTMLElement;
+      this.description.appendTo(description, item._id);
+      storageService.setSession('chosenWordId', item._id);
+    }
+    new Word(item._id, item.word, item.wordTranslate).appendTo(words);
   }
 
   addLevels(textBook: HTMLElement) {
@@ -137,22 +158,36 @@ class LayoutTextBook {
     });
   }
 
+  async getHardWords() {
+    const userData: null | SignInResponse = storageService.getLocal('user');
+    if (userData) {
+      return await wordsApiService.getUserHardWords(userData.userId).then((item) => {
+        if (item) {
+          return [...item][0].paginatedResults;
+        }
+      });
+    }
+  }
+
+  async getLearnedWords() {
+    const userData: null | SignInResponse = storageService.getLocal('user');
+    if (userData) {
+      return await wordsApiService.getUserLearnedWords(userData.userId).then((item) => {
+        if (item) {
+          return [...item][0].paginatedResults;
+        }
+      });
+    }
+  }
+
   async addWords(page: number, group: number, textBook: HTMLElement) {
     const words = textBook.querySelector('#words') as HTMLElement;
     words.innerHTML = '';
     const userData: null | SignInResponse = storageService.getLocal('user');
     if (userData) {
-      const hardWords = await wordsApiService.getUserHardWords(userData.userId).then((item) => {
-        if (item) {
-          return [...item][0].paginatedResults;
-        }
-      });
+      const hardWords = await this.getHardWords();
 
-      const learnedWords = await wordsApiService.getUserLearnedWords(userData.userId).then((item) => {
-        if (item) {
-          return [...item][0].paginatedResults;
-        }
-      });
+      const learnedWords = await this.getLearnedWords();
 
       wordsApiService.getAggregatedUserWords(userData.userId, page, group, 20).then((data) => {
         if (Array.isArray(data)) {
