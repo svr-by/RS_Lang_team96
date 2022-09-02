@@ -9,8 +9,9 @@
     width: 2rem;
     border-radius: 50%;
     cursor: pointer;
+
     &:hover {
-      background-color: $background-book-element-hover;
+      background-color: $color-blue;
     }
   }
 
@@ -24,17 +25,20 @@
     text-align: center;
     line-height: 2rem;
     margin: 0 10px;
-    font-size: 1.5rem;
+    font-size: 1rem;
     border-radius: 50%;
     cursor: pointer;
+
     &:hover {
-      background-color: $background-book-element-hover;
+      color: $color-white;
+      background-color: $color-blue;
     }
   }
 }
 
 .selected-page {
-  background-color: $background-book-element-hover;
+  color: $color-white;
+  background-color: $color-blue;
 }
 
 .pagination__page + .no-page {
