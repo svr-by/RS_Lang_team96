@@ -21,14 +21,14 @@ export type UserWord = {
   wordId: string;
   difficulty: string;
   optional?: {
-    games?: {
-      sprint?: {
-        right?: number;
-        wrong?: number;
+    games: {
+      sprint: {
+        right: number;
+        wrong: number;
       };
-      audioCall?: {
-        right?: number;
-        wrong?: number;
+      audioCall: {
+        right: number;
+        wrong: number;
       };
     };
   };
@@ -49,12 +49,16 @@ export type AggregatedWordsResponse = {
 };
 
 export type UserStatistics = {
-  id: string;
+  id?: string;
   learnedWords: number;
-  optional?: UserStatisticsOptions[];
+  optional?: UserStatisticsOptions;
 };
 
 export type UserStatisticsOptions = {
+  [index: string]: number;
+};
+
+export type UserStatisticsPerDay = {
   date: string;
   counterNewWords: number;
 };

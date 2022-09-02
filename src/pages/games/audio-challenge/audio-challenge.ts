@@ -1,6 +1,8 @@
 import BaseComponent from '../../../shared/components/base_component';
 import AnswerBox from '../audio-challenge/components/answer-box';
+import Result from '../audio-challenge/components/result';
 import playSound from '../utility/play-sound';
+import { api } from '../../../api/api';
 import { UserStatistics } from '../../../shared/types';
 import { IWord, IStorage } from '../../../shared/interfaces';
 import { userService } from '../../../shared/services/userService';
@@ -8,7 +10,6 @@ import { wordsApiService } from '../../../api/wordsApiService';
 import { statisticApiService } from '../../../api/statisticApiService';
 import { dateToday } from '../../../shared/services/dateService';
 // import { UserWord } from '../../../shared/types';
-import Result from '../audio-challenge/components/result';
 
 export default class AudioChallange {
   audioChallange: HTMLElement;
@@ -65,7 +66,7 @@ export default class AudioChallange {
         target.setAttribute('data-answer', 'yes');
         const img = document.querySelector('.main__games__audio-challange-img');
         if (img) {
-          img.setAttribute('src', `http://localhost:8000/${this.currentWord.image}`);
+          img.setAttribute('src', `${api.base}/${this.currentWord.image}`);
         }
         const sound = new Audio();
         sound.src = 'assets/sounds/success.mp3';
@@ -75,7 +76,7 @@ export default class AudioChallange {
         this.storage.countAnswerCorrect += 1;
         this.storage.namesAnswerCorrect.push(this.currentWord.word);
         this.storage.namesAnswerCorrectTranslate.push(this.currentWord.wordTranslate);
-        this.storage.namesAnswerCorrectSound.push(`http://localhost:8000/${this.currentWord.audio}`);
+        this.storage.namesAnswerCorrectSound.push(`${api.base}/${this.currentWord.audio}`);
 
         const btnSkip: HTMLElement | null = document.querySelector('.main__games__audio-challange-buttonSkip');
         if (btnSkip) {
@@ -89,41 +90,33 @@ export default class AudioChallange {
           `;
         }
 
-        // const userObjLocalStorage = localStorage.getItem('user');
+        const userId = userService.getStoredUserId();
+        if (userId) {
+          const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
+          if (userWord && userWord.optional) {
+            const bodyUserWord = {
+              difficulty: userWord.difficulty,
+              optional: Object.assign({}, userWord.optional),
+            };
 
-        // if (userObjLocalStorage) {
-        //   const userID: string = JSON.parse(userObjLocalStorage).userId;
-        //   const wordID: string = this.currentWord.id;
+            const sum: number = userWord.optional.games.audioCall.right + 1;
+            bodyUserWord.optional.games.audioCall.right = sum;
 
-        //   const userWord = (await this.api.getAggregatedWordsById(userID, wordID)) as UserWord;
-        //   if (!userWord) {
-        //     const body = {
-        //       difficulty: 'no',
-        //       optional: {
-        //         AudioCountAnswerCorrect: 1,
-        //         AudioCountAnswerWrong: 0,
-        //         SprintCountAnswerCorrect: 0,
-        //         SprintCountAnswerWrong: 0,
-        //       },
-        //     };
-        //     await this.api.addUserWord(userID, wordID, body);
-        //   }
-
-        //   userWord.optional.AudioCountAnswerCorrect += 1;
-        //   this.api.addUserWord(userID, wordID, userWord);
-        // }
+            await wordsApiService.updateUserWord(userId, this.currentWord.id, bodyUserWord);
+          }
+        }
       }
     }
   }
 
-  pushBtnWrong(target: HTMLElement | null) {
+  async pushBtnWrong(target: HTMLElement | null) {
     if (target && target.tagName === 'DIV') {
       if (!this.isPush) {
         this.isPush = true;
         target.setAttribute('data-answer', 'no');
         const img = document.querySelector('.main__games__audio-challange-img');
         if (img) {
-          img.setAttribute('src', `http://localhost:8000/${this.currentWord.image}`);
+          img.setAttribute('src', `${api.base}/${this.currentWord.image}`);
         }
         const sound = new Audio();
         sound.src = 'assets/sounds/fail.mp3';
@@ -132,7 +125,23 @@ export default class AudioChallange {
         this.storage.countAnswerWrong += 1;
         this.storage.namesAnswerWrong.push(this.currentWord.word);
         this.storage.namesAnswerWrongTranslate.push(this.currentWord.wordTranslate);
-        this.storage.namesAnswerWrongSound.push(`http://localhost:8000/${this.currentWord.audio}`);
+        this.storage.namesAnswerWrongSound.push(`${api.base}/${this.currentWord.audio}`);
+
+        const userId = userService.getStoredUserId();
+        if (userId) {
+          const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
+          if (userWord && userWord.optional) {
+            const bodyUserWord = {
+              difficulty: userWord.difficulty,
+              optional: Object.assign({}, userWord.optional),
+            };
+
+            const sum: number = userWord.optional.games.audioCall.wrong + 1;
+            bodyUserWord.optional.games.audioCall.wrong = sum;
+
+            await wordsApiService.updateUserWord(userId, this.currentWord.id, bodyUserWord);
+          }
+        }
       }
     }
   }
@@ -211,7 +220,7 @@ export default class AudioChallange {
       btnSkip.addEventListener('click', ({ target }) => this.pushBtnSkipNext(target as HTMLElement));
     }
 
-    const findButton = (event: KeyboardEvent) => {
+    const findButton = async (event: KeyboardEvent) => {
       for (let i = 1; i < 5; i++) {
         if (event.key === `${i}` && (buttonsArray[i - 1] as HTMLElement).dataset.answer !== '0') {
           if (!this.isPush) {
@@ -219,7 +228,7 @@ export default class AudioChallange {
             buttonsArray[i - 1].setAttribute('data-answer', 'no');
             const img = document.querySelector('.main__games__audio-challange-img');
             if (img) {
-              img.setAttribute('src', `http://localhost:8000/${this.currentWord.image}`);
+              img.setAttribute('src', `${api.base}/${this.currentWord.image}`);
             }
             const sound = new Audio();
             sound.src = 'assets/sounds/fail.mp3';
@@ -228,7 +237,23 @@ export default class AudioChallange {
             this.storage.countAnswerWrong += 1;
             this.storage.namesAnswerWrong.push(this.currentWord.word);
             this.storage.namesAnswerWrongTranslate.push(this.currentWord.wordTranslate);
-            this.storage.namesAnswerWrongSound.push(`http://localhost:8000/${this.currentWord.audio}`);
+            this.storage.namesAnswerWrongSound.push(`${api.base}/${this.currentWord.audio}`);
+
+            const userId = userService.getStoredUserId();
+            if (userId) {
+              const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
+              if (userWord && userWord.optional) {
+                const bodyUserWord = {
+                  difficulty: userWord.difficulty,
+                  optional: Object.assign({}, userWord.optional),
+                };
+
+                const sum: number = userWord.optional.games.audioCall.wrong + 1;
+                bodyUserWord.optional.games.audioCall.wrong = sum;
+
+                await wordsApiService.updateUserWord(userId, this.currentWord.id, bodyUserWord);
+              }
+            }
           }
         }
         if (event.key === `${i}` && (buttonsArray[i - 1] as HTMLElement).dataset.answer === '0') {
@@ -238,7 +263,7 @@ export default class AudioChallange {
             buttonsArray[i - 1].setAttribute('data-answer', 'yes');
             const img = document.querySelector('.main__games__audio-challange-img');
             if (img) {
-              img.setAttribute('src', `http://localhost:8000/${this.currentWord.image}`);
+              img.setAttribute('src', `${api.base}/${this.currentWord.image}`);
             }
             const sound = new Audio();
             sound.src = 'assets/sounds/success.mp3';
@@ -248,7 +273,7 @@ export default class AudioChallange {
             this.storage.countAnswerCorrect += 1;
             this.storage.namesAnswerCorrect.push(this.currentWord.word);
             this.storage.namesAnswerCorrectTranslate.push(this.currentWord.wordTranslate);
-            this.storage.namesAnswerCorrectSound.push(`http://localhost:8000/${this.currentWord.audio}`);
+            this.storage.namesAnswerCorrectSound.push(`${api.base}/${this.currentWord.audio}`);
 
             const btnSkip: HTMLElement | null = document.querySelector('.main__games__audio-challange-buttonSkip');
             if (btnSkip) {
@@ -260,6 +285,22 @@ export default class AudioChallange {
               <p>${this.currentWord.transcription}</p>
               <p>${this.currentWord.wordTranslate}</p>
               `;
+            }
+
+            const userId = userService.getStoredUserId();
+            if (userId) {
+              const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
+              if (userWord && userWord.optional) {
+                const bodyUserWord = {
+                  difficulty: userWord.difficulty,
+                  optional: Object.assign({}, userWord.optional),
+                };
+
+                const sum: number = userWord.optional.games.audioCall.right + 1;
+                bodyUserWord.optional.games.audioCall.right = sum;
+
+                await wordsApiService.updateUserWord(userId, this.currentWord.id, bodyUserWord);
+              }
             }
           }
         }
@@ -288,28 +329,33 @@ export default class AudioChallange {
           },
         };
         await wordsApiService.addUserWord(userId, this.currentWord.id, body);
+      }
 
-        const userStatObj = await statisticApiService.getUserStatistics(userId);
+      const userStatObj = await statisticApiService.getUserStatistics(userId);
+      if (!userStatObj) {
+        const defaultUserStatObj: UserStatistics = {
+          learnedWords: 0,
+          optional: {
+            [dateToday]: 0,
+          },
+        };
+        await statisticApiService.saveUserStatistics(userId, defaultUserStatObj);
+      } else {
+        if (userStatObj.optional) {
+          if (Object.keys(userStatObj.optional).some((el) => el === dateToday)) {
+            userStatObj.optional[dateToday]++;
+          } else {
+            userStatObj.optional[dateToday] = 1;
+          }
 
-        if (!userStatObj) {
-          const defaultUserStatObj: UserStatistics = {
-            id: `${userId}`,
-            learnedWords: 0,
-            optional: [
-              {
-                date: dateToday,
-                counterNewWords: 0,
-              },
-            ],
+          userStatObj.learnedWords++;
+          const body = {
+            learnedWords: userStatObj.learnedWords,
+            optional: {
+              [dateToday]: userStatObj.optional[dateToday],
+            },
           };
-          await statisticApiService.saveUserStatistics(userId, defaultUserStatObj);
-        }
-
-        console.log(await wordsApiService.getUserWords(userId));
-        console.log(userStatObj);
-
-        if (userStatObj) {
-          await statisticApiService.saveUserStatistics(userId, userStatObj);
+          await statisticApiService.saveUserStatistics(userId, body);
         }
       }
     }
