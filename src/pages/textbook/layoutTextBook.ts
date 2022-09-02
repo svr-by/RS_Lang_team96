@@ -108,15 +108,18 @@ class LayoutTextBook {
 
   async addDifficultWords(textBook: HTMLElement) {
     storageService.setSession('sect', 'difficult words');
+    this.addAndDeletePagination(textBook);
+    const pagination = textBook.querySelector('#pagination');
+    pagination && pagination.classList.add('display-none');
     this.highlightSelectedPartition(textBook);
     const levels = textBook.querySelector('#levels');
     if (levels) {
       levels.innerHTML = '';
     }
     const words = textBook.querySelector('#words') as HTMLElement;
-    words.innerHTML = '';
     const hardWords = await this.getHardWords();
     if (hardWords) {
+      words.innerHTML = '';
       hardWords.forEach((item: IAggregatedWord, index: number) => {
         this.addWordAndDescription(item, index, textBook, words);
       });
@@ -125,19 +128,32 @@ class LayoutTextBook {
 
   async addLearnedWords(textBook: HTMLElement) {
     storageService.setSession('sect', 'studied words');
+    this.addAndDeletePagination(textBook);
     this.highlightSelectedPartition(textBook);
     const levels = textBook.querySelector('#levels');
     if (levels) {
       levels.innerHTML = '';
     }
     const words = textBook.querySelector('#words') as HTMLElement;
-    words.innerHTML = '';
     const learnedWords = await this.getLearnedWords();
     if (learnedWords) {
+      words.innerHTML = '';
       learnedWords.forEach((item: IAggregatedWord, index: number) => {
         this.addWordAndDescription(item, index, textBook, words);
       });
     }
+  }
+
+  addAndDeletePagination(textBook: HTMLElement) {
+    const pagination = textBook.querySelector('#pagination');
+    const sect = storageService.getSession('sect');
+
+    pagination &&
+      sect &&
+      (sect === 'difficult words' || sect === 'studied words') &&
+      pagination.classList.add('display-none');
+
+    pagination && sect && sect === 'text-book' && pagination.classList.remove('display-none');
   }
 
   addWordAndDescription(item: IAggregatedWord, index: number, textBook: HTMLElement, words: HTMLElement) {
@@ -151,6 +167,7 @@ class LayoutTextBook {
 
   addLevels(textBook: HTMLElement) {
     storageService.setSession('sect', 'text-book');
+    this.addAndDeletePagination(textBook);
     this.highlightSelectedPartition(textBook);
     const levels = textBook.querySelector('#levels') as HTMLElement;
     this.groupNumber.forEach((item, index) => {
@@ -182,7 +199,6 @@ class LayoutTextBook {
 
   async addWords(page: number, group: number, textBook: HTMLElement) {
     const words = textBook.querySelector('#words') as HTMLElement;
-    words.innerHTML = '';
     const userData: null | SignInResponse = storageService.getLocal('user');
     if (userData) {
       const hardWords = await this.getHardWords();
@@ -192,6 +208,7 @@ class LayoutTextBook {
       wordsApiService.getAggregatedUserWords(userData.userId, page, group, 20).then((data) => {
         if (Array.isArray(data)) {
           const wordsData = data[0].paginatedResults;
+          words.innerHTML = '';
           wordsData.forEach((item: IAggregatedWord, index: number) => {
             if (index === 0) {
               const description = textBook.querySelector('#description') as HTMLElement;
@@ -205,6 +222,7 @@ class LayoutTextBook {
     } else {
       wordsApiService.getWords(group, page).then((data) => {
         if (Array.isArray(data)) {
+          words.innerHTML = '';
           data.forEach((item: IWord, index: number) => {
             if (index === 0) {
               const description = textBook.querySelector('#description') as HTMLElement;
@@ -267,7 +285,7 @@ class LayoutTextBook {
           (document.getElementById('settings-modal') as HTMLElement).classList.toggle('display-none');
         }
       },
-      false
+      true
     );
   }
 }

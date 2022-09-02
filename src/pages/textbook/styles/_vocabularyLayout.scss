@@ -60,11 +60,16 @@
   justify-content: center;
 }
 
+.textBook {
+  position: relative;
+}
+
 .settings-modal {
   position: absolute;
+  width: 200px;
   border-radius: 1rem;
-  top: 0;
-  left: 220px;
+  top: 2%;
+  left: 55%;
   background-color: $yellow-vocabulary;
   &__header {
     margin: 1rem 0 1rem 1rem;
@@ -76,7 +81,7 @@
   margin: 1rem;
   &__description {
     cursor: pointer;
-    font-size: 1.8rem;
+    font-size: 1rem;
     padding: 0.1rem;
     border-radius: 0.5rem;
   }

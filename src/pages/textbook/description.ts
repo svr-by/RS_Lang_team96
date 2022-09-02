@@ -54,7 +54,7 @@ class Description {
               <p class='game__correct-number' id='audio-call-was-wrong'>0</p>
             </div>
           </div>
-          <div class='sprint game'>
+          <div class='sprint-results game'>
             <p class='game__name'>Спринт</p>
             <div class='game__text'>
               <p class='game__correct-text'>Угаданно верно:</p>
@@ -89,6 +89,7 @@ class Description {
         });
     });
     this.addStyleForPage();
+    this.addWinsMistaces(id);
   }
 
   addToDifficultWords(id: string) {
@@ -166,6 +167,44 @@ class Description {
       words && words.classList.add('learned-words-background');
     } else {
       words && words.classList.remove('learned-words-background');
+    }
+  }
+
+  addWinsMistaces(id: string) {
+    const audioCallCorrect = document.getElementById('audio-call-correct');
+    const audioCallWasWrong = document.getElementById('audio-call-was-wrong');
+    const sprintCorrect = document.getElementById('sprint-correct');
+    const sprintWasWrong = document.getElementById('sprint-was-wrong');
+    const userData: null | SignInResponse = storageService.getLocal('user');
+    if (userData) {
+      wordsApiService.getAggregatedWordsById(userData.userId, id).then((item) => {
+        if (item) {
+          if (audioCallCorrect) {
+            audioCallCorrect.innerText = `${
+              item[0].userWord?.optional?.games?.audioCall?.right
+                ? item[0].userWord?.optional?.games?.audioCall?.right
+                : '0'
+            }`;
+          }
+          if (audioCallWasWrong) {
+            audioCallWasWrong.innerText = `${
+              item[0].userWord?.optional?.games?.audioCall?.wrong
+                ? item[0].userWord?.optional?.games?.audioCall?.wrong
+                : '0'
+            }`;
+          }
+          if (sprintCorrect) {
+            sprintCorrect.innerText = `${
+              item[0].userWord?.optional?.games?.sprint?.right ? item[0].userWord?.optional?.games?.sprint?.right : '0'
+            }`;
+          }
+          if (sprintWasWrong) {
+            sprintWasWrong.innerText = `${
+              item[0].userWord?.optional?.games?.sprint?.wrong ? item[0].userWord?.optional?.games?.sprint?.wrong : '0'
+            }`;
+          }
+        }
+      });
     }
   }
 }

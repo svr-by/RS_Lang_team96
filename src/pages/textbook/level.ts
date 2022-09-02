@@ -32,6 +32,11 @@ class Level {
 
     this.level.addEventListener('click', () => {
       storageService.setSession('pageNumber', '0');
+      const pagination = textBook.querySelector('#pagination');
+      if (pagination) {
+        pagination.innerHTML = '';
+        new Pagination(textBook).appendTo(pagination as HTMLElement);
+      }
       sessionStorage.setItem('level', JSON.stringify(index));
       this.changeLevel(id, this.level);
     });

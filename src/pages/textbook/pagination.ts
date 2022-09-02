@@ -56,11 +56,12 @@ class Pagination {
       }
     }
 
-    this.render();
+    if ((event.target as HTMLElement).innerText !== '...') this.render();
     const group = JSON.parse(sessionStorage.getItem('level') as string);
     const newPage: number | null = storageService.getSession('pageNumber');
-    console.log(newPage);
-    (newPage || newPage === 0) && this.layoutTextBook.addWords(newPage, group, this.textBook);
+    (newPage || newPage === 0) &&
+      (event.target as HTMLElement).innerText !== '...' &&
+      this.layoutTextBook.addWords(newPage, group, this.textBook);
   }
 
   render() {

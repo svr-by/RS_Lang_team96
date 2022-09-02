@@ -1,5 +1,4 @@
 @import "src/scss/variables";
-@import "mixins";
 
 .content {
   border-radius: 7rem 0.2rem 0.2rem 0.2rem;
@@ -79,6 +78,7 @@
 }
 
 .game {
+  max-width: 40%;
   background-color: $color-grey;
   border-radius: 0.5rem;
   padding: 0.5rem;
@@ -86,6 +86,8 @@
   &__name,
   &__correct-text,
   &__correct-number{
+    margin: 0.5rem;
+    font-size: 1rem;
     color: $color-white;
   }
 }
