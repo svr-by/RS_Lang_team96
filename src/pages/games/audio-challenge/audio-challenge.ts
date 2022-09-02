@@ -1,10 +1,12 @@
 import BaseComponent from '../../../shared/components/base_component';
 import AnswerBox from '../audio-challenge/components/answer-box';
 import playSound from '../utility/play-sound';
+import { UserStatistics } from '../../../shared/types';
 import { IWord, IStorage } from '../../../shared/interfaces';
 import { userService } from '../../../shared/services/userService';
 import { wordsApiService } from '../../../api/wordsApiService';
 import { statisticApiService } from '../../../api/statisticApiService';
+import { dateToday } from '../../../shared/services/dateService';
 // import { UserWord } from '../../../shared/types';
 import Result from '../audio-challenge/components/result';
 
@@ -16,7 +18,7 @@ export default class AudioChallange {
   currentWord: IWord;
 
   isPush: boolean;
-  
+
   constructor(
     private readonly root: HTMLElement,
     public wordsInGroup: IWord[],
@@ -157,35 +159,6 @@ export default class AudioChallange {
 
     playSound(this.currentWord);
 
-    const userId = userService.getStoredUserId();
-    if (userId) {
-      const newWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
-      if (!newWord) {
-        let body = {
-          difficulty: 'easy',
-          optional: {
-            games: {
-              sprint: {
-                right: 0,
-                wrong: 0,
-              },
-              audioCall: {
-                right: 0,
-                wrong: 0,
-              },
-            },
-          },
-        }
-        await wordsApiService.addUserWord(userId, this.currentWord.id, body);
-        let userStatObj = await statisticApiService.getUserStatistics(userId);
-        
-        if (userStatObj) {
-          await statisticApiService.saveUserStatistics(userId, userStatObj);
-        }
-        
-      }
-    }
-
     const randomNum = Math.floor(Math.random() * 4);
     const buttonsArray = document.querySelectorAll('.main__games__audio-challange__buttonAnswer');
 
@@ -294,6 +267,52 @@ export default class AudioChallange {
     };
 
     document.addEventListener('keydown', findButton);
+
+    const userId = userService.getStoredUserId();
+    if (userId) {
+      const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
+      if (!userWord) {
+        const body = {
+          difficulty: 'easy',
+          optional: {
+            games: {
+              sprint: {
+                right: 0,
+                wrong: 0,
+              },
+              audioCall: {
+                right: 0,
+                wrong: 0,
+              },
+            },
+          },
+        };
+        await wordsApiService.addUserWord(userId, this.currentWord.id, body);
+
+        const userStatObj = await statisticApiService.getUserStatistics(userId);
+
+        if (!userStatObj) {
+          const defaultUserStatObj: UserStatistics = {
+            id: `${userId}`,
+            learnedWords: 0,
+            optional: [
+              {
+                date: dateToday,
+                counterNewWords: 0,
+              },
+            ],
+          };
+          await statisticApiService.saveUserStatistics(userId, defaultUserStatObj);
+        }
+
+        console.log(await wordsApiService.getUserWords(userId));
+        console.log(userStatObj);
+
+        if (userStatObj) {
+          await statisticApiService.saveUserStatistics(userId, userStatObj);
+        }
+      }
+    }
 
     return this.audioChallange;
   }

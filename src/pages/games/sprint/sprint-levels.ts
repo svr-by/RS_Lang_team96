@@ -1,7 +1,7 @@
 import BaseComponent from '../../../shared/components/base_component';
-import { IWord, IStorage } from '../../../shared/interfaces';
-import getWords from '../../games/utility/get-words';
 import Sprint from './sprint';
+import { IWord, IStorage } from '../../../shared/interfaces';
+import { wordsApiService } from '../../../api/wordsApiService';
 
 export default class SprintLvl {
   readonly sprintLvl: HTMLElement;
@@ -39,7 +39,7 @@ export default class SprintLvl {
       if (target.dataset.group) {
         const arrPromisesFromPages30: Promise<IWord[]>[] = [];
         for (let i = 0; i < 30; i += 1) {
-          const promiseFromPage = getWords(target.dataset.group, `${i}`);
+          const promiseFromPage = wordsApiService.getWords(+target.dataset.group, i) as Promise<IWord[]>;
           arrPromisesFromPages30.push(promiseFromPage);
         }
         const arrOfArrsWords = await Promise.all(arrPromisesFromPages30);

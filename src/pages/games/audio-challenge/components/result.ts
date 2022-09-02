@@ -1,11 +1,11 @@
 import BaseComponent from '../../../../shared/components/base_component';
 import StatWordsWrong from './result-wrong';
 import StatWordsAnswer from './result-answer';
-import { IStatistic, IStorage } from '../../../../shared/interfaces';
+import { IStorage } from '../../../../shared/interfaces';
 import StatisticStorage from '../../../games/utility/statistics-storage';
-import { statisticApiService } from '../../../../api/statisticApiService';
+// import { statisticApiService } from '../../../../api/statisticApiService';
 import { storageService } from '../../../../shared/services/storageService';
-import { userService } from '../../../../shared/services/userService';
+// import { userService } from '../../../../shared/services/userService';
 
 export default class Result {
   readonly result: HTMLElement;
@@ -65,61 +65,63 @@ export default class Result {
     new StatWordsAnswer(this.container, this.storage).render();
     new StatWordsWrong(this.container, this.storage).render();
 
-    const userID: string | null = userService.getStoredUserId();
-    if (userID) {
-      let userData = await statisticApiService.getUserStatistics(userID);
-      if (typeof userData !== 'boolean') {
-        userData = (await statisticApiService.getUserStatistics(userID)) as IStatistic;
-        userData.learnedWords += this.storage.countAnswerCorrect;
-        userData.optional.AudioCountAnswerCorrect += this.storage.countAnswerCorrect;
-        userData.optional.AudioCountAnswerWrong += this.storage.countAnswerWrong;
-        if (this.storage.setInRow.size > userData.optional.AudioInRow) {
-          userData.optional.AudioInRow = this.storage.setInRow.size;
-        }
-        const storage: IStatistic = {
-          learnedWords: userData.learnedWords,
-          optional: {
-            AudioCountAnswerCorrect: userData.optional.AudioCountAnswerCorrect,
-            AudioCountAnswerWrong: userData.optional.AudioCountAnswerWrong,
-            AudioInRow: userData.optional.AudioInRow,
-            SprintCountAnswerCorrect: userData.optional.SprintCountAnswerCorrect,
-            SprintCountAnswerWrong: userData.optional.SprintCountAnswerWrong,
-            SprintInRow: userData.optional.SprintInRow,
-            SprintScore: userData.optional.SprintScore,
-          },
-        };
-        await statisticApiService.saveUserStatistics(userID, storage);
-      } else {
-        const storage: IStatistic = {
-          learnedWords: 0,
-          optional: {
-            AudioCountAnswerCorrect: 0,
-            AudioCountAnswerWrong: 0,
-            AudioInRow: 0,
-            SprintCountAnswerCorrect: 0,
-            SprintCountAnswerWrong: 0,
-            SprintInRow: 0,
-            SprintScore: 0,
-          },
-        };
-        await statisticApiService.saveUserStatistics(userID, storage);
-        userData = (await statisticApiService.getUserStatistics(userID)) as IStatistic;
-        userData.learnedWords += this.storage.countAnswerCorrect;
-        userData.optional.AudioCountAnswerCorrect += this.storage.countAnswerCorrect;
-        userData.optional.AudioCountAnswerWrong += this.storage.countAnswerWrong;
-        if (this.storage.setInRow.size > userData.optional.AudioInRow) {
-          userData.optional.AudioInRow = this.storage.setInRow.size;
-        }
-        await statisticApiService.saveUserStatistics(userID, userData);
-      }
-    } else {
-      StatisticStorage.learnedWords += this.storage.countAnswerCorrect;
-      StatisticStorage.optional.AudioCountAnswerCorrect += this.storage.countAnswerCorrect;
-      StatisticStorage.optional.AudioCountAnswerWrong += this.storage.countAnswerWrong;
-      if (this.storage.setInRow.size > StatisticStorage.optional.AudioInRow) {
-        StatisticStorage.optional.AudioInRow = this.storage.setInRow.size;
-      }
-      storageService.setSession('StatisticStorage', StatisticStorage);
+    // const userID: string | null = userService.getStoredUserId();
+    // if (userID) {
+    //   let userData = await statisticApiService.getUserStatistics(userID);
+    //   if (typeof userData !== 'boolean') {
+    //     userData = await statisticApiService.getUserStatistics(userID);
+    //     if (userData) {
+    //       userData.learnedWords += this.storage.countAnswerCorrect;
+    //       userData.optional.AudioCountAnswerCorrect += this.storage.countAnswerCorrect;
+    //       userData.optional.AudioCountAnswerWrong += this.storage.countAnswerWrong;
+    //       if (this.storage.setInRow.size > userData.optional.AudioInRow) {
+    //         userData.optional.AudioInRow = this.storage.setInRow.size;
+    //       }
+    //     }
+    //     const storage: IStatistic = {
+    //       learnedWords: userData.learnedWords,
+    //       optional: {
+    //         AudioCountAnswerCorrect: userData.optional.AudioCountAnswerCorrect,
+    //         AudioCountAnswerWrong: userData.optional.AudioCountAnswerWrong,
+    //         AudioInRow: userData.optional.AudioInRow,
+    //         SprintCountAnswerCorrect: userData.optional.SprintCountAnswerCorrect,
+    //         SprintCountAnswerWrong: userData.optional.SprintCountAnswerWrong,
+    //         SprintInRow: userData.optional.SprintInRow,
+    //         SprintScore: userData.optional.SprintScore,
+    //       },
+    //     };
+    //     await statisticApiService.saveUserStatistics(userID, storage);
+    //   } else {
+    //     const storage: IStatistic = {
+    //       learnedWords: 0,
+    //       optional: {
+    //         AudioCountAnswerCorrect: 0,
+    //         AudioCountAnswerWrong: 0,
+    //         AudioInRow: 0,
+    //         SprintCountAnswerCorrect: 0,
+    //         SprintCountAnswerWrong: 0,
+    //         SprintInRow: 0,
+    //         SprintScore: 0,
+    //       },
+    //     };
+    //     await statisticApiService.saveUserStatistics(userID, storage);
+    //     userData = (await statisticApiService.getUserStatistics(userID)) as IStatistic;
+    //     userData.learnedWords += this.storage.countAnswerCorrect;
+    //     userData.optional.AudioCountAnswerCorrect += this.storage.countAnswerCorrect;
+    //     userData.optional.AudioCountAnswerWrong += this.storage.countAnswerWrong;
+    //     if (this.storage.setInRow.size > userData.optional.AudioInRow) {
+    //       userData.optional.AudioInRow = this.storage.setInRow.size;
+    //     }
+    //     await statisticApiService.saveUserStatistics(userID, userData);
+    //   }
+    // } else {
+    StatisticStorage.learnedWords += this.storage.countAnswerCorrect;
+    StatisticStorage.optional.AudioCountAnswerCorrect += this.storage.countAnswerCorrect;
+    StatisticStorage.optional.AudioCountAnswerWrong += this.storage.countAnswerWrong;
+    if (this.storage.setInRow.size > StatisticStorage.optional.AudioInRow) {
+      StatisticStorage.optional.AudioInRow = this.storage.setInRow.size;
     }
+    storageService.setSession('StatisticStorage', StatisticStorage);
+    // }
   }
 }

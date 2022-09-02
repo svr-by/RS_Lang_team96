@@ -51,7 +51,12 @@ export type AggregatedWordsResponse = {
 export type UserStatistics = {
   id: string;
   learnedWords: number;
-  optional?: Record<string, unknown>;
+  optional?: UserStatisticsOptions[];
+};
+
+export type UserStatisticsOptions = {
+  date: string;
+  counterNewWords: number;
 };
 
 export type UserStatisticsParams = Pick<UserStatistics, 'learnedWords' | 'optional'>;
