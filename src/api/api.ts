@@ -53,7 +53,7 @@ class API {
             userService.showAuthorizationMess();
           }
         }
-        return err;
+        return Promise.reject(err);
       }
     );
   }

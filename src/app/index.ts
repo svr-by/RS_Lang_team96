@@ -7,24 +7,27 @@ import Games from '../pages/games/games';
 import LayoutTextBook from '../pages/textbook/layoutTextBook';
 import DevsPage from '../pages/developers';
 import StatsPage from '../pages/statistics';
+import VideoPage from '../pages/video';
 
 class App {
   header: Header;
   footer: Footer;
   main: HTMLElement;
   startPage: StartPage;
-  private layoutTextBook: LayoutTextBook;
+  layoutTextBook: LayoutTextBook;
   devsPage: DevsPage;
   statsPage: StatsPage;
+  videoPage: VideoPage;
 
   constructor() {
+    this.main = layoutService.createElement({ tag: 'main', classes: ['main'] });
     this.header = new Header();
     this.footer = new Footer();
-    this.main = layoutService.createElement({ tag: 'main', classes: ['main'] });
     this.startPage = new StartPage();
     this.layoutTextBook = new LayoutTextBook();
     this.devsPage = new DevsPage();
     this.statsPage = new StatsPage();
+    this.videoPage = new VideoPage();
     this.renderMain();
   }
 
@@ -52,7 +55,7 @@ class App {
         mainContent = this.devsPage.render();
         break;
       case Views.video:
-        mainContent = layoutService.createElement({ tag: 'h1', text: 'Страница с видеообзором' });
+        mainContent = this.videoPage.render();
         break;
       case Views.start:
       default:
