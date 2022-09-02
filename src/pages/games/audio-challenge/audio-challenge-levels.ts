@@ -1,18 +1,18 @@
 import BaseComponent from '../../../shared/components/base_component';
 import AudioChallange from '../audio-challenge/audio-challenge';
 import { IWord, IStorage } from '../../../shared/interfaces';
-import getWords from '../utility/get-words';
+import { wordsApiService } from '../../../api/wordsApiService';
 
 export default class AudioChallangeLvl {
-  readonly audioChallangeLvl: HTMLElement;
+  audioChallangeLvl: HTMLElement;
 
-  readonly container: HTMLElement;
+  container: HTMLElement;
 
-  public wordsInGroup: IWord[];
+  wordsInGroup: IWord[];
 
-  public storage: IStorage;
+  storage: IStorage;
 
-  public currentCountWord: string;
+  currentCountWord: string;
 
   constructor(private readonly root: HTMLElement) {
     this.audioChallangeLvl = document.createElement('div');
@@ -39,7 +39,7 @@ export default class AudioChallangeLvl {
       if (target.dataset.group) {
         const arrPromisesFromPages30: Promise<IWord[]>[] = [];
         for (let i = 0; i < 30; i += 1) {
-          const promiseFromPage = getWords(target.dataset.group, `${i}`);
+          const promiseFromPage = wordsApiService.getWords(+target.dataset.group, i) as Promise<IWord[]>;
           arrPromisesFromPages30.push(promiseFromPage);
         }
         const arrOfArrsWords = await Promise.all(arrPromisesFromPages30);

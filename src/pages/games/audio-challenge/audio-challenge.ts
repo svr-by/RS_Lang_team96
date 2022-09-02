@@ -7,13 +7,13 @@ import Result from '../audio-challenge/components/result';
 // import { api } from '../../../api/api';
 
 export default class AudioChallange {
-  readonly audioChallange: HTMLElement;
+  audioChallange: HTMLElement;
 
-  readonly containerPanel: HTMLElement;
+  containerPanel: HTMLElement;
 
-  readonly currentWord: IWord;
+  currentWord: IWord;
 
-  public isPush: boolean;
+  isPush: boolean;
 
   constructor(
     private readonly root: HTMLElement,

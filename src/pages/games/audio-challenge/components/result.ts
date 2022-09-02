@@ -4,6 +4,8 @@ import StatWordsAnswer from './result-answer';
 import { IStatistic, IStorage } from '../../../../shared/interfaces';
 import StatisticStorage from '../../../games/utility/statistics-storage';
 import { statisticApiService } from '../../../../api/statisticApiService';
+import { storageService } from '../../../../shared/services/storageService';
+import { userService } from '../../../../shared/services/userService';
 
 export default class Result {
   readonly result: HTMLElement;
@@ -63,7 +65,7 @@ export default class Result {
     new StatWordsAnswer(this.container, this.storage).render();
     new StatWordsWrong(this.container, this.storage).render();
 
-    const userID: string | null = localStorage.getItem('id');
+    const userID: string | null = userService.getStoredUserId();
     if (userID) {
       let userData = await statisticApiService.getUserStatistics(userID);
       if (typeof userData !== 'boolean') {
@@ -117,8 +119,7 @@ export default class Result {
       if (this.storage.setInRow.size > StatisticStorage.optional.AudioInRow) {
         StatisticStorage.optional.AudioInRow = this.storage.setInRow.size;
       }
-
-      sessionStorage.setItem('StatisticStorage', JSON.stringify(StatisticStorage));
+      storageService.setSession('StatisticStorage', StatisticStorage);
     }
   }
 }
