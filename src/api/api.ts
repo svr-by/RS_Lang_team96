@@ -12,7 +12,7 @@ class API {
   axiosInstance: AxiosInstance;
 
   constructor() {
-    this.base = 'http://localhost:8000';
+    this.base = 'https://rslang-team96.herokuapp.com';
     this.wordsEndpoint = `${this.base}/words`;
     this.usersEndpoint = `${this.base}/users`;
     this.signinEndpoint = `${this.base}/signin`;

@@ -13,14 +13,10 @@ class LayoutTextBook {
   private svg: Svg;
   private groupNumber: { name: string; numbers: string; id: string }[];
   private description: Description;
-  // private API: API;
-  // private storage: Storage;
 
   constructor() {
     this.svg = new Svg();
-    // this.storage = new Storage();
     this.groupNumber = dataLevels;
-    // this.API = new API();
     this.description = new Description();
   }
 
