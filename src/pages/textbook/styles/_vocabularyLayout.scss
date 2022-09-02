@@ -1,6 +1,7 @@
 @import "src/scss/variables";
 
 .header-and-settings {
+  margin-top: 2rem;
   display: flex;
   flex-wrap: wrap;
   text-align: center;
@@ -8,11 +9,12 @@
 
 
   &__header {
-    font-size: 3rem;
-    font-weight: bold;
-    border-right: solid 5px $dark-grey;
+    font-family: Fira Sans, sans-serif;
+    font-size: 2rem;
+    border-right: solid 4px $color-grey-l;
     padding-right: 1rem;
     margin: 0;
+
     &:first-child {
       cursor: pointer;
       color: $dark-grey;
@@ -40,17 +42,15 @@
 
   &__settings {
     display: block;
-    width: 3.5rem;
-    height: 3.5rem;
+    width: 2rem;
+    height: 2rem;
     margin-left: 1rem;
     cursor: pointer;
-    fill: #FFFFFF;
+    fill: $color-white;
+    border-radius: 0.5rem;
+
     &:hover {
-      fill: $secondary-grey;
-      padding: 2px;
-      background-color: $secondary-grey;
-      box-shadow: 10px 5px 5px  $secondary-grey;
-      border-radius: 0.5rem;
+      fill: $color-grey-l;
     }
   }
 }
@@ -67,7 +67,6 @@
   left: 220px;
   background-color: $yellow-vocabulary;
   &__header {
-    @include headers;
     margin: 1rem 0 1rem 1rem;
   }
 }
