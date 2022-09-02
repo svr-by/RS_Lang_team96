@@ -1,11 +1,12 @@
 import BaseComponent from '../../../../shared/components/base_component';
 import StatWordsWrong from './result-wrong';
 import StatWordsAnswer from './result-answer';
-import { IStorage } from '../../../../shared/interfaces';
 import StatisticStorage from '../../../games/utility/statistics-storage';
-// import { statisticApiService } from '../../../../api/statisticApiService';
+import { IStorage } from '../../../../shared/interfaces';
+import { statisticApiService } from '../../../../api/statisticApiService';
 import { storageService } from '../../../../shared/services/storageService';
-// import { userService } from '../../../../shared/services/userService';
+import { userService } from '../../../../shared/services/userService';
+import { dateToday } from '../../../../shared/services/dateService';
 
 export default class Result {
   readonly result: HTMLElement;
@@ -65,12 +66,46 @@ export default class Result {
     new StatWordsAnswer(this.container, this.storage).render();
     new StatWordsWrong(this.container, this.storage).render();
 
-    StatisticStorage.learnedWords += this.storage.countAnswerCorrect;
-    StatisticStorage.optional.AudioCountAnswerCorrect += this.storage.countAnswerCorrect;
-    StatisticStorage.optional.AudioCountAnswerWrong += this.storage.countAnswerWrong;
+    StatisticStorage.learnedWords = 20;
+    StatisticStorage.optional.AudioCountAnswerCorrect = this.storage.countAnswerCorrect;
+    StatisticStorage.optional.AudioCountAnswerWrong = this.storage.countAnswerWrong;
     if (this.storage.setInRow.size > StatisticStorage.optional.AudioInRow) {
       StatisticStorage.optional.AudioInRow = this.storage.setInRow.size;
     }
     storageService.setSession('StatisticStorage', StatisticStorage);
+
+    const userId = userService.getStoredUserId();
+    if (userId) {
+
+      storageService.getSession('StatisticStorage');
+
+      const userStat = await statisticApiService.getUserStatistics(userId);
+      if (userStat && userStat.optional) {
+        const LSData = {
+          allGamesRightPercent: 100,
+          allGamesRight: 20,
+          allGamesWrong: 10,
+          allNewWords: userStat.optional[dateToday],
+          date: dateToday,
+          games: {
+            audioCall: {
+              rightPercent: 0,
+              right: 0,
+              wrong: 0,
+              bestSeries: this.storage.setInRow.size,
+              newWords: 0,
+            },
+            sprint: {
+              rightPercent: 0,
+              right: 0,
+              wrong: 0,
+              bestSeries: 0,
+              newWords: 0,
+            },
+          },
+        }
+        storageService.setSession('StatByGames', LSData);
+      }
+    }
   }
 }

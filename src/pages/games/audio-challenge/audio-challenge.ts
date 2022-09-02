@@ -9,7 +9,6 @@ import { userService } from '../../../shared/services/userService';
 import { wordsApiService } from '../../../api/wordsApiService';
 import { statisticApiService } from '../../../api/statisticApiService';
 import { dateToday } from '../../../shared/services/dateService';
-// import { UserWord } from '../../../shared/types';
 
 export default class AudioChallange {
   audioChallange: HTMLElement;
