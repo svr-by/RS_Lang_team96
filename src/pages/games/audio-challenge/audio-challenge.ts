@@ -43,15 +43,18 @@ export default class AudioChallange {
 
   pushBtnSkipNext(target: HTMLElement | null) {
     if (target && target.tagName === 'DIV') {
-      const audioChallange: HTMLElement | null = document.querySelector('.main__games__audio-challange');
-      const main: HTMLElement | null = document.querySelector('.main');
-      if (audioChallange && main) {
-        this.currentCountWord = (+this.currentCountWord + 1).toString();
-        audioChallange.remove();
-        if (+this.currentCountWord > 20) {
-          new Result(main, this.storage).render();
-        } else {
-          new AudioChallange(main, this.wordsInGroup, this.currentCountWord, this.storage).render();
+      if (!this.isPush) {
+        this.isPush = true;
+        const audioChallange: HTMLElement | null = document.querySelector('.main__games__audio-challange');
+        const main: HTMLElement | null = document.querySelector('.main');
+        if (audioChallange && main) {
+          this.currentCountWord = (+this.currentCountWord + 1).toString();
+          audioChallange.remove();
+          if (+this.currentCountWord > 20) {
+            new Result(main, this.storage).render();
+          } else {
+            new AudioChallange(main, this.wordsInGroup, this.currentCountWord, this.storage).render();
+          }
         }
       }
     }
@@ -202,11 +205,13 @@ export default class AudioChallange {
     if (btnAnswerRight) {
       btnAnswerRight.dataset.answer = '0';
       btnAnswerRight.innerHTML = this.currentWord.wordTranslate;
-      btnAnswerRight.addEventListener('click', ({ target }) => this.pushBtnAnswer(target as HTMLElement));
+      btnAnswerRight.addEventListener('click', ({ target }) => this.pushBtnAnswer(target as HTMLElement), {
+        once: true,
+      });
     }
 
     buttonsArray.forEach((item) => {
-      item.addEventListener('click', ({ target }) => this.pushBtnWrong(target as HTMLElement));
+      item.addEventListener('click', ({ target }) => this.pushBtnWrong(target as HTMLElement), { once: true });
     });
 
     const btnSound: HTMLElement | null = document.querySelector('.main__games__audio-challange-buttonSound');
@@ -216,7 +221,7 @@ export default class AudioChallange {
 
     const btnSkip: HTMLElement | null = document.querySelector('.main__games__audio-challange-buttonSkip');
     if (btnSkip) {
-      btnSkip.addEventListener('click', ({ target }) => this.pushBtnSkipNext(target as HTMLElement));
+      btnSkip.addEventListener('click', ({ target }) => this.pushBtnSkipNext(target as HTMLElement), { once: true });
     }
 
     const findButton = async (event: KeyboardEvent) => {
@@ -306,7 +311,7 @@ export default class AudioChallange {
       }
     };
 
-    document.addEventListener('keydown', findButton);
+    document.addEventListener('keydown', findButton, { once: true });
 
     const userId = userService.getStoredUserId();
     if (userId) {

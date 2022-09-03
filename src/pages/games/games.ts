@@ -44,7 +44,7 @@ export default class Games {
     ).render();
     new BaseComponent(this.audioGame, 'button', ['game-audio__play'], 'play')
       .render()
-      .addEventListener('click', ({ target }) => this.pushBtnPlayAudio(target as HTMLElement));
+      .addEventListener('click', ({ target }) => this.pushBtnPlayAudio(target as HTMLElement), { once: true });
 
     this.mainGames.appendChild(this.sprintGame);
     this.sprintGame.classList.add('main__games-sprint');
@@ -57,7 +57,7 @@ export default class Games {
     ).render();
     new BaseComponent(this.sprintGame, 'button', ['game-sprint__play'], 'play')
       .render()
-      .addEventListener('click', ({ target }) => this.pushBtnPlaySprint(target as HTMLElement));
+      .addEventListener('click', ({ target }) => this.pushBtnPlaySprint(target as HTMLElement), { once: true });
 
     return this.mainGames;
   }

@@ -95,7 +95,9 @@ export default class AudioChallangeLvl {
       .render()
       .setAttribute('data-group', '5');
 
-    this.container.addEventListener('click', ({ target }) => this.addListenerToButtonLvl(target as HTMLElement));
+    this.container.addEventListener('click', ({ target }) => this.addListenerToButtonLvl(target as HTMLElement), {
+      once: true,
+    });
 
     return this.audioChallangeLvl;
   }

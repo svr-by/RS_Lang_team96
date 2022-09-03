@@ -116,11 +116,10 @@ export default class ResultSprint {
         userStatLS.games.sprint.bestSeries =
           userStatLS.games.sprint.bestSeries < this.storage.setInRow.size
             ? this.storage.setInRow.size
-          : userStatLS.games.sprint.bestSeries;
+            : userStatLS.games.sprint.bestSeries;
         userStatLS.games.sprint.newWords += this.storage.newWords;
         userStatLS.games.sprint.rightPercent = Math.round(
-          (userStatLS.games.sprint.right / (userStatLS.games.sprint.right + userStatLS.games.sprint.wrong)) *
-            100
+          (userStatLS.games.sprint.right / (userStatLS.games.sprint.right + userStatLS.games.sprint.wrong)) * 100
         );
         userStatLS.date = dateToday;
         userStatLS.allNewWords = userStatLS.games.audioCall.newWords + userStatLS.games.sprint.newWords;
