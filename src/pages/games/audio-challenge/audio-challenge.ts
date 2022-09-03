@@ -43,18 +43,15 @@ export default class AudioChallange {
 
   pushBtnSkipNext(target: HTMLElement | null) {
     if (target && target.tagName === 'DIV') {
-      if (!this.isPush) {
-        this.isPush = true;
-        const audioChallange: HTMLElement | null = document.querySelector('.main__games__audio-challange');
-        const main: HTMLElement | null = document.querySelector('.main');
-        if (audioChallange && main) {
-          this.currentCountWord = (+this.currentCountWord + 1).toString();
-          audioChallange.remove();
-          if (+this.currentCountWord > 20) {
-            new Result(main, this.storage).render();
-          } else {
-            new AudioChallange(main, this.wordsInGroup, this.currentCountWord, this.storage).render();
-          }
+      const audioChallange: HTMLElement | null = document.querySelector('.main__games__audio-challange');
+      const main: HTMLElement | null = document.querySelector('.main');
+      if (audioChallange && main) {
+        this.currentCountWord = (+this.currentCountWord + 1).toString();
+        audioChallange.remove();
+        if (+this.currentCountWord > 20) {
+          new Result(main, this.storage).render();
+        } else {
+          new AudioChallange(main, this.wordsInGroup, this.currentCountWord, this.storage).render();
         }
       }
     }
@@ -201,29 +198,6 @@ export default class AudioChallange {
       buttonsArray[3].innerHTML === buttonsArray[2].innerHTML
     );
 
-    const btnAnswerRight: HTMLElement | null = document.querySelector(`.answer-${randomNum}`);
-    if (btnAnswerRight) {
-      btnAnswerRight.dataset.answer = '0';
-      btnAnswerRight.innerHTML = this.currentWord.wordTranslate;
-      btnAnswerRight.addEventListener('click', ({ target }) => this.pushBtnAnswer(target as HTMLElement), {
-        once: true,
-      });
-    }
-
-    buttonsArray.forEach((item) => {
-      item.addEventListener('click', ({ target }) => this.pushBtnWrong(target as HTMLElement), { once: true });
-    });
-
-    const btnSound: HTMLElement | null = document.querySelector('.main__games__audio-challange-buttonSound');
-    if (btnSound) {
-      btnSound.addEventListener('click', this.pushBtnSound);
-    }
-
-    const btnSkip: HTMLElement | null = document.querySelector('.main__games__audio-challange-buttonSkip');
-    if (btnSkip) {
-      btnSkip.addEventListener('click', ({ target }) => this.pushBtnSkipNext(target as HTMLElement), { once: true });
-    }
-
     const findButton = async (event: KeyboardEvent) => {
       for (let i = 1; i < 5; i++) {
         if (event.key === `${i}` && (buttonsArray[i - 1] as HTMLElement).dataset.answer !== '0') {
@@ -311,7 +285,7 @@ export default class AudioChallange {
       }
     };
 
-    document.addEventListener('keydown', findButton, { once: true });
+    document.addEventListener('keydown', findButton);
 
     const userId = userService.getStoredUserId();
     if (userId) {
@@ -359,6 +333,29 @@ export default class AudioChallange {
           }
         }
       }
+    }
+
+    const btnAnswerRight: HTMLElement | null = document.querySelector(`.answer-${randomNum}`);
+    if (btnAnswerRight) {
+      btnAnswerRight.dataset.answer = '0';
+      btnAnswerRight.innerHTML = this.currentWord.wordTranslate;
+      btnAnswerRight.addEventListener('click', ({ target }) => this.pushBtnAnswer(target as HTMLElement), {
+        once: true,
+      });
+    }
+
+    buttonsArray.forEach((item) => {
+      item.addEventListener('click', ({ target }) => this.pushBtnWrong(target as HTMLElement), { once: true });
+    });
+
+    const btnSound: HTMLElement | null = document.querySelector('.main__games__audio-challange-buttonSound');
+    if (btnSound) {
+      btnSound.addEventListener('click', this.pushBtnSound);
+    }
+
+    const btnSkip: HTMLElement | null = document.querySelector('.main__games__audio-challange-buttonSkip');
+    if (btnSkip) {
+      btnSkip.addEventListener('click', ({ target }) => this.pushBtnSkipNext(target as HTMLElement), { once: true });
     }
 
     return this.audioChallange;

@@ -254,7 +254,6 @@ export default class Sprint {
                 difficulty: userWord.difficulty,
                 optional: Object.assign({}, userWord.optional),
               };
-
               const sum: number = userWord.optional.games.sprint.wrong + 1;
               bodyUserWord.optional.games.sprint.wrong = sum;
 
@@ -411,23 +410,6 @@ export default class Sprint {
       marks[this.storage.inRow % 7].setAttribute('style', 'background-color: #AC3BD4');
     }
 
-    const btnSound = document.querySelector('.sprint__button-sound');
-    if (btnSound) {
-      btnSound.addEventListener('click', this.pushBtnSound);
-    }
-
-    const btnFalse = document.querySelector('.sprint__button-false');
-    if (btnFalse) {
-      btnFalse.addEventListener('click', this.pressLeft, { once: true });
-    }
-
-    const btnTrue = document.querySelector('.sprint__button-true');
-    if (btnTrue) {
-      btnTrue.addEventListener('click', this.pressRight, { once: true });
-    }
-
-    document.addEventListener('keydown', this.findButton, { once: true });
-
     const userId = userService.getStoredUserId();
     if (userId) {
       const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
@@ -475,6 +457,23 @@ export default class Sprint {
         }
       }
     }
+
+    const btnSound = document.querySelector('.sprint__button-sound');
+    if (btnSound) {
+      btnSound.addEventListener('click', this.pushBtnSound);
+    }
+
+    const btnFalse = document.querySelector('.sprint__button-false');
+    if (btnFalse) {
+      btnFalse.addEventListener('click', this.pressLeft, { once: true });
+    }
+
+    const btnTrue = document.querySelector('.sprint__button-true');
+    if (btnTrue) {
+      btnTrue.addEventListener('click', this.pressRight, { once: true });
+    }
+
+    document.addEventListener('keydown', this.findButton);
 
     return this.sprint;
   }
