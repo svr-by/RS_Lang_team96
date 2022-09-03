@@ -14,6 +14,8 @@ export default class SprintLvl {
 
   public seconds: number;
 
+  isPush: boolean;
+
   constructor(private readonly root: HTMLElement) {
     this.sprintLvl = document.createElement('div');
     this.container = document.createElement('section');
@@ -33,20 +35,24 @@ export default class SprintLvl {
       newWords: 0,
     };
     this.seconds = 600;
+    this.isPush = false;
   }
 
   async addListenerToButtonLvl(target: HTMLElement | null) {
-    if (target && target.tagName === 'DIV') {
-      if (target.dataset.group) {
-        const arrPromisesFromPages30: Promise<IWord[]>[] = [];
-        for (let i = 0; i < 30; i += 1) {
-          const promiseFromPage = wordsApiService.getWords(+target.dataset.group, i) as Promise<IWord[]>;
-          arrPromisesFromPages30.push(promiseFromPage);
+    if (!this.isPush) {
+      this.isPush = true;
+      if (target && target.tagName === 'DIV') {
+        if (target.dataset.group) {
+          const arrPromisesFromPages30: Promise<IWord[]>[] = [];
+          for (let i = 0; i < 30; i += 1) {
+            const promiseFromPage = wordsApiService.getWords(+target.dataset.group, i) as Promise<IWord[]>;
+            arrPromisesFromPages30.push(promiseFromPage);
+          }
+          const arrOfArrsWords = await Promise.all(arrPromisesFromPages30);
+          this.wordsInGroup = arrOfArrsWords.reduce((a, b) => a.concat(b));
+          this.sprintLvl.remove();
+          new Sprint(this.root, this.wordsInGroup, this.storage, this.seconds).render();
         }
-        const arrOfArrsWords = await Promise.all(arrPromisesFromPages30);
-        this.wordsInGroup = arrOfArrsWords.reduce((a, b) => a.concat(b));
-        this.sprintLvl.remove();
-        new Sprint(this.root, this.wordsInGroup, this.storage, this.seconds).render();
       }
     }
   }

@@ -1,18 +1,17 @@
 import BaseComponent from '../../../../shared/components/base_component';
 import StatWordsWrong from './result-wrong';
 import StatWordsAnswer from './result-answer';
-import StatisticStorage from '../../../games/utility/statistics-storage';
 import { IStorage, IStatByGames } from '../../../../shared/interfaces';
 import { storageService } from '../../../../shared/services/storageService';
 import { userService } from '../../../../shared/services/userService';
 import { dateToday } from '../../../../shared/services/dateService';
 
 export default class Result {
-  readonly result: HTMLElement;
+  result: HTMLElement;
 
-  readonly container: HTMLElement;
+  container: HTMLElement;
 
-  readonly statisticBox: HTMLElement;
+  statisticBox: HTMLElement;
 
   constructor(private readonly root: HTMLElement, public storage: IStorage) {
     this.result = document.createElement('div');
@@ -65,17 +64,8 @@ export default class Result {
     new StatWordsAnswer(this.container, this.storage).render();
     new StatWordsWrong(this.container, this.storage).render();
 
-    StatisticStorage.learnedWords = 20;
-    StatisticStorage.optional.AudioCountAnswerCorrect = this.storage.countAnswerCorrect;
-    StatisticStorage.optional.AudioCountAnswerWrong = this.storage.countAnswerWrong;
-    StatisticStorage.optional.AudioInRow = this.storage.setInRow.size;
-
-    storageService.setSession('StatNotAutorizUser', StatisticStorage);
-
     const userId = userService.getStoredUserId();
     if (userId) {
-      storageService.getSession('StatisticStorage');
-
       const userStatLS: IStatByGames | null = storageService.getSession('StatByGames');
 
       if (!userStatLS) {

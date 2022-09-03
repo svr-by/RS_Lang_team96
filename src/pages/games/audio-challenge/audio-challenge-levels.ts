@@ -43,10 +43,6 @@ export default class AudioChallangeLvl {
       this.isPush = true;
       if (target && target.tagName === 'DIV') {
         if (target.dataset.group) {
-          const parent: HTMLElement | null = document.querySelector('.main__games__audio-challange-levels__container');
-          if (parent) {
-            parent.removeEventListener('click', ({ target }) => this.addListenerToButtonLvl(target as HTMLElement));
-          }
           const arrPromisesFromPages30: Promise<IWord[]>[] = [];
           for (let i = 0; i < 30; i += 1) {
             const promiseFromPage = wordsApiService.getWords(+target.dataset.group, i) as Promise<IWord[]>;
