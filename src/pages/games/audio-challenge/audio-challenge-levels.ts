@@ -30,6 +30,7 @@ export default class AudioChallangeLvl {
       namesAnswerWrongTranslate: [],
       namesAnswerWrongSound: [],
       score: 0,
+      newWords: 0,
     };
     this.currentCountWord = '1';
   }

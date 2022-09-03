@@ -316,17 +316,18 @@ export default class AudioChallange {
           difficulty: 'easy',
           optional: {
             games: {
-              sprint: {
+              audioCall: {
                 right: 0,
                 wrong: 0,
               },
-              audioCall: {
+              sprint: {
                 right: 0,
                 wrong: 0,
               },
             },
           },
         };
+        this.storage.newWords++;
         await wordsApiService.addUserWord(userId, this.currentWord.id, body);
       }
 

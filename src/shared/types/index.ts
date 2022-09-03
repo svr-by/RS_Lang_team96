@@ -22,11 +22,11 @@ export type UserWord = {
   difficulty: string;
   optional?: {
     games: {
-      sprint: {
+      audioCall: {
         right: number;
         wrong: number;
       };
-      audioCall: {
+      sprint: {
         right: number;
         wrong: number;
       };
