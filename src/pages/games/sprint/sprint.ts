@@ -220,6 +220,22 @@ export default class Sprint {
           this.storage.namesAnswerCorrect.push(this.currentWord.word);
           this.storage.namesAnswerCorrectTranslate.push(this.currentWord.wordTranslate);
           this.storage.namesAnswerCorrectSound.push(`${api.base}/${this.currentWord.audio}`);
+
+          const userId = userService.getStoredUserId();
+          if (userId) {
+            const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
+            if (userWord && userWord.optional) {
+              const bodyUserWord = {
+                difficulty: userWord.difficulty,
+                optional: Object.assign({}, userWord.optional),
+              };
+
+              const sum: number = userWord.optional.games.sprint.right + 1;
+              bodyUserWord.optional.games.sprint.right = sum;
+
+              await wordsApiService.updateUserWord(userId, this.currentWord.id, bodyUserWord);
+            }
+          }
         } else {
           const sound = new Audio();
           sound.src = 'assets/sounds/fail.mp3';
@@ -229,28 +245,28 @@ export default class Sprint {
           this.storage.namesAnswerWrong.push(this.currentWord.word);
           this.storage.namesAnswerWrongTranslate.push(this.currentWord.wordTranslate);
           this.storage.namesAnswerWrongSound.push(`${api.base}/${this.currentWord.audio}`);
+
+          const userId = userService.getStoredUserId();
+          if (userId) {
+            const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
+            if (userWord && userWord.optional) {
+              const bodyUserWord = {
+                difficulty: userWord.difficulty,
+                optional: Object.assign({}, userWord.optional),
+              };
+
+              const sum: number = userWord.optional.games.sprint.wrong + 1;
+              bodyUserWord.optional.games.sprint.wrong = sum;
+
+              await wordsApiService.updateUserWord(userId, this.currentWord.id, bodyUserWord);
+            }
+          }
         }
         const counterScore = document.querySelector('.sprint__score');
         if (counterScore) {
           counterScore.innerHTML = `${this.storage.score}`;
         }
         clearInterval(this.timer);
-
-        const userId = userService.getStoredUserId();
-        if (userId) {
-          const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
-          if (userWord && userWord.optional) {
-            const bodyUserWord = {
-              difficulty: userWord.difficulty,
-              optional: Object.assign({}, userWord.optional),
-            };
-
-            const sum: number = userWord.optional.games.sprint.right + 1;
-            bodyUserWord.optional.games.sprint.right = sum;
-
-            await wordsApiService.updateUserWord(userId, this.currentWord.id, bodyUserWord);
-          }
-        }
 
         this.sprint.remove();
         new Sprint(this.root, this.wordsInGroup, this.storage, this.seconds).render();
@@ -288,6 +304,22 @@ export default class Sprint {
           this.storage.namesAnswerCorrect.push(this.currentWord.word);
           this.storage.namesAnswerCorrectTranslate.push(this.currentWord.wordTranslate);
           this.storage.namesAnswerCorrectSound.push(`${api.base}/${this.currentWord.audio}`);
+
+          const userId = userService.getStoredUserId();
+          if (userId) {
+            const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
+            if (userWord && userWord.optional) {
+              const bodyUserWord = {
+                difficulty: userWord.difficulty,
+                optional: Object.assign({}, userWord.optional),
+              };
+
+              const sum: number = userWord.optional.games.sprint.right + 1;
+              bodyUserWord.optional.games.sprint.right = sum;
+
+              await wordsApiService.updateUserWord(userId, this.currentWord.id, bodyUserWord);
+            }
+          }
         } else {
           const sound = new Audio();
           sound.src = 'assets/sounds/fail.mp3';
@@ -297,28 +329,28 @@ export default class Sprint {
           this.storage.namesAnswerWrong.push(this.currentWord.word);
           this.storage.namesAnswerWrongTranslate.push(this.currentWord.wordTranslate);
           this.storage.namesAnswerWrongSound.push(`${api.base}/${this.currentWord.audio}`);
+
+          const userId = userService.getStoredUserId();
+          if (userId) {
+            const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
+            if (userWord && userWord.optional) {
+              const bodyUserWord = {
+                difficulty: userWord.difficulty,
+                optional: Object.assign({}, userWord.optional),
+              };
+
+              const sum: number = userWord.optional.games.sprint.wrong + 1;
+              bodyUserWord.optional.games.sprint.wrong = sum;
+
+              await wordsApiService.updateUserWord(userId, this.currentWord.id, bodyUserWord);
+            }
+          }
         }
         const counterScore = document.querySelector('.sprint__score');
         if (counterScore) {
           counterScore.innerHTML = `${this.storage.score}`;
         }
         clearInterval(this.timer);
-
-        const userId = userService.getStoredUserId();
-        if (userId) {
-          const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
-          if (userWord && userWord.optional) {
-            const bodyUserWord = {
-              difficulty: userWord.difficulty,
-              optional: Object.assign({}, userWord.optional),
-            };
-
-            const sum: number = userWord.optional.games.sprint.wrong + 1;
-            bodyUserWord.optional.games.sprint.wrong = sum;
-
-            await wordsApiService.updateUserWord(userId, this.currentWord.id, bodyUserWord);
-          }
-        }
 
         this.sprint.remove();
         new Sprint(this.root, this.wordsInGroup, this.storage, this.seconds).render();
@@ -327,14 +359,11 @@ export default class Sprint {
   };
 
   findButton = async (event: KeyboardEvent) => {
-    if (!this.isPush) {
-      this.isPush = true;
-      if (event.key === 'ArrowRight') {
-        this.pressRight();
-      }
-      if (event.key === 'ArrowLeft') {
-        this.pressLeft();
-      }
+    if (event.key === 'ArrowRight') {
+      this.pressRight();
+    }
+    if (event.key === 'ArrowLeft') {
+      this.pressLeft();
     }
   };
 
