@@ -19,6 +19,7 @@ export interface IWord {
 
 export interface IAggregatedWord extends IWord {
   userWord?: UserWordParams;
+  _id: string;
 }
 
 export interface IOptionalStat {

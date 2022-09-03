@@ -1,6 +1,6 @@
 import { UserWordParams, UserWord, AggregatedWordsParams, AggregatedWordsResponse } from '../shared/types';
 import { api } from './api';
-import { IWord } from '../shared/interfaces';
+import { IAggregatedWord, IWord } from '../shared/interfaces';
 
 class WordsApiService {
   async getWords(group: number, page: number): Promise<IWord[] | undefined> {
@@ -59,15 +59,15 @@ class WordsApiService {
 
   async getUserHardWords(userId: string): Promise<AggregatedWordsResponse[] | undefined> {
     const targetPage = `{"userWord.difficulty":"hard"}`;
-    return this.getAggregatedWords(userId, { filter: targetPage });
+    return this.getAggregatedWords(userId, { wordsPerPage: 600, filter: targetPage });
   }
 
   async getUserLearnedWords(userId: string): Promise<AggregatedWordsResponse[] | undefined> {
     const targetPage = `{"userWord.difficulty":"learned"}`;
-    return this.getAggregatedWords(userId, { filter: targetPage });
+    return this.getAggregatedWords(userId, { wordsPerPage: 600, filter: targetPage });
   }
 
-  async getAggregatedWordsById(userId: string, wordId: string): Promise<UserWord[] | undefined> {
+  async getAggregatedWordsById(userId: string, wordId: string): Promise<IAggregatedWord[] | undefined> {
     const response = await api.axiosInstance.get(`${api.usersEndpoint}/${userId}/aggregatedWords/${wordId}`);
     return response.data;
   }

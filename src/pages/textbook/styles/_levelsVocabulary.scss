@@ -9,7 +9,9 @@
 
 .levels {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
   gap: 0.5rem;
 }
 
@@ -28,11 +30,11 @@
     color: $color-black;
   }
 
-  &.permanent-a1  &__name, 
-  &.permanent-a2  &__name, 
-  &.permanent-b1  &__name, 
-  &.permanent-b2  &__name, 
-  &.permanent-c1  &__name, 
+  &.permanent-a1  &__name,
+  &.permanent-a2  &__name,
+  &.permanent-b1  &__name,
+  &.permanent-b2  &__name,
+  &.permanent-c1  &__name,
   &.permanent-c2  &__name {
     color: $color-black;
   }
