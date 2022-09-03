@@ -327,35 +327,31 @@ export default class AudioChallange {
             },
           },
         };
-        this.storage.newWords++;
+        this.storage.newWords += 1;
         await wordsApiService.addUserWord(userId, this.currentWord.id, body);
-      }
 
-      const userStatObj = await statisticApiService.getUserStatistics(userId);
-      if (!userStatObj) {
-        const defaultUserStatObj: UserStatistics = {
-          learnedWords: 0,
-          optional: {
-            [dateToday]: 0,
-          },
-        };
-        await statisticApiService.saveUserStatistics(userId, defaultUserStatObj);
-      } else {
-        if (userStatObj.optional) {
-          if (Object.keys(userStatObj.optional).some((el) => el === dateToday)) {
-            userStatObj.optional[dateToday]++;
-          } else {
-            userStatObj.optional[dateToday] = 1;
-          }
-
-          userStatObj.learnedWords++;
-          const body = {
-            learnedWords: userStatObj.learnedWords,
+        const userStatObj = await statisticApiService.getUserStatistics(userId);
+        if (!userStatObj) {
+          const defaultUserStatObj: UserStatistics = {
+            learnedWords: 0,
             optional: {
-              [dateToday]: userStatObj.optional[dateToday],
+              [dateToday]: 0,
             },
           };
-          await statisticApiService.saveUserStatistics(userId, body);
+          await statisticApiService.saveUserStatistics(userId, defaultUserStatObj);
+        } else {
+          if (userStatObj.optional) {
+            if (Object.keys(userStatObj.optional).some((el) => el === dateToday)) {
+              userStatObj.optional[dateToday] += 1;
+            } else {
+              userStatObj.optional[dateToday] = 1;
+            }
+
+            userStatObj.learnedWords += 1;
+            delete userStatObj.id;
+
+            await statisticApiService.saveUserStatistics(userId, userStatObj);
+          }
         }
       }
     }

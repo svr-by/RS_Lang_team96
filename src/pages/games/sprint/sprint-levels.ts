@@ -30,6 +30,7 @@ export default class SprintLvl {
       namesAnswerWrongTranslate: [],
       namesAnswerWrongSound: [],
       score: 0,
+      newWords: 0,
     };
     this.seconds = 600;
   }

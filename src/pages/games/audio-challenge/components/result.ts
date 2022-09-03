@@ -74,7 +74,6 @@ export default class Result {
 
     const userId = userService.getStoredUserId();
     if (userId) {
-
       storageService.getSession('StatisticStorage');
 
       const userStatLS: IStatByGames | null = storageService.getSession('StatByGames');
@@ -102,20 +101,28 @@ export default class Result {
               newWords: 0,
             },
           },
-        }
+        };
 
         storageService.setSession('StatByGames', startUserStatLS);
       } else {
         userStatLS.games.audioCall.right += this.storage.countAnswerCorrect;
         userStatLS.games.audioCall.wrong += this.storage.countAnswerWrong;
-        userStatLS.games.audioCall.bestSeries = (userStatLS.games.audioCall.bestSeries < this.storage.setInRow.size) ? this.storage.setInRow.size : userStatLS.games.audioCall.bestSeries;
+        userStatLS.games.audioCall.bestSeries =
+          userStatLS.games.audioCall.bestSeries < this.storage.setInRow.size
+            ? this.storage.setInRow.size
+            : userStatLS.games.audioCall.bestSeries;
         userStatLS.games.audioCall.newWords += this.storage.newWords;
-        userStatLS.games.audioCall.rightPercent = Math.round((userStatLS.games.audioCall.right / (userStatLS.games.audioCall.right + userStatLS.games.audioCall.wrong)) * 100);
+        userStatLS.games.audioCall.rightPercent = Math.round(
+          (userStatLS.games.audioCall.right / (userStatLS.games.audioCall.right + userStatLS.games.audioCall.wrong)) *
+            100
+        );
         userStatLS.date = dateToday;
         userStatLS.allNewWords = userStatLS.games.audioCall.newWords + userStatLS.games.sprint.newWords;
         userStatLS.allGamesWrong = userStatLS.games.audioCall.wrong + userStatLS.games.sprint.wrong;
         userStatLS.allGamesRight = userStatLS.games.audioCall.right + userStatLS.games.sprint.right;
-        userStatLS.allGamesRightPercent = Math.round((userStatLS.allGamesRight / (userStatLS.allGamesRight + userStatLS.allGamesWrong)) * 100);
+        userStatLS.allGamesRightPercent = Math.round(
+          (userStatLS.allGamesRight / (userStatLS.allGamesRight + userStatLS.allGamesWrong)) * 100
+        );
 
         storageService.setSession('StatByGames', userStatLS);
       }

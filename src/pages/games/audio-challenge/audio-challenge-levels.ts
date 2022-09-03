@@ -14,6 +14,8 @@ export default class AudioChallangeLvl {
 
   currentCountWord: string;
 
+  isPush: boolean;
+
   constructor(private readonly root: HTMLElement) {
     this.audioChallangeLvl = document.createElement('div');
     this.container = document.createElement('section');
@@ -33,20 +35,28 @@ export default class AudioChallangeLvl {
       newWords: 0,
     };
     this.currentCountWord = '1';
+    this.isPush = false;
   }
 
-  async addListenerToButtonLvl(target: HTMLElement | null): Promise<void> {
-    if (target && target.tagName === 'DIV') {
-      if (target.dataset.group) {
-        const arrPromisesFromPages30: Promise<IWord[]>[] = [];
-        for (let i = 0; i < 30; i += 1) {
-          const promiseFromPage = wordsApiService.getWords(+target.dataset.group, i) as Promise<IWord[]>;
-          arrPromisesFromPages30.push(promiseFromPage);
+  async addListenerToButtonLvl(target: HTMLElement): Promise<void> {
+    if (!this.isPush) {
+      this.isPush = true;
+      if (target && target.tagName === 'DIV') {
+        if (target.dataset.group) {
+          const parent: HTMLElement | null = document.querySelector('.main__games__audio-challange-levels__container');
+          if (parent) {
+            parent.removeEventListener('click', ({ target }) => this.addListenerToButtonLvl(target as HTMLElement));
+          }
+          const arrPromisesFromPages30: Promise<IWord[]>[] = [];
+          for (let i = 0; i < 30; i += 1) {
+            const promiseFromPage = wordsApiService.getWords(+target.dataset.group, i) as Promise<IWord[]>;
+            arrPromisesFromPages30.push(promiseFromPage);
+          }
+          const arrOfArrsWords = await Promise.all(arrPromisesFromPages30);
+          this.wordsInGroup = arrOfArrsWords.reduce((a, b) => a.concat(b));
+          this.audioChallangeLvl.remove();
+          new AudioChallange(this.root, this.wordsInGroup, this.currentCountWord, this.storage).render();
         }
-        const arrOfArrsWords = await Promise.all(arrPromisesFromPages30);
-        this.wordsInGroup = arrOfArrsWords.reduce((a, b) => a.concat(b));
-        this.audioChallangeLvl.remove();
-        new AudioChallange(this.root, this.wordsInGroup, this.currentCountWord, this.storage).render();
       }
     }
   }

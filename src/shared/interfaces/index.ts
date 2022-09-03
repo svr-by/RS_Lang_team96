@@ -51,7 +51,6 @@ export interface IStorage {
   newWords: number;
 }
 
-
 export interface IStatByGames {
   allGamesRightPercent: number;
   allGamesRight: number;
@@ -65,13 +64,13 @@ export interface IStatByGames {
       wrong: number;
       bestSeries: number;
       newWords: number;
-    },
+    };
     sprint: {
       rightPercent: number;
       right: number;
       wrong: number;
       bestSeries: number;
       newWords: number;
-    },
-  },
+    };
+  };
 }
