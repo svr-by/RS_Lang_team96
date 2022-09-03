@@ -23,7 +23,7 @@
   }
 
   &__games {
-    padding: 4rem 0;
+    padding: 4rem 0 2rem;
     @include flex(center, center, row, wrap);
     gap: 5rem;
   }
@@ -41,8 +41,12 @@
     border-radius: 1rem 1rem 0 0;
     font-size: 1.5rem;
     color: $color-white;
-    background-color: $color-green;
+    background-color: $color-black-xl;
     text-align: center;
+
+    &.active {
+      background-color: $color-green;
+    }
   }
 
   &__words,
