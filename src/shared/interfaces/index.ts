@@ -21,21 +21,6 @@ export interface IAggregatedWord extends IWord {
   userWord?: UserWordParams;
 }
 
-export interface IOptionalStat {
-  AudioCountAnswerCorrect: number;
-  AudioCountAnswerWrong: number;
-  AudioInRow: number;
-  SprintCountAnswerCorrect: number;
-  SprintCountAnswerWrong: number;
-  SprintInRow: number;
-  SprintScore: number;
-}
-
-export interface IStatistic {
-  learnedWords: number;
-  optional: IOptionalStat;
-}
-
 export interface IStorage {
   countAnswerCorrect: number;
   namesAnswerCorrect: string[];

@@ -2,7 +2,6 @@ import { layoutService } from '../shared/services/layoutService';
 import { Header } from '../shared/components/header';
 import { Footer } from '../shared/components/footer';
 import { Views } from '../shared/enums';
-import Statistic from '../pages/statistic/statistic';
 import StartPage from '../pages/start';
 import Games from '../pages/games/games';
 import LayoutTextBook from '../pages/textbook/layoutTextBook';
@@ -44,7 +43,7 @@ class App {
         mainContent = new Games(this.main).render();
         break;
       case Views.statistics:
-        mainContent = await new Statistic(this.main).render();
+        mainContent = layoutService.createElement({ tag: 'h1', text: 'Страница со статистикой' });
         break;
       case Views.developers:
         mainContent = this.devsPage.render();
