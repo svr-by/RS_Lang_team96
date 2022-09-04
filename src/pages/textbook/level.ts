@@ -32,6 +32,11 @@ class Level {
 
     this.level.addEventListener('click', () => {
       storageService.setSession('pageNumber', '0');
+      const pagination = textBook.querySelector('#pagination');
+      if (pagination) {
+        pagination.innerHTML = '';
+        new Pagination(textBook).appendTo(pagination as HTMLElement);
+      }
       sessionStorage.setItem('level', JSON.stringify(index));
       this.changeLevel(id, this.level);
     });
@@ -48,9 +53,10 @@ class Level {
   changeLevel(id: string, levelElement: HTMLElement) {
     const indexFromStorage = storageService.getSession('level');
     const index = indexFromStorage && Number(storageService.getSession('level'));
+
     if (typeof index === 'number') {
-      const firstPage: number | null = storageService.getSession('pageNumber');
-      firstPage && this.layoutTextBook.addWords(firstPage, index, this.textBook);
+      const pageNumber: number | null = storageService.getSession('pageNumber');
+      pageNumber && this.layoutTextBook.addWords(pageNumber, index, this.textBook);
       this.pagination.highlightPage();
       this.addPermanentColor(index, id);
       levelElement.setAttribute('data-chose', 'true');

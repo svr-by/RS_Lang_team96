@@ -21,14 +21,14 @@ export type UserWord = {
   wordId: string;
   difficulty: string;
   optional?: {
-    games?: {
-      sprint?: {
-        right?: number;
-        wrong?: number;
+    games: {
+      audioCall: {
+        right: number;
+        wrong: number;
       };
-      audioCall?: {
-        right?: number;
-        wrong?: number;
+      sprint: {
+        right: number;
+        wrong: number;
       };
     };
   };
@@ -49,9 +49,18 @@ export type AggregatedWordsResponse = {
 };
 
 export type UserStatistics = {
-  id: string;
+  id?: string;
   learnedWords: number;
-  optional?: Record<string, unknown>;
+  optional?: UserStatisticsOptions;
+};
+
+export type UserStatisticsOptions = {
+  [index: string]: number;
+};
+
+export type UserStatisticsPerDay = {
+  date: string;
+  counterNewWords: number;
 };
 
 export type UserStatisticsParams = Pick<UserStatistics, 'learnedWords' | 'optional'>;

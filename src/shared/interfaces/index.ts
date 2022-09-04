@@ -19,20 +19,7 @@ export interface IWord {
 
 export interface IAggregatedWord extends IWord {
   userWord?: UserWordParams;
-}
-
-export interface IOptionalStat {
-  AudioCountAnswerCorrect: number;
-  AudioCountAnswerWrong: number;
-  AudioInRow: number;
-  SprintCountAnswerCorrect: number;
-  SprintCountAnswerWrong: number;
-  SprintInRow: number;
-}
-
-export interface IStatistic {
-  learnedWords: number;
-  optional: IOptionalStat;
+  _id: string;
 }
 
 export interface IStorage {
@@ -47,6 +34,31 @@ export interface IStorage {
   namesAnswerWrongTranslate: string[];
   namesAnswerWrongSound: string[];
   score: number;
+  newWords: number;
+}
+
+export interface IStatByGames {
+  allGamesRightPercent: number;
+  allGamesRight: number;
+  allGamesWrong: number;
+  allNewWords: number;
+  date: string;
+  games: {
+    audioCall: {
+      rightPercent: number;
+      right: number;
+      wrong: number;
+      bestSeries: number;
+      newWords: number;
+    };
+    sprint: {
+      rightPercent: number;
+      right: number;
+      wrong: number;
+      bestSeries: number;
+      newWords: number;
+    };
+  };
 }
 
 export interface IStatByGames {

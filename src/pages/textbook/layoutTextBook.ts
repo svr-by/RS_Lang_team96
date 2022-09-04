@@ -5,9 +5,10 @@ import Pagination from './pagination';
 import Description from './description';
 import Word from './word';
 import SettingsModal from './settingsModal';
-import { IWord } from '../../shared/interfaces';
+import { IAggregatedWord, IWord } from '../../shared/interfaces';
 import { wordsApiService } from '../../api/wordsApiService';
 import { storageService } from '../../shared/services/storageService';
+import { SignInResponse } from '../../shared/types';
 
 class LayoutTextBook {
   private svg: Svg;
@@ -21,14 +22,20 @@ class LayoutTextBook {
   }
 
   async renderTextBook() {
-    const textBook = document.createElement('section') as HTMLElement;
+    const textBook = document.createElement('section');
     textBook.className = 'textBook';
     textBook.id = 'textBook';
     textBook.innerHTML = `
       <div class='wrapper'>
-        <div class='header-and-settings'>
-          <h2 class='header-and-settings__header'>Учебник</h2>
-          ${this.svg.settingsSvg('#ffef4f', 'header-and-settings__settings')}
+        <div class='header-and-settings' id='header-and-settings'>
+          <h2 class='header-and-settings__header' id='textbook-words'>Учебник</h2>
+          <h2 class='${
+            storageService.getLocal('user') ? 'header-and-settings__header' : 'display-none'
+          }' id='difficult-words'>Сложные слова</h2>
+          <h2 class='${
+            storageService.getLocal('user') ? 'header-and-settings__header' : 'display-none'
+          }' id='studied-words'>Изученные слова</h2>
+          ${this.svg.settingsSvg('#ffef4f', 'header-and-settings__settings', 'settings')}
         </div>
         <h3 class='levels-header'>Уровни сложности слов</h3>
         <div class='levels' id='levels'></div>
@@ -56,7 +63,15 @@ class LayoutTextBook {
       storageService.setSession('pageNumber', '0');
     }
 
-    await this.addLevels(textBook);
+    if (!storageService.getSession('sect')) {
+      storageService.setSession('sect', 'text-book');
+    }
+
+    this.highlightSelectedPartition(textBook);
+
+    if (storageService.getSession('sect') === 'text-book') await this.addLevels(textBook);
+    if (storageService.getSession('sect') === 'difficult words') await this.addDifficultWords(textBook);
+    if (storageService.getSession('sect') === 'studied words') await this.addLearnedWords(textBook);
 
     const pagination = textBook.querySelector('#pagination') as HTMLElement;
 
@@ -64,39 +79,181 @@ class LayoutTextBook {
 
     new SettingsModal().appendTo(textBook);
 
-    (textBook.querySelector('#settings') as HTMLElement).addEventListener('click', (event) => {
-      event.stopPropagation();
-      this.addSettings(textBook);
-    });
+    const headerAndSettings = textBook.querySelector('#header-and-settings');
+
+    if (headerAndSettings !== null) {
+      headerAndSettings.addEventListener('click', (event) => {
+        event.stopPropagation();
+        if (event instanceof MouseEvent) {
+          this.modeSwitching(event, textBook);
+        }
+      });
+    }
 
     return textBook;
   }
 
+  modeSwitching(event: MouseEvent, textBook: HTMLElement) {
+    if (event.target instanceof Element) {
+      if (event.target.parentElement instanceof Element)
+        if (event.target.parentElement.id === 'settings') this.addSettings(textBook);
+
+      if (event.target.id === 'textbook-words') this.addLevels(textBook);
+
+      if (event.target.id === 'difficult-words') this.addDifficultWords(textBook);
+
+      if (event.target.id === 'studied-words') this.addLearnedWords(textBook);
+    }
+  }
+
+  async addDifficultWords(textBook: HTMLElement) {
+    storageService.setSession('sect', 'difficult words');
+    this.addAndDeletePagination(textBook);
+    const pagination = textBook.querySelector('#pagination');
+    pagination && pagination.classList.add('display-none');
+    this.highlightSelectedPartition(textBook);
+    const levels = textBook.querySelector('#levels');
+    if (levels) {
+      levels.innerHTML = '';
+    }
+    const words = textBook.querySelector('#words') as HTMLElement;
+    const hardWords = await this.getHardWords();
+    if (hardWords) {
+      words.innerHTML = '';
+      hardWords.forEach((item: IAggregatedWord, index: number) => {
+        this.addWordAndDescription(item, index, textBook, words);
+      });
+    }
+  }
+
+  async addLearnedWords(textBook: HTMLElement) {
+    storageService.setSession('sect', 'studied words');
+    this.addAndDeletePagination(textBook);
+    this.highlightSelectedPartition(textBook);
+    const levels = textBook.querySelector('#levels');
+    if (levels) {
+      levels.innerHTML = '';
+    }
+    const words = textBook.querySelector('#words') as HTMLElement;
+    const learnedWords = await this.getLearnedWords();
+    if (learnedWords) {
+      words.innerHTML = '';
+      learnedWords.forEach((item: IAggregatedWord, index: number) => {
+        this.addWordAndDescription(item, index, textBook, words);
+      });
+    }
+  }
+
+  addAndDeletePagination(textBook: HTMLElement) {
+    const pagination = textBook.querySelector('#pagination');
+    const sect = storageService.getSession('sect');
+
+    pagination &&
+      sect &&
+      (sect === 'difficult words' || sect === 'studied words') &&
+      pagination.classList.add('display-none');
+
+    pagination && sect && sect === 'text-book' && pagination.classList.remove('display-none');
+  }
+
+  addWordAndDescription(item: IAggregatedWord, index: number, textBook: HTMLElement, words: HTMLElement) {
+    if (index === 0) {
+      const description = textBook.querySelector('#description') as HTMLElement;
+      this.description.appendTo(description, item._id);
+      storageService.setSession('chosenWordId', item._id);
+    }
+    new Word(item._id, item.word, item.wordTranslate).appendTo(words);
+  }
+
   addLevels(textBook: HTMLElement) {
+    storageService.setSession('sect', 'text-book');
+    this.addAndDeletePagination(textBook);
+    this.highlightSelectedPartition(textBook);
     const levels = textBook.querySelector('#levels') as HTMLElement;
     this.groupNumber.forEach((item, index) => {
       new Level(item.name, item.numbers, item.id, index, textBook).appendTo(levels);
     });
   }
 
-  addWords(page: number, group: number, textBook: HTMLElement) {
+  async getHardWords() {
+    const userData: null | SignInResponse = storageService.getLocal('user');
+    if (userData) {
+      return await wordsApiService.getUserHardWords(userData.userId).then((item) => {
+        if (item) {
+          return [...item][0].paginatedResults;
+        }
+      });
+    }
+  }
+
+  async getLearnedWords() {
+    const userData: null | SignInResponse = storageService.getLocal('user');
+    if (userData) {
+      return await wordsApiService.getUserLearnedWords(userData.userId).then((item) => {
+        if (item) {
+          return [...item][0].paginatedResults;
+        }
+      });
+    }
+  }
+
+  async addWords(page: number, group: number, textBook: HTMLElement) {
     const words = textBook.querySelector('#words') as HTMLElement;
-    words.innerHTML = '';
-    wordsApiService.getWords(group, page).then((data) => {
-      if (typeof data === 'string') {
-        console.log(data);
-      }
-      if (Array.isArray(data)) {
-        data.forEach((item: IWord, index: number) => {
-          if (index === 0) {
-            const description = textBook.querySelector('#description') as HTMLElement;
-            this.description.appendTo(description, item.id);
-            storageService.setSession('chosenWordId', item.id);
-          }
-          new Word(item.id, item.word, item.wordTranslate).appendTo(words);
-        });
-      }
-    });
+    const userData: null | SignInResponse = storageService.getLocal('user');
+    if (userData) {
+      const hardWords = await this.getHardWords();
+
+      const learnedWords = await this.getLearnedWords();
+
+      wordsApiService.getAggregatedUserWords(userData.userId, page, group, 20).then((data) => {
+        if (Array.isArray(data)) {
+          const wordsData = data[0].paginatedResults;
+          words.innerHTML = '';
+          wordsData.forEach((item: IAggregatedWord, index: number) => {
+            if (index === 0) {
+              const description = textBook.querySelector('#description') as HTMLElement;
+              this.description.appendTo(description, item._id);
+              storageService.setSession('chosenWordId', item._id);
+            }
+            new Word(item._id, item.word, item.wordTranslate, hardWords, learnedWords).appendTo(words);
+          });
+        }
+      });
+    } else {
+      wordsApiService.getWords(group, page).then((data) => {
+        if (Array.isArray(data)) {
+          words.innerHTML = '';
+          data.forEach((item: IWord, index: number) => {
+            if (index === 0) {
+              const description = textBook.querySelector('#description') as HTMLElement;
+              this.description.appendTo(description, item.id);
+              storageService.setSession('chosenWordId', item.id);
+            }
+            new Word(item.id, item.word, item.wordTranslate).appendTo(words);
+          });
+        }
+      });
+    }
+  }
+
+  highlightSelectedPartition(textBook: HTMLElement) {
+    const textbookWords: HTMLElement | null = textBook.querySelector('#textbook-words');
+    const difficultWords: HTMLElement | null = textBook.querySelector('#difficult-words');
+    const studiedWords: HTMLElement | null = textBook.querySelector('#studied-words');
+
+    if (textbookWords !== null && difficultWords !== null && studiedWords !== null) {
+      storageService.getSession('sect') === 'text-book'
+        ? (textbookWords.style.color = '#000000')
+        : (textbookWords.style.color = '');
+
+      storageService.getSession('sect') === 'difficult words'
+        ? (difficultWords.style.color = '#000000')
+        : (difficultWords.style.color = '');
+
+      storageService.getSession('sect') === 'studied words'
+        ? (studiedWords.style.color = '#000000')
+        : (studiedWords.style.color = '');
+    }
   }
 
   addSettings(textBook: HTMLElement) {
@@ -128,7 +285,7 @@ class LayoutTextBook {
           (document.getElementById('settings-modal') as HTMLElement).classList.toggle('display-none');
         }
       },
-      false
+      true
     );
   }
 }

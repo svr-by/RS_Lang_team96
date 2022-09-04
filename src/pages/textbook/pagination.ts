@@ -14,7 +14,6 @@ class Pagination {
     this.pagination = document.createElement('div');
     this.pagination.className = 'pagination';
     this.render();
-
     this.pagination.addEventListener('click', (event) => {
       this.newPage(event);
     });
@@ -26,7 +25,7 @@ class Pagination {
 
     if (count !== null) {
       if ((event.target as HTMLElement).id === 'pagination-arrow-left' && count > 0) {
-        storageService.setSession('pageNumber', count - 1);
+        storageService.setSession('pageNumber', +count - 1);
       }
       if ((event.target as HTMLElement).id === 'pagination-first') {
         storageService.setSession('pageNumber', +(event.target as HTMLElement).innerText - 1);
@@ -53,14 +52,16 @@ class Pagination {
         storageService.setSession('pageNumber', +(event.target as HTMLElement).innerText - 1);
       }
       if ((event.target as HTMLElement).id === 'pagination-arrow-right' && count < 29) {
-        storageService.setSession('pageNumber', count + 1);
+        storageService.setSession('pageNumber', +count + 1);
       }
     }
 
-    this.render();
+    if ((event.target as HTMLElement).innerText !== '...') this.render();
     const group = JSON.parse(sessionStorage.getItem('level') as string);
     const newPage: number | null = storageService.getSession('pageNumber');
-    newPage && this.layoutTextBook.addWords(newPage, group, this.textBook);
+    (newPage || newPage === 0) &&
+      (event.target as HTMLElement).innerText !== '...' &&
+      this.layoutTextBook.addWords(newPage, group, this.textBook);
   }
 
   render() {
