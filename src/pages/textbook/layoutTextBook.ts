@@ -5,20 +5,41 @@ import Pagination from './pagination';
 import Description from './description';
 import Word from './word';
 import SettingsModal from './settingsModal';
-import { IAggregatedWord, IWord } from '../../shared/interfaces';
+import { IAggregatedWord, IStorage, IWord } from '../../shared/interfaces';
 import { wordsApiService } from '../../api/wordsApiService';
 import { storageService } from '../../shared/services/storageService';
 import { SignInResponse } from '../../shared/types';
+import AudioChallange from '../games/audio-challenge/audio-challenge';
+import Sprint from '../games/sprint/sprint';
 
 class LayoutTextBook {
   private svg: Svg;
   private groupNumber: { name: string; numbers: string; id: string }[];
   private description: Description;
+  private wordsInGroup: IWord[];
+  private storage: IStorage;
+  private currentCountWord: string;
 
   constructor() {
     this.svg = new Svg();
     this.groupNumber = dataLevels;
     this.description = new Description();
+    this.wordsInGroup = [] as IWord[];
+    this.storage = {
+      countAnswerCorrect: 0,
+      namesAnswerCorrect: [],
+      namesAnswerCorrectTranslate: [],
+      namesAnswerCorrectSound: [],
+      inRow: 0,
+      setInRow: new Set(),
+      countAnswerWrong: 0,
+      namesAnswerWrong: [],
+      namesAnswerWrongTranslate: [],
+      namesAnswerWrongSound: [],
+      score: 0,
+      newWords: 0,
+    };
+    this.currentCountWord = '1';
   }
 
   async renderTextBook() {
@@ -100,12 +121,12 @@ class LayoutTextBook {
 
     const linksToAudioChallenge = textBook.querySelector('#links-to-audio-challenge');
     if (linksToAudioChallenge) {
-      linksToAudioChallenge.addEventListener('click', () => this.linksToGame());
+      linksToAudioChallenge.addEventListener('click', () => this.linksToGame('AudioChalenge'), { once: true });
     }
 
     const linksToSprint = textBook.querySelector('#links-to-sprint');
     if (linksToSprint) {
-      linksToSprint.addEventListener('click', () => this.linksToGame());
+      linksToSprint.addEventListener('click', () => this.linksToGame('Sprint'), { once: true });
     }
 
     return textBook;
@@ -307,8 +328,27 @@ class LayoutTextBook {
     );
   }
 
-  linksToGame() {
-    console.log(123);
+  async linksToGame(game: string) {
+    const arrPromisesFromPages30: Promise<IWord[]>[] = [];
+    const group = storageService.getSession('level');
+    for (let i = 0; i < 30; i += 1) {
+      if (group) {
+        const promiseFromPage = wordsApiService.getWords(+group, i) as Promise<IWord[]>;
+        arrPromisesFromPages30.push(promiseFromPage);
+      }
+    }
+    const arrOfArrsWords = await Promise.all(arrPromisesFromPages30);
+    this.wordsInGroup = arrOfArrsWords.reduce((a, b) => a.concat(b));
+
+    const textBook: HTMLElement | null = document.querySelector('#textBook');
+    if (textBook) textBook.remove();
+    const main: HTMLElement | null = document.querySelector('.main');
+    if (main && game === 'AudioChalenge') {
+      await new AudioChallange(main, this.wordsInGroup, this.currentCountWord, this.storage).render();
+    }
+    if (main && game === 'Sprint') {
+      await new Sprint(main, this.wordsInGroup, this.storage, 600).render();
+    }
   }
 }
 

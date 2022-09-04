@@ -60,11 +60,19 @@ class Pagination {
       }
     }
 
-    if ((event.target as HTMLElement).innerText !== '...') this.render();
+    if (
+      (event.target as HTMLElement).innerText !== '...' &&
+      (event.target as HTMLElement).classList.contains('left-inactive') &&
+      (event.target as HTMLElement).classList.contains('right-inactive')
+    ) {
+      this.render();
+    }
     const group = JSON.parse(sessionStorage.getItem('level') as string);
     const newPage: number | null = storageService.getSession('pageNumber');
     (newPage || newPage === 0) &&
       (event.target as HTMLElement).innerText !== '...' &&
+      (event.target as HTMLElement).classList.contains('left-inactive') &&
+      (event.target as HTMLElement).classList.contains('right-inactive') &&
       this.layoutTextBook.addWords(newPage, group, this.textBook);
   }
 
