@@ -1,4 +1,5 @@
 import { layoutService } from '../shared/services/layoutService';
+import { api } from '../api/api';
 import { Header } from '../shared/components/header';
 import { Footer } from '../shared/components/footer';
 import { Views } from '../shared/enums';
@@ -65,6 +66,7 @@ class App {
         break;
     }
     this.main.append(mainContent as HTMLElement);
+    api.getNewTokens();
   }
 }
 
