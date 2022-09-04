@@ -14,7 +14,8 @@ class App {
   footer: Footer;
   main: HTMLElement;
   startPage: StartPage;
-  layoutTextBook: LayoutTextBook;
+  textBook: LayoutTextBook;
+  games: Games;
   devsPage: DevsPage;
   statsPage: StatsPage;
   videoPage: VideoPage;
@@ -24,7 +25,8 @@ class App {
     this.header = new Header();
     this.footer = new Footer();
     this.startPage = new StartPage();
-    this.layoutTextBook = new LayoutTextBook();
+    this.textBook = new LayoutTextBook();
+    this.games = new Games();
     this.devsPage = new DevsPage();
     this.statsPage = new StatsPage();
     this.videoPage = new VideoPage();
@@ -43,10 +45,10 @@ class App {
     let mainContent: HTMLElement | undefined;
     switch (view) {
       case Views.textbook:
-        mainContent = await this.layoutTextBook.renderTextBook();
+        mainContent = await this.textBook.renderTextBook();
         break;
       case Views.games:
-        mainContent = new Games(this.main).render();
+        mainContent = this.games.render();
         break;
       case Views.statistics:
         mainContent = this.statsPage.render();

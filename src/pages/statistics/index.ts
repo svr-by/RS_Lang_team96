@@ -3,6 +3,7 @@ import { GameStats } from '../../shared/types';
 import { SignInResponse } from '../../shared/types';
 import { layoutService } from '../../shared/services/layoutService';
 import { storageService } from '../../shared/services/storageService';
+import { dateToday } from '../../shared/services/dateService';
 import { Modal } from '../../shared/components/modal';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
 Chart.register(...registerables);
@@ -38,11 +39,10 @@ class StatsPage {
     const sprintStats: GameStats = { words: 0, right: 0, series: 0 };
     const audiocallStats: GameStats = { words: 0, right: 0, series: 0 };
     const isUserSigin = storageService.getLocal<SignInResponse>('user') ? true : false;
-    const stats = storageService.getLocal<IStatByGames>('stats');
+    const stats = storageService.getSession<IStatByGames>('StatByGames');
 
     if (isUserSigin && stats) {
-      const isSameDay = this.checkDate(stats.date);
-      if (isSameDay) {
+      if (dateToday === stats.date) {
         allNewWords = stats.allNewWords;
         const audioCallBest = stats.games.audioCall.bestSeries;
         const sprintBest = stats.games.sprint.bestSeries;
@@ -106,12 +106,6 @@ class StatsPage {
       text: 'Статистика доступна только для авторизованных пользователей',
     });
     new Modal().showModal(mess);
-  }
-
-  private checkDate(date: string) {
-    const statsDate = new Date(date);
-    const today = new Date();
-    return today.getDate() === statsDate.getDate() && today.getMonth() === statsDate.getMonth();
   }
 
   renderChart() {

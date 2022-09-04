@@ -1,4 +1,5 @@
 import BaseComponent from '../../../../shared/components/base_component';
+import { Modal } from '../../../../shared/components/modal';
 import StatWordsWrong from '../../../games/audio-challenge/components/result-wrong';
 import StatWordsAnswer from '../../../games/audio-challenge/components/result-answer';
 import { IStorage, IStatByGames } from '../../../../shared/interfaces';
@@ -8,19 +9,16 @@ import { dateToday } from '../../../../shared/services/dateService';
 
 export default class ResultSprint {
   resultSprint: HTMLElement;
-
   container: HTMLElement;
-
   statisticBox: HTMLElement;
 
-  constructor(private readonly root: HTMLElement, public storage: IStorage) {
+  constructor(public storage: IStorage) {
     this.resultSprint = document.createElement('div');
     this.container = document.createElement('div');
     this.statisticBox = document.createElement('div');
   }
 
   async render() {
-    this.root.appendChild(this.resultSprint);
     this.resultSprint.classList.add('result');
 
     new BaseComponent(this.resultSprint, 'h2', ['result__title'], 'Result').render();
@@ -132,5 +130,6 @@ export default class ResultSprint {
         storageService.setSession('StatByGames', userStatLS);
       }
     }
+    new Modal().showModal(this.resultSprint);
   }
 }

@@ -9,14 +9,12 @@ import { userService } from '../../../shared/services/userService';
 import { wordsApiService } from '../../../api/wordsApiService';
 import { statisticApiService } from '../../../api/statisticApiService';
 import { dateToday } from '../../../shared/services/dateService';
+import AudioChallangeLvl from './../audio-challenge/audio-challenge-levels';
 
 export default class AudioChallange {
   audioChallange: HTMLElement;
-
   containerPanel: HTMLElement;
-
   currentWord: IWord;
-
   isPush: boolean;
 
   constructor(
@@ -44,12 +42,13 @@ export default class AudioChallange {
   pushBtnSkipNext(target: HTMLElement | null) {
     if (target && target.tagName === 'DIV') {
       const audioChallange: HTMLElement | null = document.querySelector('.main__games__audio-challange');
-      const main: HTMLElement | null = document.querySelector('.main');
+      const main: HTMLElement | null = document.querySelector('.main__games');
       if (audioChallange && main) {
         this.currentCountWord = (+this.currentCountWord + 1).toString();
         audioChallange.remove();
         if (+this.currentCountWord > 20) {
-          new Result(main, this.storage).render();
+          new AudioChallangeLvl(this.root).render();
+          new Result(this.storage).render();
         } else {
           new AudioChallange(main, this.wordsInGroup, this.currentCountWord, this.storage).render();
         }
@@ -63,7 +62,7 @@ export default class AudioChallange {
         this.isPush = true;
         target.classList.add('answer');
         target.setAttribute('data-answer', 'yes');
-        const img = document.querySelector('.main__games__audio-challange-img');
+        const img = this.audioChallange.querySelector('.main__games__audio-challange-img');
         if (img) {
           img.setAttribute('src', `${api.base}/${this.currentWord.image}`);
         }
@@ -77,7 +76,9 @@ export default class AudioChallange {
         this.storage.namesAnswerCorrectTranslate.push(this.currentWord.wordTranslate);
         this.storage.namesAnswerCorrectSound.push(`${api.base}/${this.currentWord.audio}`);
 
-        const btnSkip: HTMLElement | null = document.querySelector('.main__games__audio-challange-buttonSkip');
+        const btnSkip: HTMLElement | null = this.audioChallange.querySelector(
+          '.main__games__audio-challange-buttonSkip'
+        );
         if (btnSkip) {
           btnSkip.classList.add('main__games__audio-challange-buttonNext');
           btnSkip.innerHTML = 'NEXT';
@@ -113,7 +114,7 @@ export default class AudioChallange {
       if (!this.isPush) {
         this.isPush = true;
         target.setAttribute('data-answer', 'no');
-        const img = document.querySelector('.main__games__audio-challange-img');
+        const img = this.audioChallange.querySelector('.main__games__audio-challange-img');
         if (img) {
           img.setAttribute('src', `${api.base}/${this.currentWord.image}`);
         }
@@ -168,7 +169,7 @@ export default class AudioChallange {
     playSound(this.currentWord);
 
     const randomNum = Math.floor(Math.random() * 4);
-    const buttonsArray = document.querySelectorAll('.main__games__audio-challange__buttonAnswer');
+    const buttonsArray = this.audioChallange.querySelectorAll('.main__games__audio-challange__buttonAnswer');
 
     do {
       buttonsArray[0].innerHTML = this.getRandomWordInGroup().wordTranslate;
@@ -204,7 +205,7 @@ export default class AudioChallange {
           if (!this.isPush) {
             this.isPush = true;
             buttonsArray[i - 1].setAttribute('data-answer', 'no');
-            const img = document.querySelector('.main__games__audio-challange-img');
+            const img = this.audioChallange.querySelector('.main__games__audio-challange-img');
             if (img) {
               img.setAttribute('src', `${api.base}/${this.currentWord.image}`);
             }
@@ -239,7 +240,7 @@ export default class AudioChallange {
             this.isPush = true;
             buttonsArray[i - 1].classList.add('answer');
             buttonsArray[i - 1].setAttribute('data-answer', 'yes');
-            const img = document.querySelector('.main__games__audio-challange-img');
+            const img = this.audioChallange.querySelector('.main__games__audio-challange-img');
             if (img) {
               img.setAttribute('src', `${api.base}/${this.currentWord.image}`);
             }
@@ -253,7 +254,9 @@ export default class AudioChallange {
             this.storage.namesAnswerCorrectTranslate.push(this.currentWord.wordTranslate);
             this.storage.namesAnswerCorrectSound.push(`${api.base}/${this.currentWord.audio}`);
 
-            const btnSkip: HTMLElement | null = document.querySelector('.main__games__audio-challange-buttonSkip');
+            const btnSkip: HTMLElement | null = this.audioChallange.querySelector(
+              '.main__games__audio-challange-buttonSkip'
+            );
             if (btnSkip) {
               btnSkip.classList.add('main__games__audio-challange-buttonNext');
               btnSkip.innerHTML = 'NEXT';
@@ -335,7 +338,7 @@ export default class AudioChallange {
       }
     }
 
-    const btnAnswerRight: HTMLElement | null = document.querySelector(`.answer-${randomNum}`);
+    const btnAnswerRight: HTMLElement | null = this.audioChallange.querySelector(`.answer-${randomNum}`);
     if (btnAnswerRight) {
       btnAnswerRight.dataset.answer = '0';
       btnAnswerRight.innerHTML = this.currentWord.wordTranslate;
@@ -348,12 +351,12 @@ export default class AudioChallange {
       item.addEventListener('click', ({ target }) => this.pushBtnWrong(target as HTMLElement), { once: true });
     });
 
-    const btnSound: HTMLElement | null = document.querySelector('.main__games__audio-challange-buttonSound');
+    const btnSound: HTMLElement | null = this.audioChallange.querySelector('.main__games__audio-challange-buttonSound');
     if (btnSound) {
       btnSound.addEventListener('click', this.pushBtnSound);
     }
 
-    const btnSkip: HTMLElement | null = document.querySelector('.main__games__audio-challange-buttonSkip');
+    const btnSkip: HTMLElement | null = this.audioChallange.querySelector('.main__games__audio-challange-buttonSkip');
     if (btnSkip) {
       btnSkip.addEventListener('click', ({ target }) => this.pushBtnSkipNext(target as HTMLElement), { once: true });
     }

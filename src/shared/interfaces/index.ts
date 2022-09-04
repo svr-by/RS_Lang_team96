@@ -60,27 +60,3 @@ export interface IStatByGames {
     };
   };
 }
-
-export interface IStatByGames {
-  allGamesRightPercent: number;
-  allGamesRight: number;
-  allGamesWrong: number;
-  allNewWords: number;
-  date: string;
-  games: {
-    audioCall: {
-      rightPercent: number;
-      right: number;
-      wrong: number;
-      bestSeries: number;
-      newWords: number;
-    };
-    sprint: {
-      rightPercent: number;
-      right: number;
-      wrong: number;
-      bestSeries: number;
-      newWords: number;
-    };
-  };
-}

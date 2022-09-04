@@ -1,4 +1,5 @@
 import BaseComponent from '../../../../shared/components/base_component';
+import { Modal } from '../../../../shared/components/modal';
 import StatWordsWrong from './result-wrong';
 import StatWordsAnswer from './result-answer';
 import { IStorage, IStatByGames } from '../../../../shared/interfaces';
@@ -8,19 +9,16 @@ import { dateToday } from '../../../../shared/services/dateService';
 
 export default class Result {
   result: HTMLElement;
-
   container: HTMLElement;
-
   statisticBox: HTMLElement;
 
-  constructor(private readonly root: HTMLElement, public storage: IStorage) {
+  constructor(public storage: IStorage) {
     this.result = document.createElement('div');
     this.container = document.createElement('div');
     this.statisticBox = document.createElement('div');
   }
 
   render() {
-    this.root.appendChild(this.result);
     this.result.classList.add('result');
 
     new BaseComponent(this.result, 'h2', ['result__title'], 'Result').render();
@@ -117,5 +115,6 @@ export default class Result {
         storageService.setSession('StatByGames', userStatLS);
       }
     }
+    new Modal().showModal(this.result);
   }
 }
