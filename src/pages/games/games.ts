@@ -42,9 +42,9 @@ export default class Games {
       ['game-audio__description'],
       'A word is voiced to you, and you choose the correct translation'
     ).render();
-    new BaseComponent(this.audioGame, 'button', ['game-audio__play'], 'play')
+    new BaseComponent(this.audioGame, 'button', ['game-audio__play'], 'start')
       .render()
-      .addEventListener('click', ({ target }) => this.pushBtnPlayAudio(target as HTMLElement));
+      .addEventListener('click', ({ target }) => this.pushBtnPlayAudio(target as HTMLElement), { once: true });
 
     this.mainGames.appendChild(this.sprintGame);
     this.sprintGame.classList.add('main__games-sprint');
@@ -53,11 +53,11 @@ export default class Games {
       this.sprintGame,
       'div',
       ['game-sprint__description'],
-      'In 10 seconds you have to answer the maximum number of correctly translated words'
+      'In 60 seconds you have to answer the maximum number of correctly translated words'
     ).render();
-    new BaseComponent(this.sprintGame, 'button', ['game-sprint__play'], 'play')
+    new BaseComponent(this.sprintGame, 'button', ['game-sprint__play'], 'start')
       .render()
-      .addEventListener('click', ({ target }) => this.pushBtnPlaySprint(target as HTMLElement));
+      .addEventListener('click', ({ target }) => this.pushBtnPlaySprint(target as HTMLElement), { once: true });
 
     return this.mainGames;
   }
