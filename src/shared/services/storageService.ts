@@ -1,17 +1,19 @@
 class StorageService {
   getLocal<T>(key: string): null | T {
-    const value = sessionStorage.getItem(key);
-
+    const value = localStorage.getItem(key);
     return value && JSON.parse(value);
   }
 
   setLocal<T>(key: string, value: T) {
-    sessionStorage.setItem(key, JSON.stringify(value));
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  removeLocal(key: string) {
+    localStorage.removeItem(key);
   }
 
   getSession<T>(key: string): null | T {
     const value = sessionStorage.getItem(key);
-
     return value && JSON.parse(value);
   }
 

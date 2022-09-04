@@ -9,18 +9,14 @@ import { userService } from '../../../shared/services/userService';
 import { wordsApiService } from '../../../api/wordsApiService';
 import { statisticApiService } from '../../../api/statisticApiService';
 import { dateToday } from '../../../shared/services/dateService';
+import SprintLvl from './../sprint/sprint-levels';
 
 export default class Sprint {
   sprint: HTMLElement;
-
   container: HTMLElement;
-
   buttonsBox: HTMLElement;
-
   currentWord: IWord;
-
   isPush: boolean;
-
   timer: NodeJS.Timer;
 
   constructor(
@@ -40,7 +36,8 @@ export default class Sprint {
         clearInterval(this.timer);
         document.removeEventListener('keydown', this.findButton);
         this.sprint.remove();
-        new ResultSprint(this.root, this.storage).render();
+        new SprintLvl(this.root).render();
+        new ResultSprint(this.storage).render();
       } else {
         const strTimer = `${Math.trunc(this.seconds / 10)}`;
         if (timerShow) {
@@ -328,22 +325,22 @@ export default class Sprint {
       }
     }
 
-    const btnSound = document.querySelector('.sprint__button-sound');
+    const btnSound = this.sprint.querySelector('.sprint__button-sound');
     if (btnSound) {
       btnSound.addEventListener('click', this.pushBtnSound);
     }
 
-    const btnFalse = document.querySelector('.sprint__button-false');
+    const btnFalse = this.sprint.querySelector('.sprint__button-false');
     if (btnFalse) {
       btnFalse.addEventListener('click', this.pressLeft, { once: true });
     }
 
-    const btnTrue = document.querySelector('.sprint__button-true');
+    const btnTrue = this.sprint.querySelector('.sprint__button-true');
     if (btnTrue) {
       btnTrue.addEventListener('click', this.pressRight, { once: true });
     }
 
-    document.addEventListener('keydown', this.findButton);
+    this.sprint.addEventListener('keydown', this.findButton);
 
     return this.sprint;
   }

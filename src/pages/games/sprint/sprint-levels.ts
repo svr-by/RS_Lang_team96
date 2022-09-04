@@ -5,15 +5,10 @@ import { wordsApiService } from '../../../api/wordsApiService';
 
 export default class SprintLvl {
   readonly sprintLvl: HTMLElement;
-
   readonly container: HTMLElement;
-
   public wordsInGroup: IWord[];
-
   public storage: IStorage;
-
   public seconds: number;
-
   isPush: boolean;
 
   constructor(private readonly root: HTMLElement) {
@@ -34,7 +29,7 @@ export default class SprintLvl {
       score: 0,
       newWords: 0,
     };
-    this.seconds = 600;
+    this.seconds = 300;
     this.isPush = false;
   }
 

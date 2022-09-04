@@ -5,15 +5,10 @@ import { wordsApiService } from '../../../api/wordsApiService';
 
 export default class AudioChallangeLvl {
   audioChallangeLvl: HTMLElement;
-
   container: HTMLElement;
-
   wordsInGroup: IWord[];
-
   storage: IStorage;
-
   currentCountWord: string;
-
   isPush: boolean;
 
   constructor(private readonly root: HTMLElement) {

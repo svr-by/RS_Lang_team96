@@ -1,0 +1,9 @@
+.video {
+  margin: 3rem auto;
+  text-align: center;
+
+  &__player {
+    width: 720px;
+    height: 405px;
+  }
+}

@@ -39,14 +39,14 @@ class StartPage {
               <img src="assets/img/book.png" alt="Huge dictionary" class="card__img">
             </div>  
             <h4 class="card__title">Огромный словарь</h4>
-            <p class="card__text">В нашем словаре более 3500 слов</p>
+            <p class="card__text">В нашем словаре более 3500 популярных слов</p>
           </div>
           <div class="card">
             <div class="card__img-wrap">
               <img src="assets/img/stats.png" alt="Personal statistics" class="card__img">
             </div>  
-            <h4 class="card__title">Персональная статистика</h4>
-            <p class="card__text">Отслеживайте свой прогресс</p>
+            <h4 class="card__title">Cтатистика</h4>
+            <p class="card__text">Отслеживайте свой прогресс, мотивируйтесь</p>
           </div>
         </div> 
       </div>

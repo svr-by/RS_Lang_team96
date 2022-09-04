@@ -37,7 +37,7 @@ class UserService {
   }
 
   signOut() {
-    sessionStorage.removeItem('user');
+    storageService.removeLocal('user');
     app.header.renderloginElem();
     app.renderMain();
   }

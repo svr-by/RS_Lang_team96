@@ -4,12 +4,10 @@ import SprintLvl from './sprint/sprint-levels';
 
 export default class Games {
   readonly mainGames: HTMLElement;
-
   readonly audioGame: HTMLElement;
-
   readonly sprintGame: HTMLElement;
 
-  constructor(private readonly root: HTMLElement) {
+  constructor() {
     this.mainGames = document.createElement('div');
     this.audioGame = document.createElement('div');
     this.sprintGame = document.createElement('div');
@@ -17,24 +15,28 @@ export default class Games {
 
   pushBtnPlayAudio(target: HTMLElement | null): void {
     if (target && target.tagName === 'BUTTON') {
-      this.mainGames.remove();
-      new AudioChallangeLvl(this.root).render();
+      this.mainGames.innerHTML = '';
+      new AudioChallangeLvl(this.mainGames).render();
     }
   }
 
   pushBtnPlaySprint(target: HTMLElement | null): void {
     if (target && target.tagName === 'BUTTON') {
-      this.mainGames.remove();
-      new SprintLvl(this.root).render();
+      this.mainGames.innerHTML = '';
+      new SprintLvl(this.mainGames).render();
     }
   }
 
   render() {
-    this.root.appendChild(this.mainGames);
+    this.mainGames.innerHTML = '';
+    this.audioGame.innerHTML = '';
+    this.sprintGame.innerHTML = '';
+
     this.mainGames.classList.add('main__games');
 
     this.mainGames.appendChild(this.audioGame);
     this.audioGame.classList.add('main__games-audio');
+
     new BaseComponent(this.audioGame, 'div', ['game-audio__title'], 'audio challenge').render();
     new BaseComponent(
       this.audioGame,
