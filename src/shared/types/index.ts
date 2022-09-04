@@ -76,3 +76,9 @@ export type LevelType = {
   numbers: string;
   id: string;
 };
+
+export type GameStats = {
+  words: number;
+  right: number;
+  series: number;
+};

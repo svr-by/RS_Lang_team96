@@ -1,24 +1,34 @@
 import { IStatByGames } from '../../shared/interfaces';
+import { GameStats } from '../../shared/types';
 import { SignInResponse } from '../../shared/types';
 import { layoutService } from '../../shared/services/layoutService';
 import { storageService } from '../../shared/services/storageService';
 import { Modal } from '../../shared/components/modal';
-import { Chart } from 'chart.js';
-
-type GameStats = {
-  words: number;
-  right: number;
-  series: number;
-};
+import { Chart, ChartConfiguration, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 class StatsPage {
   elem: HTMLElement;
-  chart: HTMLCanvasElement;
+  canvas: HTMLCanvasElement;
+  chart: Chart;
+  chartConfig: ChartConfiguration;
 
   constructor() {
     this.elem = layoutService.createElement({ tag: 'div', classes: ['wrapper'] });
-    this.chart = document.createElement('canvas');
-    this.chart.id = 'myChart';
+    this.canvas = document.createElement('canvas');
+    this.canvas.id = 'myChart';
+    this.chartConfig = {
+      type: 'bar',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            data: [],
+          },
+        ],
+      },
+    };
+    this.chart = new Chart(this.canvas.getContext('2d') as CanvasRenderingContext2D, this.chartConfig);
   }
 
   render() {
@@ -74,7 +84,7 @@ class StatsPage {
         </div>
       </section>
     `;
-    // if (isUserSigin) this.renderChart();
+    if (isUserSigin) this.renderChart();
     return this.elem;
   }
 
@@ -106,6 +116,7 @@ class StatsPage {
 
   renderChart() {
     const longStats = layoutService.createElement({ tag: 'section', classes: ['long-stats'] });
+
     const title = layoutService.createElement({
       tag: 'h2',
       text: 'Долговременная статистика',
@@ -113,47 +124,19 @@ class StatsPage {
     });
     longStats.append(title);
 
-    const ctx = this.chart.getContext('2d');
-    if (ctx) {
-      console.log(ctx);
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-          datasets: [
-            {
-              label: '# of Votes',
-              data: [12, 19, 3, 5, 2, 3],
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-              ],
-              borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)',
-              ],
-              borderWidth: 1,
-            },
-          ],
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
-          },
-        },
-      });
-    }
-    longStats.append(this.chart);
+    const chartWrap = layoutService.createElement({ tag: 'div', classes: ['chart-wrap'] });
+    chartWrap.append(this.canvas);
+    longStats.append(chartWrap);
+
+    this.chartConfig.data.labels = ['30-08-2022', '31-08-2022', '01-09-2022', '02-09-2022', '03-09-2022', '04-09-2022'];
+    this.chartConfig.data.datasets = [
+      {
+        label: 'Количество новых слов',
+        backgroundColor: `#16b0e8`,
+        data: [12, 19, 21, 21, 25, 30],
+      },
+    ];
+
     this.elem.append(longStats);
   }
 }
