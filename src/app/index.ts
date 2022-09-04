@@ -6,22 +6,30 @@ import StartPage from '../pages/start';
 import Games from '../pages/games/games';
 import LayoutTextBook from '../pages/textbook/layoutTextBook';
 import DevsPage from '../pages/developers';
+import StatsPage from '../pages/statistics';
+import VideoPage from '../pages/video';
 
 class App {
   header: Header;
   footer: Footer;
   main: HTMLElement;
   startPage: StartPage;
-  private layoutTextBook: LayoutTextBook;
+  textBook: LayoutTextBook;
+  games: Games;
   devsPage: DevsPage;
+  statsPage: StatsPage;
+  videoPage: VideoPage;
 
   constructor() {
+    this.main = layoutService.createElement({ tag: 'main', classes: ['main'] });
     this.header = new Header();
     this.footer = new Footer();
-    this.main = layoutService.createElement({ tag: 'main', classes: ['main'] });
     this.startPage = new StartPage();
-    this.layoutTextBook = new LayoutTextBook();
+    this.textBook = new LayoutTextBook();
+    this.games = new Games();
     this.devsPage = new DevsPage();
+    this.statsPage = new StatsPage();
+    this.videoPage = new VideoPage();
     this.renderMain();
   }
 
@@ -34,29 +42,29 @@ class App {
   async renderMain() {
     this.main.innerHTML = '';
     const view = sessionStorage.getItem('view');
-    let mainContent: HTMLElement;
+    let mainContent: HTMLElement | undefined;
     switch (view) {
       case Views.textbook:
-        mainContent = await this.layoutTextBook.renderTextBook();
+        mainContent = await this.textBook.renderTextBook();
         break;
       case Views.games:
-        mainContent = new Games(this.main).render();
+        mainContent = this.games.render();
         break;
       case Views.statistics:
-        mainContent = layoutService.createElement({ tag: 'h1', text: 'Страница статистики' });
+        mainContent = this.statsPage.render();
         break;
       case Views.developers:
         mainContent = this.devsPage.render();
         break;
       case Views.video:
-        mainContent = layoutService.createElement({ tag: 'h1', text: 'Страница с видеообзором' });
+        mainContent = this.videoPage.render();
         break;
       case Views.start:
       default:
         mainContent = this.startPage.render();
         break;
     }
-    this.main.append(mainContent);
+    this.main.append(mainContent as HTMLElement);
   }
 }
 

@@ -1,28 +1,24 @@
 import BaseComponent from '../../../../shared/components/base_component';
+import { Modal } from '../../../../shared/components/modal';
 import StatWordsWrong from '../../../games/audio-challenge/components/result-wrong';
 import StatWordsAnswer from '../../../games/audio-challenge/components/result-answer';
-import { IStatistic, IStorage } from '../../../../shared/interfaces';
-import StatisticStorage from '../../../games/utility/statistics-storage';
-import { statisticApiService } from '../../../../api/statisticApiService';
+import { IStorage, IStatByGames } from '../../../../shared/interfaces';
+import { storageService } from '../../../../shared/services/storageService';
+import { userService } from '../../../../shared/services/userService';
+import { dateToday } from '../../../../shared/services/dateService';
 
 export default class ResultSprint {
-  // readonly api: API;
+  resultSprint: HTMLElement;
+  container: HTMLElement;
+  statisticBox: HTMLElement;
 
-  readonly resultSprint: HTMLElement;
-
-  readonly container: HTMLElement;
-
-  readonly statisticBox: HTMLElement;
-
-  constructor(private readonly root: HTMLElement, public storage: IStorage) {
+  constructor(public storage: IStorage) {
     this.resultSprint = document.createElement('div');
     this.container = document.createElement('div');
     this.statisticBox = document.createElement('div');
-    // this.api = new API();
   }
 
   async render() {
-    this.root.appendChild(this.resultSprint);
     this.resultSprint.classList.add('result');
 
     new BaseComponent(this.resultSprint, 'h2', ['result__title'], 'Result').render();
@@ -82,67 +78,58 @@ export default class ResultSprint {
     new StatWordsAnswer(this.container, this.storage).render();
     new StatWordsWrong(this.container, this.storage).render();
 
-    const userToken: string | null = localStorage.getItem('token');
-    const userID: string | null = localStorage.getItem('id');
+    const userId = userService.getStoredUserId();
+    if (userId) {
+      const userStatLS: IStatByGames | null = storageService.getSession('StatByGames');
 
-    if (userToken && userID) {
-      let userData = await statisticApiService.getUserStatistics(userID);
-      if (typeof userData !== 'boolean') {
-        userData = (await statisticApiService.getUserStatistics(userID)) as IStatistic;
-        userData.learnedWords += this.storage.countAnswerCorrect;
-        userData.optional.SprintCountAnswerCorrect += this.storage.countAnswerCorrect;
-        userData.optional.SprintCountAnswerWrong += this.storage.countAnswerWrong;
-        if (this.storage.setInRow.size > userData.optional.SprintInRow) {
-          userData.optional.SprintInRow = this.storage.setInRow.size;
-        }
-        const storage: IStatistic = {
-          learnedWords: userData.learnedWords,
-          optional: {
-            AudioCountAnswerCorrect: userData.optional.AudioCountAnswerCorrect,
-            AudioCountAnswerWrong: userData.optional.AudioCountAnswerWrong,
-            AudioInRow: userData.optional.AudioInRow,
-            SprintCountAnswerCorrect: userData.optional.SprintCountAnswerCorrect,
-            SprintCountAnswerWrong: userData.optional.SprintCountAnswerWrong,
-            SprintInRow: userData.optional.SprintInRow,
+      if (!userStatLS) {
+        const startUserStatLS: IStatByGames = {
+          allGamesRightPercent: Math.round((this.storage.countAnswerCorrect / 20) * 100),
+          allGamesRight: this.storage.countAnswerCorrect,
+          allGamesWrong: this.storage.countAnswerWrong,
+          allNewWords: this.storage.newWords,
+          date: dateToday,
+          games: {
+            audioCall: {
+              rightPercent: 0,
+              right: 0,
+              wrong: 0,
+              bestSeries: 0,
+              newWords: 0,
+            },
+            sprint: {
+              rightPercent: (this.storage.countAnswerCorrect / 20) * 100,
+              right: this.storage.countAnswerCorrect,
+              wrong: this.storage.countAnswerWrong,
+              bestSeries: this.storage.setInRow.size,
+              newWords: this.storage.newWords,
+            },
           },
         };
-        await statisticApiService.saveUserStatistics(userID, storage);
+
+        storageService.setSession('StatByGames', startUserStatLS);
       } else {
-        const storage: IStatistic = {
-          learnedWords: 0,
-          optional: {
-            AudioCountAnswerCorrect: 0,
-            AudioCountAnswerWrong: 0,
-            AudioInRow: 0,
-            SprintCountAnswerCorrect: 0,
-            SprintCountAnswerWrong: 0,
-            SprintInRow: 0,
-          },
-        };
-        await statisticApiService.saveUserStatistics(userID, storage);
-        userData = (await statisticApiService.getUserStatistics(userID)) as IStatistic;
-        userData.learnedWords += this.storage.countAnswerCorrect;
-        userData.optional.SprintCountAnswerCorrect += this.storage.countAnswerCorrect;
-        userData.optional.SprintCountAnswerWrong += this.storage.countAnswerWrong;
-        if (this.storage.setInRow.size > userData.optional.SprintInRow) {
-          userData.optional.SprintInRow = this.storage.setInRow.size;
-        }
-        await statisticApiService.saveUserStatistics(userID, userData);
-      }
-    } else {
-      StatisticStorage.learnedWords += this.storage.countAnswerCorrect;
-      StatisticStorage.optional.SprintCountAnswerCorrect += this.storage.countAnswerCorrect;
-      StatisticStorage.optional.SprintCountAnswerWrong += this.storage.countAnswerWrong;
-      if (this.storage.setInRow.size > StatisticStorage.optional.SprintInRow) {
-        StatisticStorage.optional.SprintInRow = this.storage.setInRow.size;
-      }
-    }
+        userStatLS.games.sprint.right += this.storage.countAnswerCorrect;
+        userStatLS.games.sprint.wrong += this.storage.countAnswerWrong;
+        userStatLS.games.sprint.bestSeries =
+          userStatLS.games.sprint.bestSeries < this.storage.setInRow.size
+            ? this.storage.setInRow.size
+            : userStatLS.games.sprint.bestSeries;
+        userStatLS.games.sprint.newWords += this.storage.newWords;
+        userStatLS.games.sprint.rightPercent = Math.round(
+          (userStatLS.games.sprint.right / (userStatLS.games.sprint.right + userStatLS.games.sprint.wrong)) * 100
+        );
+        userStatLS.date = dateToday;
+        userStatLS.allNewWords = userStatLS.games.audioCall.newWords + userStatLS.games.sprint.newWords;
+        userStatLS.allGamesWrong = userStatLS.games.audioCall.wrong + userStatLS.games.sprint.wrong;
+        userStatLS.allGamesRight = userStatLS.games.audioCall.right + userStatLS.games.sprint.right;
+        userStatLS.allGamesRightPercent = Math.round(
+          (userStatLS.allGamesRight / (userStatLS.allGamesRight + userStatLS.allGamesWrong)) * 100
+        );
 
-    StatisticStorage.learnedWords += this.storage.countAnswerCorrect;
-    StatisticStorage.optional.SprintCountAnswerCorrect += this.storage.countAnswerCorrect;
-    StatisticStorage.optional.SprintCountAnswerWrong += this.storage.countAnswerWrong;
-    if (this.storage.setInRow.size > StatisticStorage.optional.SprintInRow) {
-      StatisticStorage.optional.SprintInRow = this.storage.setInRow.size;
+        storageService.setSession('StatByGames', userStatLS);
+      }
     }
+    new Modal().showModal(this.resultSprint);
   }
 }
