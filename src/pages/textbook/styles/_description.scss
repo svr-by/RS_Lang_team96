@@ -12,51 +12,52 @@
   &__word {
     padding-left: 1rem;
     font-weight: bold;
-    font-size: 3rem;
+    font-size: 2rem;
   }
 
   &__word-translate {
     padding-left: 1rem;
-    font-size: 2.5rem;
+    font-size: 1.5rem;
   }
 
   .transcription {
     display: flex;
     padding-left: 1rem;
+    align-items: center;
 
     &__value {
-      font-size: 2.5rem;
+      font-size: 1.2rem;
       margin: 2px;
     }
 
     &__play {
-      width: 70px;
-      height: 60px;
+      width: 2.5rem;
+      height: 2.5rem;
       margin-left: 20px;
       border-radius: 1rem;
       cursor: pointer;
       &:hover {
         background-color: #c9c9c9;
-        box-shadow: 10px 5px 5px  #c9c9c9;
       }
     }
   }
 
   &__header {
     padding-left: 1rem;
-    font-size: 1.7rem;
+    font-size: 1.2rem;
     font-weight: bold;
   }
 
   &__text {
     padding-left: 1rem;
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 }
 
 .buttons {
   display: flex;
   justify-content: space-around;
+
   &__difficult-button {
     margin: 1rem 0 0 1rem;
     padding: 0.5rem;

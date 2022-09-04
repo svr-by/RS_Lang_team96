@@ -34,6 +34,21 @@
       background-color: $color-blue;
     }
   }
+
+  @media screen and (max-width: $small-screen) {
+    &__arrow-left,
+    &__arrow-right {
+      width: 1rem;
+    }
+
+    &__page {
+      width: 1rem;
+      height: 1rem;
+      line-height: 1rem;
+      margin: 0 5px;
+      font-size: 1rem;
+    }
+  }
 }
 
 .selected-page {
@@ -50,6 +65,12 @@
 .right-inactive {
   width: 2rem;
   fill: $secondary-grey;
+
+  @media screen and (max-width: $small-screen) {
+    & {
+      width: 1rem;
+    }
+  }
 }
 
 .right-inactive {

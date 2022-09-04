@@ -9,11 +9,11 @@
 
 
   &__header {
+    margin: 0;
+    padding-right: 1rem;
     font-family: Fira Sans, sans-serif;
     font-size: 2rem;
     border-right: solid 4px $color-grey-l;
-    padding-right: 1rem;
-    margin: 0;
 
     &:first-child {
       cursor: pointer;
@@ -68,9 +68,10 @@
   position: absolute;
   width: 200px;
   border-radius: 1rem;
-  top: 2%;
-  left: 55%;
+  top: 80px;
+  left: 170px;
   background-color: $yellow-vocabulary;
+
   &__header {
     margin: 1rem 0 1rem 1rem;
   }
@@ -79,12 +80,14 @@
 .russian-on-off {
   display: flex;
   margin: 1rem;
+
   &__description {
     cursor: pointer;
     font-size: 1rem;
     padding: 0.1rem;
     border-radius: 0.5rem;
   }
+
   &__checkbox {
     position: absolute;
     z-index: -1;
@@ -109,6 +112,7 @@
         background-size: 50% 50%;
       }
     }
+    
     &:checked+label::before{
       border-color: #0b76ef;
       background-color: #0b76ef;
