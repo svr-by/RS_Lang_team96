@@ -1,18 +1,15 @@
 import BaseComponent from '../../../shared/components/base_component';
 import AudioChallange from '../audio-challenge/audio-challenge';
 import { IWord, IStorage } from '../../../shared/interfaces';
-import getWords from '../utility/get-words';
+import { wordsApiService } from '../../../api/wordsApiService';
 
 export default class AudioChallangeLvl {
-  readonly audioChallangeLvl: HTMLElement;
-
-  readonly container: HTMLElement;
-
-  public wordsInGroup: IWord[];
-
-  public storage: IStorage;
-
-  public currentCountWord: string;
+  audioChallangeLvl: HTMLElement;
+  container: HTMLElement;
+  wordsInGroup: IWord[];
+  storage: IStorage;
+  currentCountWord: string;
+  isPush: boolean;
 
   constructor(private readonly root: HTMLElement) {
     this.audioChallangeLvl = document.createElement('div');
@@ -30,22 +27,27 @@ export default class AudioChallangeLvl {
       namesAnswerWrongTranslate: [],
       namesAnswerWrongSound: [],
       score: 0,
+      newWords: 0,
     };
     this.currentCountWord = '1';
+    this.isPush = false;
   }
 
-  async addListenerToButtonLvl(target: HTMLElement | null): Promise<void> {
-    if (target && target.tagName === 'DIV') {
-      if (target.dataset.group) {
-        const arrPromisesFromPages30: Promise<IWord[]>[] = [];
-        for (let i = 0; i < 30; i += 1) {
-          const promiseFromPage = getWords(target.dataset.group, `${i}`);
-          arrPromisesFromPages30.push(promiseFromPage);
+  async addListenerToButtonLvl(target: HTMLElement): Promise<void> {
+    if (!this.isPush) {
+      this.isPush = true;
+      if (target && target.tagName === 'DIV') {
+        if (target.dataset.group) {
+          const arrPromisesFromPages30: Promise<IWord[]>[] = [];
+          for (let i = 0; i < 30; i += 1) {
+            const promiseFromPage = wordsApiService.getWords(+target.dataset.group, i) as Promise<IWord[]>;
+            arrPromisesFromPages30.push(promiseFromPage);
+          }
+          const arrOfArrsWords = await Promise.all(arrPromisesFromPages30);
+          this.wordsInGroup = arrOfArrsWords.reduce((a, b) => a.concat(b));
+          this.audioChallangeLvl.remove();
+          new AudioChallange(this.root, this.wordsInGroup, this.currentCountWord, this.storage).render();
         }
-        const arrOfArrsWords = await Promise.all(arrPromisesFromPages30);
-        this.wordsInGroup = arrOfArrsWords.reduce((a, b) => a.concat(b));
-        this.audioChallangeLvl.remove();
-        new AudioChallange(this.root, this.wordsInGroup, this.currentCountWord, this.storage).render();
       }
     }
   }
@@ -88,7 +90,9 @@ export default class AudioChallangeLvl {
       .render()
       .setAttribute('data-group', '5');
 
-    this.container.addEventListener('click', ({ target }) => this.addListenerToButtonLvl(target as HTMLElement));
+    this.container.addEventListener('click', ({ target }) => this.addListenerToButtonLvl(target as HTMLElement), {
+      once: true,
+    });
 
     return this.audioChallangeLvl;
   }

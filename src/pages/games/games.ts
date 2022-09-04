@@ -4,12 +4,10 @@ import SprintLvl from './sprint/sprint-levels';
 
 export default class Games {
   readonly mainGames: HTMLElement;
-
   readonly audioGame: HTMLElement;
-
   readonly sprintGame: HTMLElement;
 
-  constructor(private readonly root: HTMLElement) {
+  constructor() {
     this.mainGames = document.createElement('div');
     this.audioGame = document.createElement('div');
     this.sprintGame = document.createElement('div');
@@ -17,24 +15,28 @@ export default class Games {
 
   pushBtnPlayAudio(target: HTMLElement | null): void {
     if (target && target.tagName === 'BUTTON') {
-      this.mainGames.remove();
-      new AudioChallangeLvl(this.root).render();
+      this.mainGames.innerHTML = '';
+      new AudioChallangeLvl(this.mainGames).render();
     }
   }
 
   pushBtnPlaySprint(target: HTMLElement | null): void {
     if (target && target.tagName === 'BUTTON') {
-      this.mainGames.remove();
-      new SprintLvl(this.root).render();
+      this.mainGames.innerHTML = '';
+      new SprintLvl(this.mainGames).render();
     }
   }
 
   render() {
-    this.root.appendChild(this.mainGames);
+    this.mainGames.innerHTML = '';
+    this.audioGame.innerHTML = '';
+    this.sprintGame.innerHTML = '';
+
     this.mainGames.classList.add('main__games');
 
     this.mainGames.appendChild(this.audioGame);
     this.audioGame.classList.add('main__games-audio');
+
     new BaseComponent(this.audioGame, 'div', ['game-audio__title'], 'audio challenge').render();
     new BaseComponent(
       this.audioGame,
@@ -42,9 +44,9 @@ export default class Games {
       ['game-audio__description'],
       'A word is voiced to you, and you choose the correct translation'
     ).render();
-    new BaseComponent(this.audioGame, 'button', ['game-audio__play'], 'play')
+    new BaseComponent(this.audioGame, 'button', ['game-audio__play'], 'start')
       .render()
-      .addEventListener('click', ({ target }) => this.pushBtnPlayAudio(target as HTMLElement));
+      .addEventListener('click', ({ target }) => this.pushBtnPlayAudio(target as HTMLElement), { once: true });
 
     this.mainGames.appendChild(this.sprintGame);
     this.sprintGame.classList.add('main__games-sprint');
@@ -53,11 +55,11 @@ export default class Games {
       this.sprintGame,
       'div',
       ['game-sprint__description'],
-      'In 10 seconds you have to answer the maximum number of correctly translated words'
+      'In 60 seconds you have to answer the maximum number of correctly translated words'
     ).render();
-    new BaseComponent(this.sprintGame, 'button', ['game-sprint__play'], 'play')
+    new BaseComponent(this.sprintGame, 'button', ['game-sprint__play'], 'start')
       .render()
-      .addEventListener('click', ({ target }) => this.pushBtnPlaySprint(target as HTMLElement));
+      .addEventListener('click', ({ target }) => this.pushBtnPlaySprint(target as HTMLElement), { once: true });
 
     return this.mainGames;
   }

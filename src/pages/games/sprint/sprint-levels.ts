@@ -1,18 +1,15 @@
 import BaseComponent from '../../../shared/components/base_component';
-import { IWord, IStorage } from '../../../shared/interfaces';
-import getWords from '../../games/utility/get-words';
 import Sprint from './sprint';
+import { IWord, IStorage } from '../../../shared/interfaces';
+import { wordsApiService } from '../../../api/wordsApiService';
 
 export default class SprintLvl {
   readonly sprintLvl: HTMLElement;
-
   readonly container: HTMLElement;
-
   public wordsInGroup: IWord[];
-
   public storage: IStorage;
-
   public seconds: number;
+  isPush: boolean;
 
   constructor(private readonly root: HTMLElement) {
     this.sprintLvl = document.createElement('div');
@@ -30,22 +27,27 @@ export default class SprintLvl {
       namesAnswerWrongTranslate: [],
       namesAnswerWrongSound: [],
       score: 0,
+      newWords: 0,
     };
-    this.seconds = 100;
+    this.seconds = 300;
+    this.isPush = false;
   }
 
   async addListenerToButtonLvl(target: HTMLElement | null) {
-    if (target && target.tagName === 'DIV') {
-      if (target.dataset.group) {
-        const arrPromisesFromPages30: Promise<IWord[]>[] = [];
-        for (let i = 0; i < 30; i += 1) {
-          const promiseFromPage = getWords(target.dataset.group, `${i}`);
-          arrPromisesFromPages30.push(promiseFromPage);
+    if (!this.isPush) {
+      this.isPush = true;
+      if (target && target.tagName === 'DIV') {
+        if (target.dataset.group) {
+          const arrPromisesFromPages30: Promise<IWord[]>[] = [];
+          for (let i = 0; i < 30; i += 1) {
+            const promiseFromPage = wordsApiService.getWords(+target.dataset.group, i) as Promise<IWord[]>;
+            arrPromisesFromPages30.push(promiseFromPage);
+          }
+          const arrOfArrsWords = await Promise.all(arrPromisesFromPages30);
+          this.wordsInGroup = arrOfArrsWords.reduce((a, b) => a.concat(b));
+          this.sprintLvl.remove();
+          new Sprint(this.root, this.wordsInGroup, this.storage, this.seconds).render();
         }
-        const arrOfArrsWords = await Promise.all(arrPromisesFromPages30);
-        this.wordsInGroup = arrOfArrsWords.reduce((a, b) => a.concat(b));
-        this.sprintLvl.remove();
-        new Sprint(this.root, this.wordsInGroup, this.storage, this.seconds).render();
       }
     }
   }
@@ -78,7 +80,9 @@ export default class SprintLvl {
       .render()
       .setAttribute('data-group', '5');
 
-    this.container.addEventListener('click', ({ target }) => this.addListenerToButtonLvl(target as HTMLElement));
+    this.container.addEventListener('click', ({ target }) => this.addListenerToButtonLvl(target as HTMLElement), {
+      once: true,
+    });
 
     return this.sprintLvl;
   }
