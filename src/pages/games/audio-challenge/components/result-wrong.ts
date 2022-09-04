@@ -24,7 +24,7 @@ export default class StatWordsWrong {
     this.statWordsWrong.classList.add('result-wrong');
 
     new BaseComponent(this.statWordsWrong, 'div', ['result-wrong__minus']).render();
-    new BaseComponent(this.statWordsWrong, 'h2', ['result-wrong__name'], 'Wrong').render();
+    new BaseComponent(this.statWordsWrong, 'h2', ['result-wrong__name'], 'Ошибки').render();
     for (let i = 0; i < this.storage.namesAnswerWrong.length; i += 1) {
       new BaseComponent(
         this.statWordsWrong,

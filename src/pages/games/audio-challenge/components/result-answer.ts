@@ -23,7 +23,7 @@ export default class StatWordsAnswer {
     this.statWordsAnswer.classList.add('result-answer');
 
     new BaseComponent(this.statWordsAnswer, 'div', ['result-answer__plus']).render();
-    new BaseComponent(this.statWordsAnswer, 'h2', ['result-answer__name'], 'Right').render();
+    new BaseComponent(this.statWordsAnswer, 'h2', ['result-answer__name'], 'Правильно').render();
     for (let i = 0; i < this.storage.namesAnswerCorrect.length; i += 1) {
       new BaseComponent(
         this.statWordsAnswer,

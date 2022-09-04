@@ -21,7 +21,7 @@ export default class Result {
   render() {
     this.result.classList.add('result');
 
-    new BaseComponent(this.result, 'h2', ['result__title'], 'Result').render();
+    new BaseComponent(this.result, 'h2', ['result__title'], 'Результаты').render();
 
     this.result.appendChild(this.container);
     this.container.classList.add('result__container');
@@ -32,31 +32,31 @@ export default class Result {
       this.statisticBox,
       'div',
       ['result__accuracy'],
-      '<span clas = "result__num">Accuracy</span>'
+      '<span clas = "result__num">Точность: </span>'
     ).render();
     new BaseComponent(
       this.statisticBox,
       'div',
       ['result__accuracyNum'],
-      `<span clas = 'result__num'>${Math.round((this.storage.countAnswerCorrect / 20) * 100)}</span> %`
+      `<span clas = 'result__num'>${Math.round((this.storage.countAnswerCorrect / 20) * 100)}</span> %, `
     ).render();
     new BaseComponent(
       this.statisticBox,
       'div',
       ['result__correct'],
-      `<span clas = 'result__num'>${this.storage.countAnswerCorrect}</span> - Right answers`
+      `<span clas = 'result__num'>${this.storage.countAnswerCorrect}</span> - правильных ответов, `
     ).render();
     new BaseComponent(
       this.statisticBox,
       'div',
       ['result__in-row'],
-      `<span clas = 'result__num'>${this.storage.setInRow.size}</span> - In a row`
+      `<span clas = 'result__num'>${this.storage.setInRow.size}</span> - серия, `
     ).render();
     new BaseComponent(
       this.statisticBox,
       'div',
       ['result__wrong'],
-      `<span clas = 'result__num'>${this.storage.countAnswerWrong}</span> - Mistakes`
+      `<span clas = 'result__num'>${this.storage.countAnswerWrong}</span> - ошибки.`
     ).render();
 
     new StatWordsAnswer(this.container, this.storage).render();

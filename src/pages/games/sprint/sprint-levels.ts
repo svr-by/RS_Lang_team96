@@ -56,8 +56,8 @@ export default class SprintLvl {
     this.root.appendChild(this.sprintLvl);
     this.sprintLvl.classList.add('main__games__sprint-levels');
 
-    new BaseComponent(this.sprintLvl, 'h2', ['main__games__sprint-levels__head'], 'Sprint').render();
-    new BaseComponent(this.sprintLvl, 'h3', ['main__games__sprint-levels__title'], 'Select the Level').render();
+    new BaseComponent(this.sprintLvl, 'h2', ['main__games__sprint-levels__head'], '"Спринт"').render();
+    new BaseComponent(this.sprintLvl, 'h3', ['main__games__sprint-levels__title'], 'Выберите уровень:').render();
 
     this.sprintLvl.appendChild(this.container);
     this.container.classList.add('main__games__sprint-levels__container');

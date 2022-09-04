@@ -60,13 +60,13 @@ export default class AudioChallangeLvl {
       this.audioChallangeLvl,
       'h2',
       ['main__games__audio-challange-levels__head'],
-      'Audio challenge'
+      '"Аудиовызов"'
     ).render();
     new BaseComponent(
       this.audioChallangeLvl,
       'h3',
       ['main__games__audio-challange-levels__title'],
-      'Select the Level'
+      'Выберите уровень:'
     ).render();
 
     this.audioChallangeLvl.appendChild(this.container);
