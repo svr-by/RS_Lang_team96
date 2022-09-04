@@ -55,19 +55,21 @@
 }
 
 .buttons {
+  margin: 1rem 0 0;
   display: flex;
   justify-content: space-around;
 
   &__difficult-button {
-    margin: 1rem 0 0 1rem;
     padding: 0.5rem;
-    background-color: $background-book-element-hover;
+    background-color: $color-grey;
     border: none;
     border-radius: 1rem;
     cursor: pointer;
-    transition: background-color 0.5s;
+    // transition: background-color 0.5s;
+
     &:hover {
-      background-color: $dark-grey;
+      color: $color-white;
+      background-color: $color-blue;
     }
   }
 }

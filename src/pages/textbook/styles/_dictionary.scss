@@ -18,13 +18,15 @@
   &__value {
     display: flex;
     flex-wrap: wrap;
-    width: 60%;
-    gap: 1rem;
+    align-content: flex-start;
+    width: 65%;
+    column-gap: 1rem;
+    row-gap: 2rem;
     margin-bottom: 1rem;
   }
 
   &__description {
-    width: 40%;
+    width: 35%;
     background-color: $background-book-element;
     border-radius: 7rem 0.2rem 0.5rem 0.5rem;
     margin-bottom: 1rem;
@@ -115,7 +117,12 @@
 }
 
 .hard-word {
-  border: 3px solid $color-red;
+  border: 1px solid $color-grey;
+  background-image: url(assets/img/hard.png);
+  background-size: 2rem;
+  background-repeat: no-repeat;
+  background-position: top right;
+  
 }
 
 .learned-word {
@@ -129,65 +136,6 @@
   radial-gradient(ellipse farthest-corner at left top, #ffffff 0%, #ffffac 8%, #d1b464 25%, #5d4a1f 62.5%, #5d4a1f 100%);
   border-radius: 0.5rem;
 }
-
-// .content {
-//   border-radius: 7rem 0.2rem 0.2rem 0.2rem;
-
-//   &__image {
-//     width: 100%;
-//     max-height: 400px;
-//     border-radius: 7rem 0.2rem;
-//   }
-
-//   &__word {
-//     margin: 0.5rem 0;
-//     padding: 0 1rem;
-//     font-weight: bold;
-//     font-size: 2rem;
-//   }
-
-//   &__word-translate {
-//     margin: 0.5rem 0;
-//     padding: 0 1rem;
-//     font-size: 1.5rem;
-//   }
-
-//   .transcription {
-//     display: flex;
-//     padding: 0 1rem;
-
-//     &__value {
-//       font-size: 1.2rem;
-//       margin: 0.5rem 0;
-//     }
-
-//     &__play {
-//       width: 2.5rem;
-//       height: 2.5rem;
-//       padding: 0.5rem;
-//       margin-left: 1rem;
-//       border-radius: 1rem;
-//       cursor: pointer;
-
-//       &:hover {
-//         background-color: $color-black-xl;
-//       }
-//     }
-//   }
-
-//   &__header {
-//     margin: 0 0 1rem 0;
-//     padding: 0 1rem;
-//     font-size: 1.2rem;
-//     font-weight: bold;
-//   }
-
-//   &__text {
-//     margin: 0 0 0.8rem 0;
-//     padding: 0 1rem;
-//     font-size: 1rem;
-//   }
-// }
 
 .word-background {
   color: $color-white;

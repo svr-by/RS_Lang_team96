@@ -131,7 +131,7 @@ export class Header {
 
     window.addEventListener('resize', () => {
       const burger = document.querySelector('.burger') as HTMLElement;
-      if (burger.classList.contains('open')) {
+      if (burger && burger.classList.contains('open')) {
         closeMenu();
       }
     });

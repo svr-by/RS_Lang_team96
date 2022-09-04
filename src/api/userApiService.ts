@@ -1,11 +1,11 @@
 import { User, UserParams, SignInResponse } from '../shared/types';
-import { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { storageService } from '../shared/services/storageService';
 import { api } from './api';
 
 class UserApiService {
   async createUser(body: User): Promise<User | string | undefined> {
-    const response = await api.axiosInstance.post(`${api.usersEndpoint}`, body).catch((error: AxiosError) => {
+    const response = await axios.post(`${api.usersEndpoint}`, body).catch((error: AxiosError) => {
       switch (error.response?.status) {
         case 417:
           return 'Пользователь уже существует.';
@@ -15,7 +15,7 @@ class UserApiService {
           return 'Извините, непредвиденная ошибка.';
       }
     });
-
+    console.log('response', response, 'typeof response', typeof response);
     if (response && typeof response === 'string') {
       return response;
     } else if (response) {
@@ -24,7 +24,7 @@ class UserApiService {
   }
 
   async signIn(body: UserParams): Promise<SignInResponse | string | undefined> {
-    const response = await api.axiosInstance.post(`${api.signinEndpoint}`, body).catch((error: AxiosError) => {
+    const response = await axios.post(`${api.signinEndpoint}`, body).catch((error: AxiosError) => {
       switch (error.response?.status) {
         case 403:
           return 'Не верный e-mail или пароль.';
@@ -34,7 +34,7 @@ class UserApiService {
           return 'Извините, непредвиденная ошибка.';
       }
     });
-
+    console.log('response', response, 'typeof response', typeof response);
     if (response && typeof response === 'string') {
       return response;
     } else if (response) {
