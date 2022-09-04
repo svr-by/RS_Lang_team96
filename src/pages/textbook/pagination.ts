@@ -51,7 +51,11 @@ class Pagination {
       if ((event.target as HTMLElement).id === 'pagination-seven') {
         storageService.setSession('pageNumber', +(event.target as HTMLElement).innerText - 1);
       }
-      if ((event.target as HTMLElement).id === 'pagination-arrow-right' && count < 29) {
+      if (
+        ((event.target as HTMLElement).id === 'pagination-arrow-right' ||
+          ((event.target as HTMLElement).parentElement as HTMLElement).id === 'pagination-arrow-right') &&
+        count < 29
+      ) {
         storageService.setSession('pageNumber', +count + 1);
       }
     }
