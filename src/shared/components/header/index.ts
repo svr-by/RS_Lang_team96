@@ -16,8 +16,7 @@ export class Header {
     this.loginElem = layoutService.createElement({ tag: 'div', classes: ['login'] });
     this.loginBtn = new Button('Войти', ['login__btn', 'button']);
     this.loginWindow = new Authorization();
-    this.addLinkListeners();
-    this.addBtnListeners();
+    this.addListeners();
     this.render();
   }
 
@@ -49,6 +48,13 @@ export class Header {
             <a id="${NavLinks.developers}" class="nav__link" href="">Разработчики</a>
           </li>
         </ul>
+      </div>
+      <div class="burger">
+        <div class="line line1"></div>
+        <div class="line line2"></div>
+        <div class="line line3"></div>
+      </div>
+      <div class="background"></div>
     `;
 
     this.renderloginElem();
@@ -73,7 +79,27 @@ export class Header {
     this.loginElem.append(this.loginBtn.elem);
   }
 
-  private addBtnListeners() {
+  private addListeners() {
+    function toggleMenu() {
+      const burger = document.querySelector('.burger') as HTMLElement;
+      const nav = document.querySelector('.nav') as HTMLElement;
+      const background = document.querySelector('.background') as HTMLElement;
+      burger.classList.toggle('open');
+      nav.classList.toggle('open');
+      background.classList.toggle('visible');
+      document.body.classList.toggle('noscroll');
+    }
+
+    function closeMenu() {
+      const burger = document.querySelector('.burger') as HTMLElement;
+      const nav = document.querySelector('.nav') as HTMLElement;
+      const background = document.querySelector('.background') as HTMLElement;
+      burger.classList.remove('open');
+      nav.classList.remove('open');
+      background.classList.remove('visible');
+      document.body.classList.remove('noscroll');
+    }
+
     this.loginBtn.elem.addEventListener('click', () => {
       if (this.loginBtn.elem.id === 'logInBtn') {
         this.loginWindow.render();
@@ -82,20 +108,31 @@ export class Header {
         userService.signOut();
       }
     });
-  }
 
-  private addLinkListeners() {
     this.elem.addEventListener('click', (event) => {
       const target = event.target as HTMLElement;
 
       if (target.classList.contains('logo__img')) {
         event.preventDefault();
         navigationService.followLink(NavLinks.start);
+        closeMenu();
       }
 
       if (target.classList.contains('nav__link')) {
         event.preventDefault();
         navigationService.followLink(target.id);
+        closeMenu();
+      }
+
+      if (target.closest('.burger')) {
+        toggleMenu();
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      const burger = document.querySelector('.burger') as HTMLElement;
+      if (burger.classList.contains('open')) {
+        closeMenu();
       }
     });
   }
