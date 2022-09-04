@@ -11,6 +11,8 @@ import { statisticApiService } from '../../../api/statisticApiService';
 import { dateToday } from '../../../shared/services/dateService';
 
 export default class AudioChallange {
+  wrapper: HTMLElement;
+
   audioChallange: HTMLElement;
 
   containerPanel: HTMLElement;
@@ -25,6 +27,7 @@ export default class AudioChallange {
     public currentCountWord: string,
     public storage: IStorage
   ) {
+    this.wrapper = document.createElement('div');
     this.audioChallange = document.createElement('div');
     this.containerPanel = document.createElement('div');
     this.wordsInGroup = wordsInGroup;
@@ -43,11 +46,11 @@ export default class AudioChallange {
 
   pushBtnSkipNext(target: HTMLElement | null) {
     if (target && target.tagName === 'DIV') {
-      const audioChallange: HTMLElement | null = document.querySelector('.main__games__audio-challange');
+      const wrapper: HTMLElement | null = document.querySelector('.main__games__wrapper');
       const main: HTMLElement | null = document.querySelector('.main');
-      if (audioChallange && main) {
+      if (wrapper && main) {
         this.currentCountWord = (+this.currentCountWord + 1).toString();
-        audioChallange.remove();
+        wrapper.remove();
         if (+this.currentCountWord > 20) {
           new Result(main, this.storage).render();
         } else {
@@ -146,7 +149,9 @@ export default class AudioChallange {
   }
 
   async render() {
-    this.root.appendChild(this.audioChallange);
+    this.root.appendChild(this.wrapper);
+    this.wrapper.classList.add('main__games__wrapper');
+    this.wrapper.appendChild(this.audioChallange);
     this.audioChallange.classList.add('main__games__audio-challange');
 
     new BaseComponent(this.audioChallange, 'img', ['main__games__audio-challange-img'])

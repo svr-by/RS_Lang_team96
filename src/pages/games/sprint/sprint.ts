@@ -11,6 +11,8 @@ import { statisticApiService } from '../../../api/statisticApiService';
 import { dateToday } from '../../../shared/services/dateService';
 
 export default class Sprint {
+  wrapper: HTMLElement;
+
   sprint: HTMLElement;
 
   container: HTMLElement;
@@ -29,6 +31,7 @@ export default class Sprint {
     public storage: IStorage,
     public seconds: number
   ) {
+    this.wrapper = document.createElement('div');
     this.sprint = document.createElement('div');
     this.container = document.createElement('div');
     this.buttonsBox = document.createElement('div');
@@ -39,7 +42,8 @@ export default class Sprint {
       if (this.seconds <= 0) {
         clearInterval(this.timer);
         document.removeEventListener('keydown', this.findButton);
-        this.sprint.remove();
+        const wrapper: HTMLElement | null = document.querySelector('.main__games__wrapper');
+        if (wrapper) this.wrapper.remove();
         new ResultSprint(this.root, this.storage).render();
       } else {
         const strTimer = `${Math.trunc(this.seconds / 10)}`;
@@ -131,13 +135,14 @@ export default class Sprint {
             }
           }
         }
+
         const counterScore = document.querySelector('.sprint__score');
         if (counterScore) {
           counterScore.innerHTML = `${this.storage.score}`;
         }
         clearInterval(this.timer);
-
-        this.sprint.remove();
+        const wrapper: HTMLElement | null = document.querySelector('.main__games__wrapper');
+        if (wrapper) this.wrapper.remove();
         new Sprint(this.root, this.wordsInGroup, this.storage, this.seconds).render();
       }
     }
@@ -221,7 +226,8 @@ export default class Sprint {
         }
         clearInterval(this.timer);
 
-        this.sprint.remove();
+        const wrapper: HTMLElement | null = document.querySelector('.main__games__wrapper');
+        if (wrapper) this.wrapper.remove();
         new Sprint(this.root, this.wordsInGroup, this.storage, this.seconds).render();
       }
     }
@@ -237,7 +243,9 @@ export default class Sprint {
   };
 
   async render() {
-    this.root.appendChild(this.sprint);
+    this.root.appendChild(this.wrapper);
+    this.wrapper.classList.add('main__games__wrapper');
+    this.wrapper.appendChild(this.sprint);
     this.sprint.classList.add('sprint');
     new BaseComponent(this.sprint, 'h2', ['sprint__timer'], `${Math.trunc(this.seconds / 10)}`).render();
 

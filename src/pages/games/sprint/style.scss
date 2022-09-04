@@ -2,7 +2,13 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  flex: 1;
+  padding: 2rem;
+}
+
+.sprint__timer {
+  margin: 0;
+  font-style: italic;
+  color: #FF8C0E;
 }
 
 .sprint__container {
@@ -16,7 +22,9 @@
 }
 
 .sprint__score {
+  margin: 0;
   font-size: 6rem;
+  color: #16AEE8;
 }
 
 .sprint__card-box {
@@ -25,8 +33,8 @@
   align-items: center;
   width: 450px;
   height: 400px;
-  background-color: #8b7ee17e;
-  border-radius: 25px;
+  background-color: #e7e7e7;
+  box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
 }
 
 .sprint__panel {
@@ -45,52 +53,52 @@
 }
 
 .sprint__img-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100px;
-  height: 100px;
-  font-family: 'Kalam';
-  font-size: 4rem;
-}
-
-.sprint__word {
-  margin-top: 5%;
+  margin: 5%;
+  font-style: italic;
   font-size: 2rem;
 }
 
+.sprint__word {
+  margin: 2%;
+  font-size: 2.5rem;
+}
+
+.sprint__simbol {
+  margin: 0;
+}
+
 .sprint__translate {
-  margin-top: 5%;
+  margin: 0;
+  font-style: italic;
+  font-size: 2.2rem;
+  color: #0e1eff;
 }
 
 .sprint__buttons-box {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: center;
+}
+
+.sprint__button-false,
+.sprint__button-true {
+  margin: 2%;
+  width: 110px;
+  height: 50px;
+  font-size: 1.5rem;
+  text-align: center;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
+  cursor: pointer;
 }
 
 .sprint__button-false {
   background-color: #fd0000;
-  width: 110px;
-  height: 50px;
-  font-size: 1.5rem;
-  text-align: center;
-  border: none;
-  border-radius: 10px;
-  box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
-  cursor: pointer;
 }
 
 .sprint__button-true {
   background-color: #08aa05;
-  width: 110px;
-  height: 50px;
-  font-size: 1.5rem;
-  text-align: center;
-  border: none;
-  border-radius: 10px;
-  box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
-  cursor: pointer;
 }
 
 .sprint__button-false:hover,

@@ -25,6 +25,7 @@ export default class CardBox {
     new BaseComponent(this.cardBox, 'div', ['sprint__img-box']).render();
     new BaseComponent(this.cardBox, 'div', ['sprint__button-sound']).render();
     new BaseComponent(this.cardBox, 'h3', ['sprint__word'], `${this.currentWord.word}`).render();
+    new BaseComponent(this.cardBox, 'h3', ['sprint__simbol'], '=').render();
 
     const randomNum = Math.floor(Math.random() * 600);
     if (randomNum === 0 || randomNum % 2 === 0) {

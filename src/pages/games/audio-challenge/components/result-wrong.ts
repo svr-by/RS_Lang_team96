@@ -30,7 +30,7 @@ export default class StatWordsWrong {
         this.statWordsWrong,
         'section',
         ['result-wrong__container'],
-        `<div class = "result__sound-wrong"  data-ind = "${i}"></div><span class = "result__word">${this.storage.namesAnswerWrong[i]}</span><span class = "result__trans"> - ${this.storage.namesAnswerWrongTranslate[i]}</span>`
+        `<div class = "result__sound-wrong"  data-ind = "${i}"></div><span class = "result__word">${this.storage.namesAnswerWrong[i]}</span><span class = "result__translate"> - ${this.storage.namesAnswerWrongTranslate[i]}</span>`
       ).render();
     }
 
