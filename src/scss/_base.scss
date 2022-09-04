@@ -1,6 +1,7 @@
 html {  
   box-sizing: border-box;
   scroll-behavior: smooth;
+  height: 100%;
 }
 
 * {
@@ -11,11 +12,11 @@ html {
 body {
   @include flex(flex-start, stretch, column);
   min-height: 100vh;
+  height: 100%;
 }
 
 main {
   flex-grow: 1;
-  @include flex(center, stretch)
 }
 
 .wrapper {

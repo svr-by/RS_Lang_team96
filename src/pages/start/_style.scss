@@ -1,5 +1,6 @@
 .start__wrapper {
   width: 100%;
+  height: 100%;
   background: linear-gradient( $color-blue 0%, $color-black-l 100%);
   overflow: hidden;
 }
@@ -15,24 +16,25 @@
   color: $color-white;
   line-height: 2;
   text-align: center;
-}
 
-.text-block__title {
-  margin: 0 0 2rem 0;
-  font-family: Fira Sans,sans-serif;
-  font-size: 3rem;
-  font-weight: 800;
-}
 
-.text-block__text {
-  margin: 0 0 3rem 0;
-}
+  &__title {
+    margin: 0 0 2rem 0;
+    font-family: Fira Sans,sans-serif;
+    font-size: 3rem;
+    font-weight: 800;
+  }
 
-.text-block__btn {
-  background-color: transparent;
-  border: 2px solid $color-white;
-  color: $color-white;
-  font-size: 1.125rem;
+  &__text {
+    margin: 0 0 3rem 0;
+  }
+
+  &__btn {
+    background-color: transparent;
+    border: 2px solid $color-white;
+    color: $color-white;
+    font-size: 1.125rem;
+  }
 }
 
 .cards-block {
@@ -46,32 +48,34 @@
   width: 20%;
   @include flex(flex-start, center, column);
   text-align: center;
-}
 
-.card__img-wrap {
-  width: 6rem;
-  margin: 0;
-  flex-grow: 1;
-}
 
-.card__img {
-  width: 100%;
-  cursor: pointer;
-  transition: all 0.3s;
-
-  &:hover {
-    transform: scale(1.1);
+  &__img-wrap {
+    width: 6rem;
+    margin: 0;
   }
-}
 
-.card__title {
-  margin: 1rem 0;
-  font-size: 1rem;
-  font-weight: 400;
-  text-transform: uppercase;
-}
+  &__img {
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.3s;
 
-.card__text {
-  margin: 0 auto;
-  font-size: 0.875rem;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  &__title {
+    margin: 1rem 0;
+    flex-grow: 1;
+    font-size: 1rem;
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+
+  &__text {
+    margin: 0 auto;
+    flex-grow: 1;
+    font-size: 0.875rem;
+  }
 }
