@@ -50,7 +50,15 @@ class LayoutTextBook {
         <div class='games'>
           <h2 class='games__header'>Игры</h2>
           <p class='games__description'>Закрепи новые слова при помощи игр</p>
-          <div class='games__links'></div>
+          <div class='links'>
+            <div class='links__unactive display-none'></div>
+            <div class='links__audio-challenge' id='links-to-audio-challenge'>
+              <img src="assets/img/audio-challenge.png" alt="audio-challenge" class="links__img">
+            </div>
+            <div class='links__sprint' id='links-to-sprint'>
+              <img src="assets/img/sprint.png" alt="sprint" class="links__img">
+            </div>
+          </div>
         </div>
       </div>
     `;
@@ -88,6 +96,16 @@ class LayoutTextBook {
           this.modeSwitching(event, textBook);
         }
       });
+    }
+
+    const linksToAudioChallenge = textBook.querySelector('#links-to-audio-challenge');
+    if (linksToAudioChallenge) {
+      linksToAudioChallenge.addEventListener('click', () => this.linksToGame());
+    }
+
+    const linksToSprint = textBook.querySelector('#links-to-sprint');
+    if (linksToSprint) {
+      linksToSprint.addEventListener('click', () => this.linksToGame());
     }
 
     return textBook;
@@ -287,6 +305,10 @@ class LayoutTextBook {
       },
       true
     );
+  }
+
+  linksToGame() {
+    console.log(123);
   }
 }
 
