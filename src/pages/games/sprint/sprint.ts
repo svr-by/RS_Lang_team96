@@ -214,7 +214,7 @@ export default class Sprint {
         }
         const counterScore = document.querySelector('.sprint__score');
         if (counterScore) {
-          counterScore.innerHTML = `${this.storage.score}`;
+          counterScore.innerHTML = `баллы ${this.storage.score}`;
         }
         clearInterval(this.timer);
 

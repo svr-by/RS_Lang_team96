@@ -7,6 +7,8 @@
 }
 
 .sprint__timer {
+  width: 5rem;
+  height: 5rem;
   margin: 0;
   padding: 1rem;
   font-size: 2rem;
@@ -28,17 +30,26 @@
 
 .sprint__score {
   margin: 1rem auto;
-  font-size: 2.5rem;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+
+  &::before {
+    content: 'баллы ';
+  }
 }
 
 .sprint__card-box {
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 450px;
-  height: 400px;
-  background-color: #8b7ee17e;
+  background-color: $color-grey-xl;
   border-radius: 25px;
+
+  @media screen and (max-width: $small-screen) {
+    width: 250px;
+  }
 }
 
 .sprint__panel {
@@ -53,7 +64,7 @@
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  background-color: #fd0000;
+  background-color: $color-blue;
 }
 
 .sprint__img-box {
@@ -62,17 +73,16 @@
   align-items: center;
   width: 100px;
   height: 100px;
-  font-family: 'Kalam';
   font-size: 4rem;
 }
 
 .sprint__word {
-  margin-top: 5%;
+  margin: 1rem auto;
   font-size: 2rem;
 }
 
 .sprint__translate {
-  margin-top: 5%;
+  margin: 0;
 }
 
 .sprint__buttons-box {
@@ -83,39 +93,39 @@
 }
 
 .sprint__button-false {
-  background-color: #fd0000;
+  background-color: $color-red;
   width: 110px;
   height: 50px;
   font-size: 1.5rem;
   text-align: center;
   border: none;
   border-radius: 10px;
-  box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
+  // box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
   cursor: pointer;
 }
 
 .sprint__button-true {
-  background-color: #08aa05;
+  background-color: $color-green;
   width: 110px;
   height: 50px;
   font-size: 1.5rem;
   text-align: center;
   border: none;
   border-radius: 10px;
-  box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
+  // box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
   cursor: pointer;
 }
 
 .sprint__button-false:hover,
 .sprint__button-true:hover {
-  transform: translateY(-3px);
+  transform: scale(1.1);
   transition: 0.4s;
-  box-shadow: 10px 10px 10px 0px rgba(34, 60, 80, 0.55);
+  // box-shadow: 10px 10px 10px 0px rgba(34, 60, 80, 0.55);
 }
 
 .sprint__button-false:active,
 .sprint__button-true:active {
-  transform: translateY(5px);
+  transform: scale(1.1);
   transition: 0.1s;
-  box-shadow: 0px 0px 0px 0px rgba(34, 60, 80, 0.55);
+  // box-shadow: 0px 0px 0px 0px rgba(34, 60, 80, 0.55);
 }

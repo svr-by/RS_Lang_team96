@@ -37,4 +37,10 @@ main {
   font-family: Fira Sans,sans-serif;
   font-size: 2rem;
   text-align: center;
+
+  @media screen and (max-width: $mobile) {
+    & {
+      font-size: 1.5rem;
+    }
+  }
 }
