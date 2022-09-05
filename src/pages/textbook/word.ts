@@ -25,6 +25,10 @@ class Word {
         <p class = 'word__russian russian'>${wordTranslate}</p>
         `;
 
+    if (storageService.getSession('sect') === 'difficult words') {
+      this.newWord.classList.add('hard-word');
+    }
+
     if (this.hardWords) {
       if (this.hardWords.find((item) => item._id === id)) {
         this.newWord.classList.add('hard-word');
