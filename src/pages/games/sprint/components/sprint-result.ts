@@ -6,6 +6,7 @@ import { IStorage, IStatByGames } from '../../../../shared/interfaces';
 import { storageService } from '../../../../shared/services/storageService';
 import { userService } from '../../../../shared/services/userService';
 import { dateToday } from '../../../../shared/services/dateService';
+import { Views } from '../../../../shared/enums';
 
 export default class ResultSprint {
   resultSprint: HTMLElement;
@@ -130,6 +131,10 @@ export default class ResultSprint {
         storageService.setSession('StatByGames', userStatLS);
       }
     }
-    new Modal().showModal(this.resultSprint);
+    const view = sessionStorage.getItem('view');
+
+    if (view === Views.games) {
+      new Modal().showModal(this.resultSprint);
+    }
   }
 }

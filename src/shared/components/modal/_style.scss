@@ -5,12 +5,15 @@
   z-index: 10;
   width: 100vw;
   height: 100vh;
+  overflow-y: auto;
   @include flex(center, center);
   background: rgba(41, 41, 41, 0.6);
 
   &__wrapper {
     position: relative;
     max-width: 900px;
+    max-height: 100vh;
+    overflow-y: auto;
     margin: 1rem;
     padding: 3rem;
     @include flex();

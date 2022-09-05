@@ -53,6 +53,7 @@ export default class SprintLvl {
   }
 
   render(): HTMLElement {
+    this.root.innerHTML = '';
     this.root.appendChild(this.sprintLvl);
     this.sprintLvl.classList.add('main__games__sprint-levels');
 
