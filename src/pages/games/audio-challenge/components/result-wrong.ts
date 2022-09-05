@@ -34,7 +34,7 @@ export default class StatWordsWrong {
       ).render();
     }
 
-    const btnSound: NodeListOf<Element> = document.querySelectorAll('.result__sound-wrong');
+    const btnSound: NodeListOf<Element> = this.statWordsWrong.querySelectorAll('.result__sound-wrong');
     if (btnSound) {
       btnSound.forEach((el) =>
         el.addEventListener('click', ({ target }) => this.playSoundWordWrong(target as HTMLElement))

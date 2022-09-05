@@ -44,19 +44,19 @@ export default class Result {
       this.statisticBox,
       'div',
       ['result__correct'],
-      `<span clas = 'result__num'>${this.storage.countAnswerCorrect}</span> - правильных ответов, `
+      `верно: <span clas = 'result__num'>${this.storage.countAnswerCorrect}</span>, `
     ).render();
     new BaseComponent(
       this.statisticBox,
       'div',
       ['result__in-row'],
-      `<span clas = 'result__num'>${this.storage.setInRow.size}</span> - серия, `
+      `серия ответов: <span clas = 'result__num'>${this.storage.setInRow.size}</span>, `
     ).render();
     new BaseComponent(
       this.statisticBox,
       'div',
       ['result__wrong'],
-      `<span clas = 'result__num'>${this.storage.countAnswerWrong}</span> - ошибки.`
+      `ошибки: <span clas = 'result__num'>${this.storage.countAnswerWrong}</span>.`
     ).render();
 
     new StatWordsAnswer(this.container, this.storage).render();

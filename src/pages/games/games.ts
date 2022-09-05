@@ -40,12 +40,12 @@ export default class Games {
     this.mainGames.appendChild(this.audioGame);
     this.audioGame.classList.add('main__games-audio');
 
-    new BaseComponent(this.audioGame, 'div', ['game-audio__title'], '"Аудиовызов"').render();
+    new BaseComponent(this.audioGame, 'div', ['game-audio__title'], 'Аудиовызов').render();
     new BaseComponent(
       this.audioGame,
       'div',
       ['game-audio__description'],
-      'Тренирует восприятие английских слов на слух'
+      'Тренировка на слуховое восприятие английских слов'
     ).render();
     new BaseComponent(this.audioGame, 'button', ['game-audio__play'], 'Играть')
       .render()
@@ -53,12 +53,12 @@ export default class Games {
 
     this.mainGames.appendChild(this.sprintGame);
     this.sprintGame.classList.add('main__games-sprint');
-    new BaseComponent(this.sprintGame, 'div', ['game-sprint__title'], '"Спринт"').render();
+    new BaseComponent(this.sprintGame, 'div', ['game-sprint__title'], 'Спринт').render();
     new BaseComponent(
       this.sprintGame,
       'div',
       ['game-sprint__description'],
-      'Тренировка на быстрое воспроизвдение слов из памяти'
+      'Тренировка на быстрое воспроизведение слов из памяти'
     ).render();
     new BaseComponent(this.sprintGame, 'button', ['game-sprint__play'], 'Играть')
       .render()

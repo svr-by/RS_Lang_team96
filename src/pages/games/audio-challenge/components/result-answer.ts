@@ -33,7 +33,7 @@ export default class StatWordsAnswer {
       ).render();
     }
 
-    const btnSound: NodeListOf<Element> = document.querySelectorAll('.result__sound-answer');
+    const btnSound: NodeListOf<Element> = this.statWordsAnswer.querySelectorAll('.result__sound-answer');
     if (btnSound) {
       btnSound.forEach((el) =>
         el.addEventListener('click', ({ target }) => this.playSoundWordAnswer(target as HTMLElement))
