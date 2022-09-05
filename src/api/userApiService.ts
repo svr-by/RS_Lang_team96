@@ -15,7 +15,6 @@ class UserApiService {
           return 'Извините, непредвиденная ошибка.';
       }
     });
-    console.log('response', response, 'typeof response', typeof response);
     if (response && typeof response === 'string') {
       return response;
     } else if (response) {
@@ -34,7 +33,6 @@ class UserApiService {
           return 'Извините, непредвиденная ошибка.';
       }
     });
-    console.log('response', response, 'typeof response', typeof response);
     if (response && typeof response === 'string') {
       return response;
     } else if (response) {

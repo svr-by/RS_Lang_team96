@@ -1,6 +1,5 @@
 .main__games {
   width: 100%;
-  height: 100%;
   padding: 2rem;
   display: flex;
   justify-content: space-around;
@@ -20,6 +19,7 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  gap: 1rem;
   min-height: 40vh;
   padding: 3rem 2rem;
   border-radius: 1.8rem;
@@ -34,6 +34,22 @@
     padding: 2rem 1rem;
     font-size: 1rem;
   }
+}
+
+.game-sprint__icon,
+.game-audio__icon {
+  width: 150px;
+  height: 150px;
+  flex-grow: 1;
+}
+.game-sprint__icon {
+  background: no-repeat center url('assets/img/sprint-game.png');
+  background-size: contain;
+}
+
+.game-audio__icon {
+  background: no-repeat center url('assets/img/audio-game.png');
+  background-size: contain;
 }
 
 .game-audio__title,

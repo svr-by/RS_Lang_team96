@@ -47,6 +47,7 @@ export default class Games {
       ['game-audio__description'],
       'Тренировка на слуховое восприятие английских слов'
     ).render();
+    new BaseComponent(this.audioGame, 'div', ['game-audio__icon']).render();
     new BaseComponent(this.audioGame, 'button', ['game-audio__play'], 'Играть')
       .render()
       .addEventListener('click', ({ target }) => this.pushBtnPlayAudio(target as HTMLElement), { once: true });
@@ -60,6 +61,7 @@ export default class Games {
       ['game-sprint__description'],
       'Тренировка на быстрое воспроизведение слов из памяти'
     ).render();
+    new BaseComponent(this.sprintGame, 'div', ['game-sprint__icon']).render();
     new BaseComponent(this.sprintGame, 'button', ['game-sprint__play'], 'Играть')
       .render()
       .addEventListener('click', ({ target }) => this.pushBtnPlaySprint(target as HTMLElement), { once: true });

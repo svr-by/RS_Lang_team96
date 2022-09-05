@@ -47,22 +47,28 @@ class App {
     switch (view) {
       case Views.textbook:
         mainContent = await this.textBook.renderTextBook();
+        this.footer.elem.hidden = false;
         break;
       case Views.games:
         mainContent = this.games.render();
+        this.footer.elem.hidden = true;
         break;
       case Views.statistics:
         mainContent = this.statsPage.render();
+        this.footer.elem.hidden = false;
         break;
       case Views.developers:
         mainContent = this.devsPage.render();
+        this.footer.elem.hidden = false;
         break;
       case Views.video:
         mainContent = this.videoPage.render();
+        this.footer.elem.hidden = false;
         break;
       case Views.start:
       default:
         mainContent = this.startPage.render();
+        this.footer.elem.hidden = false;
         break;
     }
     this.main.append(mainContent as HTMLElement);
