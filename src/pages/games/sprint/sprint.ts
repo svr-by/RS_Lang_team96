@@ -214,7 +214,7 @@ export default class Sprint {
         }
         const counterScore = document.querySelector('.sprint__score');
         if (counterScore) {
-          counterScore.innerHTML = `${this.storage.score}`;
+          counterScore.innerHTML = `баллы ${this.storage.score}`;
         }
         clearInterval(this.timer);
 
@@ -234,6 +234,7 @@ export default class Sprint {
   };
 
   async render() {
+    this.root.innerHTML = '';
     this.root.appendChild(this.sprint);
     this.sprint.classList.add('sprint');
     new BaseComponent(this.sprint, 'h2', ['sprint__timer'], `${Math.trunc(this.seconds / 10)}`).render();

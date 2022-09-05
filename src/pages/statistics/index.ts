@@ -4,8 +4,10 @@ import { SignInResponse } from '../../shared/types';
 import { layoutService } from '../../shared/services/layoutService';
 import { storageService } from '../../shared/services/storageService';
 import { dateToday } from '../../shared/services/dateService';
+import { statisticApiService } from '../../api/statisticApiService';
 import { Modal } from '../../shared/components/modal';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
+import { userService } from '../../shared/services/userService';
 Chart.register(...registerables);
 
 class StatsPage {
@@ -108,7 +110,7 @@ class StatsPage {
     new Modal().showModal(mess);
   }
 
-  renderChart() {
+  async renderChart() {
     const longStats = layoutService.createElement({ tag: 'section', classes: ['long-stats'] });
 
     const title = layoutService.createElement({
@@ -122,20 +124,17 @@ class StatsPage {
     chartWrap.append(this.canvas);
     longStats.append(chartWrap);
 
-    this.chartConfig.data.labels = [
-      '30-08-2022',
-      '31-08-2022',
-      '01-09-2022',
-      '02-09-2022',
-      '03-09-2022',
-      '04-09-2022',
-      '05-09-2022',
-    ];
+    const userId = userService.getStoredUserId();
+    const userStats = await statisticApiService.getUserStatistics(userId);
+    const dates = userStats?.optional ? Object.keys(userStats.optional) : [];
+    const words = userStats?.optional ? Object.values(userStats.optional) : [];
+
+    this.chartConfig.data.labels = dates;
     this.chartConfig.data.datasets = [
       {
         label: 'Количество новых слов',
         backgroundColor: `#16b0e8`,
-        data: [12, 19, 21, 21, 25, 30, 35],
+        data: words,
       },
     ];
 

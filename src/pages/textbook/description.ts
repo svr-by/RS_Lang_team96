@@ -44,26 +44,14 @@ class Description {
         <p class='content__text russian'>${item.textExampleTranslate}</p>
         <div class='${storageService.getLocal('user') ? 'gaming-response' : 'display-none'}'>
           <div class='audio-call game'>
-            <p class='game__name'>Аудио-вызов</p>
-            <div class='game__text'>
-              <p class='game__correct-text'>Угаданно верно:</p>
-              <p class='game__correct-number' id='audio-call-correct'>0</p>
-            </div>
-            <div class='game__text'>
-              <p class='game__correct-text'>Ошибался:</p>
-              <p class='game__correct-number' id='audio-call-was-wrong'>0</p>
-            </div>
+            <p class='game__name'>Аудио-вызов: 
+            <span id='audio-call-correct'>0</span> из <span id='audio-call-was-wrong'>0</span>
+            </p>
           </div>
           <div class='sprint-results game'>
-            <p class='game__name'>Спринт</p>
-            <div class='game__text'>
-              <p class='game__correct-text'>Угаданно верно:</p>
-              <p class='game__correct-number' id='sprint-correct'>0</p>
-            </div>
-            <div class='game__text'>
-              <p class='game__correct-text'>Ошибался:</p>
-              <p class='game__correct-number' id='sprint-was-wrong'>0</p>
-            </div>
+            <p class='game__name'>Спринт: 
+              <span id='sprint-correct'>0</span> из <span id='sprint-was-wrong'>0</span>
+            </p>
           </div>
         </div>
       `;

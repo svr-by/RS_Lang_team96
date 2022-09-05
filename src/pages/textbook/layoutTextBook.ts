@@ -11,6 +11,7 @@ import { storageService } from '../../shared/services/storageService';
 import { SignInResponse } from '../../shared/types';
 import AudioChallange from '../games/audio-challenge/audio-challenge';
 import Sprint from '../games/sprint/sprint';
+import { Views } from '../../shared/enums';
 
 class LayoutTextBook {
   private svg: Svg;
@@ -58,7 +59,7 @@ class LayoutTextBook {
           }' id='studied-words'>Изученные слова</h2>
           ${this.svg.settingsSvg('#ffef4f', 'header-and-settings__settings', 'settings')}
         </div>
-        <h3 class='levels-header'>Уровни сложности слов</h3>
+        
         <div class='levels' id='levels'></div>
         <div class='words'>
           <h2 class='words__header'>Слова</h2>
@@ -68,18 +69,13 @@ class LayoutTextBook {
           </div>
         </div>
         <div class='page-navigation' id='pagination'></div>
-        <div class='games'>
-          <h2 class='games__header'>Игры</h2>
-          <p class='games__description'>Закрепи новые слова при помощи игр</p>
-          <div class='links'>
-            <div class='links__unactive display-none'></div>
-            <div class='links__audio-challenge' id='links-to-audio-challenge'>
-              <img src="assets/img/audio-challenge.png" alt="audio-challenge" class="links__img">
-            </div>
-            <div class='links__sprint' id='links-to-sprint'>
-              <img src="assets/img/sprint.png" alt="sprint" class="links__img">
-            </div>
-          </div>
+
+        <div class='${storageService.getLocal('user') ? 'games' : 'display-none'}'>
+          <p class='games__description'>Закрепи новые слова при помощи игр 
+            <span class='links__audio-challenge' id='links-to-audio-challenge'>Аудиовызов</span>
+            и 
+            <span class='links__audio-challenge' id='links-to-sprint'>Спринт</span>
+          </p>
         </div>
       </div>
     `;
@@ -344,10 +340,20 @@ class LayoutTextBook {
     if (textBook) textBook.remove();
     const main: HTMLElement | null = document.querySelector('.main');
     if (main && game === 'AudioChalenge') {
-      await new AudioChallange(main, this.wordsInGroup, this.currentCountWord, this.storage).render();
+      main.innerHTML = '';
+      sessionStorage.setItem('view', Views.games);
+      const mainGames = document.createElement('div');
+      mainGames.classList.add('main__games');
+      main.append(mainGames);
+      await new AudioChallange(mainGames, this.wordsInGroup, this.currentCountWord, this.storage).render();
     }
     if (main && game === 'Sprint') {
-      await new Sprint(main, this.wordsInGroup, this.storage, 600).render();
+      main.innerHTML = '';
+      sessionStorage.setItem('view', Views.games);
+      const mainGames = document.createElement('div');
+      mainGames.classList.add('main__games');
+      main.append(mainGames);
+      await new Sprint(mainGames, this.wordsInGroup, this.storage, 600).render();
     }
   }
 }

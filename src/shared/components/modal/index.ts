@@ -17,12 +17,10 @@ export class Modal {
     wrapper.append(removeBtn);
     this.elem.append(wrapper);
     document.body.append(this.elem);
-    document.body.classList.add('noscroll');
   }
 
   closeModal() {
     this.elem.remove();
-    document.body.classList.remove('noscroll');
   }
 
   private closeModalHandler(event: Event) {
