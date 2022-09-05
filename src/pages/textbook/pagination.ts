@@ -62,8 +62,8 @@ class Pagination {
 
     if (
       (event.target as HTMLElement).innerText !== '...' &&
-      (event.target as HTMLElement).classList.contains('left-inactive') &&
-      (event.target as HTMLElement).classList.contains('right-inactive')
+      !(event.target as HTMLElement).classList.contains('left-inactive') &&
+      !(event.target as HTMLElement).classList.contains('right-inactive')
     ) {
       this.render();
     }
@@ -71,8 +71,8 @@ class Pagination {
     const newPage: number | null = storageService.getSession('pageNumber');
     (newPage || newPage === 0) &&
       (event.target as HTMLElement).innerText !== '...' &&
-      (event.target as HTMLElement).classList.contains('left-inactive') &&
-      (event.target as HTMLElement).classList.contains('right-inactive') &&
+      !(event.target as HTMLElement).classList.contains('left-inactive') &&
+      !(event.target as HTMLElement).classList.contains('right-inactive') &&
       this.layoutTextBook.addWords(newPage, group, this.textBook);
   }
 
