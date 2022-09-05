@@ -161,11 +161,14 @@ class Description {
     const learnedWords = document.querySelectorAll('.learned-word');
     const numberElements = hardWords.length + learnedWords.length;
     const words = document.querySelector('.words');
+    const curtainLinks = document.querySelector('.links__unactive');
     if (numberElements === 20) {
       const selectedPage = document.querySelector('.selected-page');
       selectedPage && selectedPage.classList.add('learned-page');
       words && words.classList.add('learned-words-background');
+      curtainLinks && curtainLinks.classList.remove('display-none');
     } else {
+      curtainLinks && curtainLinks.classList.add('display-none');
       words && words.classList.remove('learned-words-background');
     }
   }
