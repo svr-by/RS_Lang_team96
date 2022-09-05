@@ -17,7 +17,6 @@ class StartPage {
         <div class="text-block">
           <h2 class="text-block__title">Учите английский легко!</h2>
           <p class="text-block__text">Приложение для изучения иностранных слов в игровой форме. Всегда под рукой. На любом устройстве.</p>
-          <button class="button text-block__btn">Видеообзор</button>
         </div>
         <div class="cards-block">
           <div class="card">
