@@ -9,11 +9,11 @@
 
 .levels {
   display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
   gap: 0.5rem;
 }
+
 
 .level {
   width: 15%;
@@ -66,34 +66,47 @@
     align-self: center;
     text-align: right;
   }
+
+  @media screen and (max-width: $mobile) {
+    & {
+      width: 45%;
+    }
+  }
+  @media screen and (max-width: $small-screen) {
+    & {
+      width: 100%;
+
+    }
+  }
 }
+
 
 .hover-a1,
 .permanent-a1 .level__value  {
-  background-color: #b5f8cb;
+  background-color: $color-level-a1;
 }
 
 .hover-a2,
 .permanent-a2 .level__value {
-  background-color: #96ebb3;
+  background-color: $color-level-a2;
 }
 
 .hover-b1,
 .permanent-b1 .level__value {
-  background-color: #70d794;
+  background-color: $color-level-b1;
 }
 
 .hover-b2,
 .permanent-b2 .level__value {
-  background-color: #4dbb73;
+  background-color: $color-level-b2;
 }
 
 .hover-c1,
 .permanent-c1 .level__value {
-  background-color: #34a95d;
+  background-color: $color-level-c1;
 }
 
 .hover-c2,
 .permanent-c2 .level__value {
-  background-color: #0f8739;
+  background-color: $color-level-c2;
 }

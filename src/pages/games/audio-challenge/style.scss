@@ -11,14 +11,22 @@
 
 .main__games__audio-challange-levels__head,
 .main__games__sprint-levels__head {
-  font-family: 'Kalam';
-  font-size: 4rem;
+  font-family: "Gilroy";
+  text-transform: uppercase;
+  font-size: 3rem;
+
+  @media screen and (max-width: $mobile) {
+    font-size: 2rem;
+  }
 }
 
 .main__games__audio-challange-levels__title,
 .main__games__sprint-levels__title {
-  font-family: 'Roboto';
   font-size: 2rem;
+
+  @media screen and (max-width: $mobile) {
+    font-size: 1.5rem;
+  }
 }
 
 .main__games__audio-challange-levels__container,
@@ -26,7 +34,14 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 400px;
+  align-items: center;
+  gap: 2rem;
+
+  @media screen and (max-width: $mobile) {
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center
+  }
 }
 
 .main__games__audio-challange-levels-group,
@@ -34,20 +49,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 40px;
-  width: 40px;
-  font-family: 'Roboto';
-  font-weight: 900;
+  gap: 1rem;
+  height: 60px;
+  width: 60px;
+  font-weight: 800;
   font-size: 1.5rem;
-  border-radius: 50%;
-  background-color: #A63E00;
+  border-radius: 1rem;
   cursor: pointer;
+
+  @media screen and (max-width: $mobile) {
+    height: 40px;
+    width: 40px;
+    font-size: 1rem;
+  }
 }
 
 .main__games__audio-challange-levels-group:hover,
 .main__games__sprint-levels-group:hover {
-  transform: scale(1.5);
-  transition: 0.4s;
+  background-color: $color-grey;
+  color: $color-white;
 }
 
 .main__games__audio-challange-levels__back,
@@ -57,7 +77,6 @@
   justify-content: center;
   height: 40px;
   width: 120px;
-  font-family: 'Roboto';
   font-weight: 900;
   font-size: 1.2rem;
   background-color: #A63E00;
@@ -67,27 +86,27 @@
 
 
 .lvl-1 {
-  background: #6051c340
+  background: $color-level-a1;
 }
 
 .lvl-2 {
-  background: #6051c350
+  background: $color-level-a2;
 }
 
 .lvl-3 {
-  background: #6051c360
+  background: $color-level-b1;
 }
 
 .lvl-4 {
-  background: #6051c370
+  background: $color-level-b2;
 }
 
 .lvl-5 {
-  background: #6051c380
+  background: $color-level-c1;
 }
 
 .lvl-6 {
-  background: #6051c390
+  background: $color-level-c2;
 }
 
 
@@ -100,23 +119,29 @@
   align-items: center;
   width: 100%;
   height: 100%;
+  gap: 1rem;
   flex-grow: 1;
 }
 
 .main__games__audio-challange-img {
-  width: 390px;
-  height: 260px;
-  background-color: #7375D8;
+  width: 300px;
+  height: 200px;
+  object-fit: contain;
+  margin: 1rem;
+  border-radius: 1rem;
+
+  @media screen and (max-width: $mobile) {
+    width: 80%;
+  }
 }
 
 .sprint__button-sound,
 .main__games__audio-challange-buttonSound {
-  width: 80px;
-  height: 80px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background: no-repeat center url('assets/svg/sound.svg');
-  background-color: #7375D8;
-  box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
+  background-color: $color-green;
   cursor: pointer;
 }
 
@@ -126,9 +151,8 @@
 .main__games__audio-challange-buttonSkip:hover,
 .main__games__audio-challange-buttonNext:hover,
 .main__games__audio-challange__buttonAnswer:hover {
-  transform: translateY(-3px);
-  transition: 0.4s;
-  box-shadow: 10px 10px 10px 0px rgba(34, 60, 80, 0.55);
+  transform: scale(1.1);
+  transition: 0.3s;
 }
 
 .sprint__button-sound:active,
@@ -137,9 +161,8 @@
 .main__games__audio-challange-buttonSkip:active,
 .main__games__audio-challange-buttonNext:active,
 .main__games__audio-challange__buttonAnswer:active {
-  transform: translateY(5px);
-  transition: 0.1s;
-  box-shadow: 0px 0px 0px 0px rgba(34, 60, 80, 0.55);
+  transform: scale(1.1);
+  transition: 0.3s;
 }
 
 
@@ -149,10 +172,9 @@
   justify-content: center;
   width: 100px;
   height: 40px;
-  font-size: 1.7rem;
-  border-radius: 10px;
-  background-color: #FF4040;
-  box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
+  font-size: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: $color-green;
   cursor: pointer;
 }
 
@@ -162,18 +184,24 @@
   justify-content: center;
   width: 100px;
   height: 40px;
-  font-size: 1.7rem;
-  border-radius: 10px;
-  background-color: #00CC00;
-  box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
+  font-size: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: $color-green;
   cursor: pointer;
 }
 
 .main__games__audio-challange__answerBox {
+  margin: 2rem 0;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  align-items: center;
+  gap: 1rem;
   width: 100%;
+
+  @media screen and (max-width: $mobile) {
+    flex-direction: column;
+  }
 }
 
 .main__games__audio-challange__buttonAnswer {
@@ -182,24 +210,27 @@
   align-items: center;
   justify-content: center;
   width: 240px;
-  height: 80px;
-  font-size: 1.5rem;
+  height: 50px;
+  font-size: 1rem;
   text-align: center;
   border-radius: 10px;
-  background-color: #7375D8;
-  box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
+  background-color: $color-blue;
+  gap: 0.5rem;
   cursor: pointer;
+
+  @media screen and (max-width: $mobile) {
+    flex-direction: row;
+  }
 }
 
 .main__games__audio-challange__buttonAnswer[data-answer='yes'] {
-  font-size: 1.3rem;
-  background-color: #00CC00;
-  transform: scale(1.5);
+  font-size: 1rem;
+  background-color: $color-green;
   transition: 0.2s;
 }
 
 .main__games__audio-challange__buttonAnswer[data-answer='no'] {
-  background-color: #FF0000;
+  background-color:  $color-red;
 }
 
 .main__games__audio-challange__containerPanel {
@@ -223,7 +254,7 @@
 }
 
 .main__games__audio-challange__containerPanel-counter {
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .main__games__audio-challange__containerPanel-fullScreen {
@@ -247,9 +278,8 @@
 }
 
 .result__title {
-  margin-bottom: 25px;
-  font-family: 'Kalam';
-  font-size: 4rem;
+  margin: 0 auto 1rem;
+  font-size: 2rem;
   text-align: center;
 }
 
@@ -257,41 +287,47 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 2rem;
 }
 
 .result__statistic-box {
   display: flex;
-  flex-direction: column;
-}
-
-.result__accuracy,
-.result__accuracyNum {
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
   align-self: center;
-  font-family: 'Roboto';
-  font-weight: 400;
-  font-size: 4rem;
-}
-
-.result__correct,
-.result__in-row,
-.result__wrong {
-  align-self: center;
-  font-family: 'Roboto';
+  font-size: 1rem;
   font-weight: 600;
-  font-size: 2rem;
+  text-transform: uppercase;
+  gap: 1rem;
+
+  @media screen and (max-width: $mobile) {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .result-answer,
 .result-wrong {
   display: flex;
   flex-direction: column;
+  width: 45%;
+  background-color: $color-grey-xl;
+  border-radius: 1rem;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+
+  @media screen and (max-width: $mobile) {
+    width: 100%;
+  }
 }
 
 .result-answer__plus,
 .result-wrong__minus {
-  width: 35px;
-  height: 35px;
+  width: 25px;
+  height: 25px;
   align-self: center;
+  background-repeat: no-repeat;
 
 }
 
@@ -306,6 +342,8 @@
 .result-answer__name,
 .result-wrong__name {
   align-self: center;
+  font-size: 1.2rem;
+  margin: 1rem 0;
 }
 
 .result-answer__container,
@@ -313,28 +351,27 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  height: 32px;
-  font-size: 1.5rem;
+  flex-wrap: wrap;
+  font-size: 1rem;
 }
 
 .result__sound-wrong,
 .result__sound-answer {
   width: 30px;
   height: 30px;
-  margin-right: 5px;
-  border-radius: 2px;
-  background-color: #8c7ecc9a;
+  margin-right: 1rem;
+  border-radius: 25%;
   background-image: url(assets/svg/speaker.svg);
+  cursor: pointer;
 }
 
 .result__sound-wrong:hover,
 .result__sound-answer:hover {
-  background-color: #67E667;
+  background-color: $color-grey;
 }
 
 .result__sound-wrong:active,
 .result__sound-answer:active {
-  background-color: #67E667;
   transform: scale(0.8);
 }
 

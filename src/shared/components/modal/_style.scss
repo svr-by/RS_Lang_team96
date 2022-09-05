@@ -11,6 +11,7 @@
   &__wrapper {
     position: relative;
     max-width: 900px;
+    margin: 1rem;
     padding: 3rem;
     @include flex();
     background-color: $color-white;

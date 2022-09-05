@@ -7,7 +7,7 @@ class DevsPage {
   team: TeamMember[];
 
   constructor() {
-    this.elem = layoutService.createElement({ tag: 'div', classes: ['devs__wrapper'] });
+    this.elem = layoutService.createElement({ tag: 'div', classes: ['wrapper'] });
     this.mentor = new TeamMember({
       name: 'Катерина',
       pesp: 'Всесторонняя поддержка проекта',
@@ -39,7 +39,7 @@ class DevsPage {
 
   render() {
     this.elem.innerHTML = '';
-    const wrapper = layoutService.createElement({ tag: 'div', classes: ['wrapper'] });
+    const wrapper = layoutService.createElement({ tag: 'div', classes: ['wrapper-devs'] });
     const pageTitle = layoutService.createElement({ tag: 'h2', text: 'Наша команда', classes: ['page-title'] });
     wrapper.append(pageTitle);
     const devs = layoutService.createElement({ tag: 'div', classes: ['devs'] });

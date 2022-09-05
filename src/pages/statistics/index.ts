@@ -66,7 +66,7 @@ class StatsPage {
           <div class="stats__numbers">
             <div class="stats__index">
               <h3 class="stats__digit">${allNewWords}</h3>
-              <h4 class="stats__name">слов изучено</h4>
+              <h4 class="stats__name">новых слов</h4>
             </div>
             <div class="stats__index">
               <h3 class="stats__digit">${bestSeries}</h3>
@@ -122,12 +122,20 @@ class StatsPage {
     chartWrap.append(this.canvas);
     longStats.append(chartWrap);
 
-    this.chartConfig.data.labels = ['30-08-2022', '31-08-2022', '01-09-2022', '02-09-2022', '03-09-2022', '04-09-2022'];
+    this.chartConfig.data.labels = [
+      '30-08-2022',
+      '31-08-2022',
+      '01-09-2022',
+      '02-09-2022',
+      '03-09-2022',
+      '04-09-2022',
+      '05-09-2022',
+    ];
     this.chartConfig.data.datasets = [
       {
         label: 'Количество новых слов',
         backgroundColor: `#16b0e8`,
-        data: [12, 19, 21, 21, 25, 30],
+        data: [12, 19, 21, 21, 25, 30, 35],
       },
     ];
 

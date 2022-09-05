@@ -1,22 +1,39 @@
-.footer {
-  background-color: $color-black-l;
-}
-
-.footer__wrapper {
+.wrapper-footer {
   @include flex(space-between);
   padding-top: 1rem;
   padding-bottom: 1rem;
   color: $color-white;
+
+  @media screen and (max-width: $mobile) {
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
 }
+
+
+.footer {
+  background-color: $color-black-l;
+}
+
 
 .github__list {
   @include flex();
   margin: 0;
   padding: 1rem;
+
+  @media screen and (max-width: $mobile) {
+    width: 100%;
+    justify-content: center;
+    order: 3;
+    font-size: 0.7rem;
+  }
 }
 
 .github__item {
   list-style: none;
+  text-align: center;
+  display: flex;
 }
 
 .github__link {
@@ -32,7 +49,7 @@
   &::before {
     content: url('assets/img/github.svg');
     vertical-align: middle;
-    margin-right: 0.5rem;
+    margin: 0.5rem;
   }
 
   &:hover::before {

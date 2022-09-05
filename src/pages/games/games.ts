@@ -32,35 +32,41 @@ export default class Games {
     this.audioGame.innerHTML = '';
     this.sprintGame.innerHTML = '';
 
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('wrapper');
+
     this.mainGames.classList.add('main__games');
 
     this.mainGames.appendChild(this.audioGame);
     this.audioGame.classList.add('main__games-audio');
 
-    new BaseComponent(this.audioGame, 'div', ['game-audio__title'], 'audio challenge').render();
+    new BaseComponent(this.audioGame, 'div', ['game-audio__title'], 'Аудиовызов').render();
     new BaseComponent(
       this.audioGame,
       'div',
       ['game-audio__description'],
-      'A word is voiced to you, and you choose the correct translation'
+      'Тренировка на слуховое восприятие английских слов'
     ).render();
-    new BaseComponent(this.audioGame, 'button', ['game-audio__play'], 'start')
+    new BaseComponent(this.audioGame, 'div', ['game-audio__icon']).render();
+    new BaseComponent(this.audioGame, 'button', ['game-audio__play'], 'Играть')
       .render()
       .addEventListener('click', ({ target }) => this.pushBtnPlayAudio(target as HTMLElement), { once: true });
 
     this.mainGames.appendChild(this.sprintGame);
     this.sprintGame.classList.add('main__games-sprint');
-    new BaseComponent(this.sprintGame, 'div', ['game-sprint__title'], 'sprint').render();
+    new BaseComponent(this.sprintGame, 'div', ['game-sprint__title'], 'Спринт').render();
     new BaseComponent(
       this.sprintGame,
       'div',
       ['game-sprint__description'],
-      'In 60 seconds you have to answer the maximum number of correctly translated words'
+      'Тренировка на быстрое воспроизведение слов из памяти'
     ).render();
-    new BaseComponent(this.sprintGame, 'button', ['game-sprint__play'], 'start')
+    new BaseComponent(this.sprintGame, 'div', ['game-sprint__icon']).render();
+    new BaseComponent(this.sprintGame, 'button', ['game-sprint__play'], 'Играть')
       .render()
       .addEventListener('click', ({ target }) => this.pushBtnPlaySprint(target as HTMLElement), { once: true });
 
-    return this.mainGames;
+    wrapper.append(this.mainGames);
+    return wrapper;
   }
 }

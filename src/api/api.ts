@@ -44,8 +44,7 @@ class API {
             userService.showServerDownMess();
           } else if (err.response.status === 401 && !originalConfig._retry) {
             originalConfig._retry = true;
-            const userId = this.getLocalUserId();
-            await this.getNewTokens(userId);
+            await this.getNewTokens();
             const newToken = this.getLocalToken();
             originalConfig.headers['Authorization'] = `Bearer ${newToken}`;
             return this.axiosInstance(originalConfig);
@@ -58,35 +57,37 @@ class API {
     );
   }
 
-  private getLocalToken(): string {
+  getLocalToken(): string {
     const user = storageService.getLocal<SignInResponse>('user');
     const token = user ? user.token : '';
     return token;
   }
 
-  private getLocalRefreshToken() {
+  getLocalRefreshToken() {
     const user = storageService.getLocal<SignInResponse>('user');
     const refreshToken = user ? user.refreshToken : '';
     return refreshToken;
   }
 
-  private getLocalUserId() {
+  getLocalUserId() {
     const user = storageService.getLocal<SignInResponse>('user');
     const userId = user ? user.userId : '';
     return userId;
   }
 
-  private async getNewTokens(userId: string) {
-    const refreshToken = this.getLocalRefreshToken();
-    const response = await axios
-      .get(`${this.usersEndpoint}/${userId}/tokens`, {
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${refreshToken}`,
-        },
-      })
-      .catch(() => null);
-    if (response) this.updateLocalTokens(response.data);
+  async getNewTokens() {
+    const user = storageService.getLocal<SignInResponse>('user');
+    if (user) {
+      const response = await axios
+        .get(`${this.usersEndpoint}/${user.userId}/tokens`, {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${user.refreshToken}`,
+          },
+        })
+        .catch(() => null);
+      if (response) this.updateLocalTokens(response.data);
+    }
   }
 
   private async updateLocalTokens(data: SignInResponse) {

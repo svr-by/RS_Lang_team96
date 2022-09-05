@@ -340,7 +340,7 @@ export default class Sprint {
       btnTrue.addEventListener('click', this.pressRight, { once: true });
     }
 
-    this.sprint.addEventListener('keydown', this.findButton);
+    document.addEventListener('keydown', this.findButton);
 
     return this.sprint;
   }

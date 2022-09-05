@@ -1,5 +1,12 @@
+.wrapper-devs {
+  height: 100%;
+  @include flex(flex-start, center, column);
+}
+
 .devs {
   margin-bottom: 1.5rem;
+  @include flex(space-evenly, stretch, column);
+  flex-grow: 1;
 
   &__row {
     margin-bottom: 1rem;

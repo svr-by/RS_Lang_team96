@@ -9,7 +9,7 @@ export class Footer {
   }
 
   render() {
-    const wrapper = layoutService.createElement({ tag: 'div', classes: ['wrapper', 'footer__wrapper'] });
+    const wrapper = layoutService.createElement({ tag: 'div', classes: ['wrapper', 'wrapper-footer'] });
     wrapper.innerHTML = `   
       <div class="footer__copyright">© 2022 RSLang</div>
       <ul class="github__list">

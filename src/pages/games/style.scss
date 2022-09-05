@@ -1,28 +1,55 @@
-
 .main__games {
-  padding: 5rem;
+  width: 100%;
+  padding: 2rem;
   display: flex;
   justify-content: space-around;
-  width: 100%;
-  height: 100%;
+  align-items: center;
+  gap: 2rem;
+
+  @media screen and (max-width: $mobile) {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .main__games-audio,
 .main__games-sprint {
+  width: 45%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  width: 30%;
-  min-height: 45vh;
-  padding: 3rem 5rem;
+  gap: 1rem;
+  min-height: 40vh;
+  padding: 3rem 2rem;
   border-radius: 1.8rem;
-  background-color: #e7e7e7;
   text-align: center;
-  color: #000000;
-  font-family: 'Open Sans', sans-serif;
+  color: $color-black;
   font-weight: 500;
   font-size: 1.5rem;
+  box-shadow: 0px 0px 20px rgb(0 0 0 / 20%);
+
+  @media screen and (max-width: $mobile) {
+    width: 80%;
+    padding: 2rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+.game-sprint__icon,
+.game-audio__icon {
+  width: 150px;
+  height: 150px;
+  flex-grow: 1;
+}
+.game-sprint__icon {
+  background: no-repeat center url('assets/img/sprint-game.png');
+  background-size: contain;
+}
+
+.game-audio__icon {
+  background: no-repeat center url('assets/img/audio-game.png');
+  background-size: contain;
 }
 
 .game-audio__title,
@@ -30,38 +57,30 @@
   font-weight: bold;
   font-size: 2rem;
   letter-spacing: 3px;
-  color: #16AEE8;
-  text-decoration: underline;
   text-transform: capitalize;
+  font-family: "Gilroy";
+
+  @media screen and (max-width: $mobile) {
+    font-size: 1.5rem;
+  }
 }
 
 .game-audio__play,
 .game-sprint__play {
-  width: 50%;
-  height: 6vh;
-  margin-top: 10px;
+  margin: 1rem;
+  padding: 0.5rem 1rem;
   font-weight: bold;
   font-size: 1.5rem;
   letter-spacing: 2px;
   text-transform: capitalize;
   border-radius: 10px;
   border: none;
-  background: #FF8C0E;
-  box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
+  background: $color-green;
   cursor: pointer;
 }
 
 .game-audio__play:hover,
 .game-sprint__play:hover {
-  background: #48F789;
-  transform: translateY(-5px);
-  transition: 0.4s;
-  box-shadow: 10px 10px 10px 0px rgba(34, 60, 80, 0.55);
-}
-
-.game-audio__play:active,
-.game-sprint__play:active {
-  transform: translateY(5px);
-  transition: 0.1s;
-  box-shadow: 0px 0px 0px 0px rgba(34, 60, 80, 0.55);
+  background: $color-blue;
+  color: $color-white;
 }
