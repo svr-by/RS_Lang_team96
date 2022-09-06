@@ -1,8 +1,8 @@
 import Svg from './svg';
-import { IWord } from '../../shared/interfaces';
 import { wordsApiService } from '../../api/wordsApiService';
 import { storageService } from '../../shared/services/storageService';
 import { SignInResponse } from '../../shared/types';
+import { Preloader } from '../../shared/components/preloader';
 
 class Description {
   private svg: Svg;
@@ -15,11 +15,17 @@ class Description {
 
   async appendTo(parent: HTMLElement, id: string) {
     parent.innerHTML = '';
-    await wordsApiService.getWord(id).then((item: IWord | string | void) => {
-      if (typeof item !== 'string' && item) {
-        const newDescription = document.createElement('div');
-        newDescription.className = 'content';
-        newDescription.innerHTML = `
+    parent.className = 'dictionary__description';
+    const preloader = new Preloader().elem;
+    parent.append(preloader);
+
+    const item = await wordsApiService.getWord(id);
+    preloader.remove();
+
+    if (typeof item !== 'string' && item) {
+      const newDescription = document.createElement('div');
+      newDescription.className = 'content';
+      newDescription.innerHTML = `
         <img class='content__image' src='https://rslang-team96.herokuapp.com/${item.image}' alt=${item.word}>
         <div class='${storageService.getLocal('user') ? 'buttons' : 'display-none'}'>
           <button class='${
@@ -55,28 +61,28 @@ class Description {
           </div>
         </div>
       `;
-        parent.append(newDescription);
-      } else {
-        throw new Error(`Error ${item}`);
-      }
+      parent.append(newDescription);
+    } else {
+      throw new Error(`Error ${item}`);
+    }
 
-      (parent.querySelector('#playSvg') as HTMLElement).addEventListener('click', () => {
-        const sound = document.getElementById('sound') as HTMLAudioElement;
-        if (sound) sound.play();
+    (parent.querySelector('#playSvg') as HTMLElement).addEventListener('click', () => {
+      const sound = document.getElementById('sound') as HTMLAudioElement;
+      if (sound) sound.play();
+    });
+
+    const buttonInDifficult = parent.querySelector('#in-difficult');
+    buttonInDifficult &&
+      buttonInDifficult.addEventListener('click', () => {
+        this.addToDifficultWords(id);
       });
 
-      const buttonInDifficult = parent.querySelector('#in-difficult');
-      buttonInDifficult &&
-        buttonInDifficult.addEventListener('click', () => {
-          this.addToDifficultWords(id);
-        });
+    const buttonInLearning = parent.querySelector('#in-learning');
+    buttonInLearning &&
+      buttonInLearning.addEventListener('click', () => {
+        this.addToLearningWords(id);
+      });
 
-      const buttonInLearning = parent.querySelector('#in-learning');
-      buttonInLearning &&
-        buttonInLearning.addEventListener('click', () => {
-          this.addToLearningWords(id);
-        });
-    });
     this.addStyleForPage();
     this.addWinsMistaces(id);
   }

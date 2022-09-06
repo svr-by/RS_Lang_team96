@@ -33,37 +33,13 @@
 
   &__audio-challenge,
   &__sprint{
-    // position: relative;
     margin-top: 3rem;
     border-radius: 0.5rem;
     color: $color-blue;
 
-    // box-shadow: 0  0  10px  #8f8e8e;
     &:hover{
       cursor: pointer;
-      // box-shadow: 10px  10px  10px  #8f8e8e;
+      color: $color-green;
     }
   }
-
-  // &__audio-challenge:before {
-  //   content: 'Audio challenge';
-  //   position: absolute;
-  //   top: -2rem;
-  //   left: 1.8rem;
-  //   font-size: 1.3rem;
-  // }
-
-  // &__sprint:before {
-  //   content: 'Sprint';
-  //   position: absolute;
-  //   top: -2rem;
-  //   left: 4.1rem;
-  //   font-size: 1.3rem;
-  // }
-
-  // &__img {
-  //   width: 200px;
-  //   height: 200px;
-  //   border-radius: 0.5rem;
-  // }
 }

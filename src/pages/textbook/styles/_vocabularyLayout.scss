@@ -64,6 +64,7 @@
 
 .textBook {
   position: relative;
+  height: 100%;
 }
 
 .settings-modal {
@@ -124,4 +125,13 @@
 
 .display-none {
   display: none;
+}
+
+.wrapper-textbook {
+  display: flex;
+  flex-direction: column;
+}
+
+.words {
+  flex-grow: 1;
 }

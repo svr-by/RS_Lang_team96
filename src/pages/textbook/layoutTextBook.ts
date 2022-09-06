@@ -12,6 +12,7 @@ import { SignInResponse } from '../../shared/types';
 import AudioChallange from '../games/audio-challenge/audio-challenge';
 import Sprint from '../games/sprint/sprint';
 import { Views } from '../../shared/enums';
+import { Preloader } from '../../shared/components/preloader';
 
 class LayoutTextBook {
   private svg: Svg;
@@ -48,7 +49,7 @@ class LayoutTextBook {
     textBook.className = 'textBook';
     textBook.id = 'textBook';
     textBook.innerHTML = `
-      <div class='wrapper'>
+      <div class='wrapper wrapper-textbook'>
         <div class='header-and-settings' id='header-and-settings'>
           <h2 class='header-and-settings__header' id='textbook-words'>Учебник</h2>
           <h2 class='${
@@ -65,7 +66,7 @@ class LayoutTextBook {
           <h2 class='words__header'>Слова</h2>
           <div class='dictionary'>
             <div class='dictionary__value' id='words'></div>
-            <div class='dictionary__description' id='description'></div>
+            <div id='description'></div>
           </div>
         </div>
         <div class='page-navigation' id='pagination'></div>
@@ -234,41 +235,42 @@ class LayoutTextBook {
 
   async addWords(page: number, group: number, textBook: HTMLElement) {
     const words = textBook.querySelector('#words') as HTMLElement;
+    const preloader = new Preloader().elem;
+    words.append(preloader);
     const userData: null | SignInResponse = storageService.getLocal('user');
     if (userData) {
       const hardWords = await this.getHardWords();
 
       const learnedWords = await this.getLearnedWords();
 
-      wordsApiService.getAggregatedUserWords(userData.userId, page, group, 20).then((data) => {
-        if (Array.isArray(data)) {
-          const wordsData = data[0].paginatedResults;
-          words.innerHTML = '';
-          wordsData.forEach((item: IAggregatedWord, index: number) => {
-            if (index === 0) {
-              const description = textBook.querySelector('#description') as HTMLElement;
-              this.description.appendTo(description, item._id);
-              storageService.setSession('chosenWordId', item._id);
-            }
-            new Word(item._id, item.word, item.wordTranslate, hardWords, learnedWords).appendTo(words);
-          });
-        }
-      });
+      const data = await wordsApiService.getAggregatedUserWords(userData.userId, page, group, 20);
+      if (Array.isArray(data)) {
+        const wordsData = data[0].paginatedResults;
+        words.innerHTML = '';
+        wordsData.forEach((item: IAggregatedWord, index: number) => {
+          if (index === 0) {
+            const description = textBook.querySelector('#description') as HTMLElement;
+            this.description.appendTo(description, item._id);
+            storageService.setSession('chosenWordId', item._id);
+          }
+          new Word(item._id, item.word, item.wordTranslate, hardWords, learnedWords).appendTo(words);
+        });
+      }
     } else {
-      wordsApiService.getWords(group, page).then((data) => {
-        if (Array.isArray(data)) {
-          words.innerHTML = '';
-          data.forEach((item: IWord, index: number) => {
-            if (index === 0) {
-              const description = textBook.querySelector('#description') as HTMLElement;
-              this.description.appendTo(description, item.id);
-              storageService.setSession('chosenWordId', item.id);
-            }
-            new Word(item.id, item.word, item.wordTranslate).appendTo(words);
-          });
-        }
-      });
+      const data = await wordsApiService.getWords(group, page);
+      if (Array.isArray(data)) {
+        words.innerHTML = '';
+        data.forEach((item: IWord, index: number) => {
+          if (index === 0) {
+            const description = textBook.querySelector('#description') as HTMLElement;
+            this.description.appendTo(description, item.id);
+            storageService.setSession('chosenWordId', item.id);
+          }
+          new Word(item.id, item.word, item.wordTranslate).appendTo(words);
+        });
+      }
     }
+    preloader.remove();
   }
 
   highlightSelectedPartition(textBook: HTMLElement) {
