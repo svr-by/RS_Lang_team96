@@ -2,6 +2,7 @@ import BaseComponent from '../../../shared/components/base_component';
 import Sprint from './sprint';
 import { IWord, IStorage } from '../../../shared/interfaces';
 import { wordsApiService } from '../../../api/wordsApiService';
+import { Preloader } from '../../../shared/components/preloader';
 
 export default class SprintLvl {
   readonly sprintLvl: HTMLElement;
@@ -38,12 +39,15 @@ export default class SprintLvl {
       this.isPush = true;
       if (target && target.tagName === 'DIV') {
         if (target.dataset.group) {
+          const preloader = new Preloader(true).elem;
+          this.sprintLvl.append(preloader);
           const arrPromisesFromPages30: Promise<IWord[]>[] = [];
           for (let i = 0; i < 30; i += 1) {
             const promiseFromPage = wordsApiService.getWords(+target.dataset.group, i) as Promise<IWord[]>;
             arrPromisesFromPages30.push(promiseFromPage);
           }
           const arrOfArrsWords = await Promise.all(arrPromisesFromPages30);
+          preloader.remove();
           this.wordsInGroup = arrOfArrsWords.reduce((a, b) => a.concat(b));
           this.sprintLvl.remove();
           new Sprint(this.root, this.wordsInGroup, this.storage, this.seconds).render();

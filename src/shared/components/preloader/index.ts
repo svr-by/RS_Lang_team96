@@ -3,8 +3,9 @@ import { layoutService } from '../../services/layoutService';
 export class Preloader {
   elem: HTMLElement;
 
-  constructor() {
+  constructor(isFullScreen = false) {
     this.elem = layoutService.createElement({ tag: 'div', classes: ['preloader'] });
+    if (isFullScreen) this.elem.classList.add('preloader--full');
     this.elem.innerHTML = `
       <div class="sk-circle">
         <div class="sk-circle1 sk-child"></div>

@@ -20,7 +20,7 @@ class Description {
     parent.append(preloader);
 
     const item = await wordsApiService.getWord(id);
-    preloader.remove();
+    parent.innerHTML = '';
 
     if (typeof item !== 'string' && item) {
       const newDescription = document.createElement('div');
