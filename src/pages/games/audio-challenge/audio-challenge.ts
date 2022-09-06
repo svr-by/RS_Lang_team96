@@ -9,7 +9,7 @@ import { userService } from '../../../shared/services/userService';
 import { wordsApiService } from '../../../api/wordsApiService';
 import { statisticApiService } from '../../../api/statisticApiService';
 import { dateToday } from '../../../shared/services/dateService';
-import AudioChallangeLvl from './../audio-challenge/audio-challenge-levels';
+// import AudioChallangeLvl from './../audio-challenge/audio-challenge-levels';
 
 export default class AudioChallange {
   audioChallange: HTMLElement;
@@ -45,11 +45,12 @@ export default class AudioChallange {
       const main: HTMLElement | null = document.querySelector('.main__games');
       if (audioChallange && main) {
         this.currentCountWord = (+this.currentCountWord + 1).toString();
-        audioChallange.remove();
         if (+this.currentCountWord > 20) {
-          new AudioChallangeLvl(this.root).render();
-          new Result(this.storage).render();
+          this.audioChallange.innerHTML = '';
+          const result = new Result(this.storage).render();
+          this.audioChallange.append(result);
         } else {
+          audioChallange.remove();
           new AudioChallange(main, this.wordsInGroup, this.currentCountWord, this.storage).render();
         }
       }

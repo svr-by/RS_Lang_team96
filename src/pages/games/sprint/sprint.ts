@@ -9,7 +9,7 @@ import { userService } from '../../../shared/services/userService';
 import { wordsApiService } from '../../../api/wordsApiService';
 import { statisticApiService } from '../../../api/statisticApiService';
 import { dateToday } from '../../../shared/services/dateService';
-import SprintLvl from './../sprint/sprint-levels';
+// import SprintLvl from './../sprint/sprint-levels';
 
 export default class Sprint {
   sprint: HTMLElement;
@@ -35,9 +35,9 @@ export default class Sprint {
       if (this.seconds <= 0) {
         clearInterval(this.timer);
         document.removeEventListener('keydown', this.findButton);
-        this.sprint.remove();
-        new SprintLvl(this.root).render();
-        new ResultSprint(this.storage).render();
+        this.sprint.innerHTML = '';
+        const result = new ResultSprint(this.storage).render();
+        this.sprint.append(result);
       } else {
         const strTimer = `${Math.trunc(this.seconds / 10)}`;
         if (timerShow) {
