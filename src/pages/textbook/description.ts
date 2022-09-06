@@ -60,17 +60,18 @@ class Description {
         throw new Error(`Error ${item}`);
       }
 
-      (document.getElementById('playSvg') as HTMLElement).addEventListener('click', () => {
-        (document.getElementById('sound') as HTMLAudioElement).play();
+      (parent.querySelector('#playSvg') as HTMLElement).addEventListener('click', () => {
+        const sound = document.getElementById('sound') as HTMLAudioElement;
+        if (sound) sound.play();
       });
 
-      const buttonInDifficult = document.getElementById('in-difficult');
+      const buttonInDifficult = parent.querySelector('#in-difficult');
       buttonInDifficult &&
         buttonInDifficult.addEventListener('click', () => {
           this.addToDifficultWords(id);
         });
 
-      const buttonInLearning = document.getElementById('in-learning');
+      const buttonInLearning = parent.querySelector('#in-learning');
       buttonInLearning &&
         buttonInLearning.addEventListener('click', () => {
           this.addToLearningWords(id);
