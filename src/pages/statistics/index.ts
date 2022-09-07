@@ -132,7 +132,6 @@ class StatsPage {
       (acc: number[], el: number, ind: number) => (ind === 0 ? acc.concat([el]) : acc.concat([el + acc[ind - 1]])),
       []
     );
-    console.log(agrLearnWords);
 
     this.chartConfig.data.labels = dates;
     this.chartConfig.data.datasets = [
