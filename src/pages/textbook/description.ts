@@ -20,6 +20,7 @@ class Description {
     parent.append(preloader);
 
     const item = await wordsApiService.getWord(id);
+    console.log(item);
     parent.innerHTML = '';
 
     if (typeof item !== 'string' && item) {
@@ -40,6 +41,8 @@ class Description {
         <div class='transcription'>
           <p class='transcription__value'>${item.transcription}</p>
           <audio class='sound' src='https://rslang-team96.herokuapp.com/${item.audio}' id='sound'></audio>
+          <audio class='sound' src='https://rslang-team96.herokuapp.com/${item.audioExample}' id='audioExample'></audio>
+          <audio class='sound' src='https://rslang-team96.herokuapp.com/${item.audioMeaning}' id='audioMeaning'></audio>
           ${this.svg.playSvg('#8f8e8e', 'transcription__play')}
         </div>
         <h3 class='content__header'>Значение</h3>
@@ -67,7 +70,20 @@ class Description {
     }
 
     (parent.querySelector('#playSvg') as HTMLElement).addEventListener('click', () => {
-      const sound = document.getElementById('sound') as HTMLAudioElement;
+      const sound = (document.getElementById('sound') as HTMLAudioElement) || null;
+      const audioMeaning = (document.getElementById('audioMeaning') as HTMLAudioElement) || null;
+      const audioExample = (document.getElementById('audioExample') as HTMLAudioElement) || null;
+
+      sound &&
+        sound.addEventListener('ended', () => {
+          audioMeaning && audioMeaning.play();
+        });
+
+      audioMeaning &&
+        audioMeaning.addEventListener('ended', () => {
+          audioExample && audioExample.play();
+        });
+
       if (sound) sound.play();
     });
 
