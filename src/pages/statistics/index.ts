@@ -21,7 +21,7 @@ class StatsPage {
     this.canvas = document.createElement('canvas');
     this.canvas.id = 'myChart';
     this.chartConfig = {
-      type: 'bar',
+      type: 'line',
       data: {
         labels: [],
         datasets: [
@@ -128,13 +128,29 @@ class StatsPage {
     const userStats = await statisticApiService.getUserStatistics(userId);
     const dates = userStats?.optional ? Object.keys(userStats.optional) : [];
     const words = userStats?.optional ? Object.values(userStats.optional) : [];
+    const agrLearnWords = words.reduce(
+      (acc: number[], el: number, ind: number) => (ind === 0 ? acc.concat([el]) : acc.concat([el + acc[ind - 1]])),
+      []
+    );
+    console.log(agrLearnWords);
 
     this.chartConfig.data.labels = dates;
     this.chartConfig.data.datasets = [
       {
-        label: 'Количество новых слов',
+        label: 'Новые слова',
+        barPercentage: 0.8,
+        categoryPercentage: 1,
         backgroundColor: `#16b0e8`,
+        fill: true,
         data: words,
+      },
+      {
+        label: 'Сумма новых слов',
+        barPercentage: 1,
+        categoryPercentage: 1,
+        backgroundColor: `#74fea4`,
+        pointRadius: 10,
+        data: agrLearnWords,
       },
     ];
 
