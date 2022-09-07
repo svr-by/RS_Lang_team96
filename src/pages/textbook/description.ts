@@ -20,7 +20,6 @@ class Description {
     parent.append(preloader);
 
     const item = await wordsApiService.getWord(id);
-    console.log(item);
     parent.innerHTML = '';
 
     if (typeof item !== 'string' && item) {
@@ -51,7 +50,7 @@ class Description {
         <h3 class='content__header'>Пример</h3>
         <p class='content__text'>${item.textExample}</p>
         <p class='content__text russian'>${item.textExampleTranslate}</p>
-        <div class='${storageService.getLocal('user') ? 'gaming-response' : 'display-none'}'>
+        <div class=${storageService.getLocal('user') ? 'gaming-response' : 'display-none'}>
           <div class='audio-call game'>
             <p class='game__name'>Аудио-вызов: 
             <span id='audio-call-correct'>0</span> из <span id='audio-call-was-wrong'>0</span>

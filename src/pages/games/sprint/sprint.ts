@@ -9,7 +9,6 @@ import { userService } from '../../../shared/services/userService';
 import { wordsApiService } from '../../../api/wordsApiService';
 import { statisticApiService } from '../../../api/statisticApiService';
 import { dateToday } from '../../../shared/services/dateService';
-// import SprintLvl from './../sprint/sprint-levels';
 
 export default class Sprint {
   sprint: HTMLElement;
@@ -214,7 +213,7 @@ export default class Sprint {
         }
         const counterScore = document.querySelector('.sprint__score');
         if (counterScore) {
-          counterScore.innerHTML = `баллы ${this.storage.score}`;
+          counterScore.innerHTML = `${this.storage.score}`;
         }
         clearInterval(this.timer);
 
@@ -269,13 +268,13 @@ export default class Sprint {
 
     const marks = document.querySelectorAll('.mark');
     if (this.storage.inRow > 0 && this.storage.inRow <= 3) {
-      marks[this.storage.inRow - 1].setAttribute('style', 'background-color: #FFE500');
+      marks[this.storage.inRow - 1].setAttribute('style', 'background-color: #96ebb3');
     }
     if (this.storage.inRow >= 4 && this.storage.inRow <= 6) {
-      marks[this.storage.inRow % 4].setAttribute('style', 'background-color: #34D800');
+      marks[this.storage.inRow % 4].setAttribute('style', 'background-color: #4dbb73');
     }
     if (this.storage.inRow >= 7 && this.storage.inRow <= 9) {
-      marks[this.storage.inRow % 7].setAttribute('style', 'background-color: #AC3BD4');
+      marks[this.storage.inRow % 7].setAttribute('style', 'background-color: #0f8739');
     }
 
     const userId = userService.getStoredUserId();
