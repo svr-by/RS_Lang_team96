@@ -157,13 +157,19 @@ class Description {
     const numberElements = hardWords.length + learnedWords.length;
     const words = document.querySelector('.words');
     const curtainLinks = document.querySelector('.links__unactive');
+    const audioChallengeLink = document.querySelector('#links-to-audio-challenge') as HTMLButtonElement;
+    const sprintLinks = document.querySelector('#links-to-sprint') as HTMLButtonElement;
     if (numberElements === 20) {
       const selectedPage = document.querySelector('.selected-page');
       selectedPage && selectedPage.classList.add('learned-page');
       words && words.classList.add('learned-words-background');
       curtainLinks && curtainLinks.classList.remove('display-none');
+      audioChallengeLink && (audioChallengeLink.disabled = true);
+      sprintLinks && (sprintLinks.disabled = true);
     } else {
       curtainLinks && curtainLinks.classList.add('display-none');
+      audioChallengeLink && (audioChallengeLink.disabled = false);
+      sprintLinks && (sprintLinks.disabled = false);
       words && words.classList.remove('learned-words-background');
     }
   }

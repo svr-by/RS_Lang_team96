@@ -71,11 +71,11 @@ class LayoutTextBook {
         </div>
         <div class='page-navigation' id='pagination'></div>
 
-        <div class='${storageService.getLocal('user') ? 'games' : 'display-none'}'>
-          <p class='games__description'>Закрепи новые слова при помощи игр 
-            <span class='links__audio-challenge' id='links-to-audio-challenge'>Аудиовызов</span>
+        <div class='games'>
+          <p class='games__description'>Закрепите новые слова при помощи игр 
+            <button class='links__audio-challenge' id='links-to-audio-challenge'>Аудиовызов</button>
             и 
-            <span class='links__audio-challenge' id='links-to-sprint'>Спринт</span>
+            <button class='links__audio-challenge' id='links-to-sprint'>Спринт</button>
           </p>
         </div>
       </div>
@@ -235,7 +235,7 @@ class LayoutTextBook {
 
   async addWords(page: number, group: number, textBook: HTMLElement) {
     const words = textBook.querySelector('#words') as HTMLElement;
-    const preloader = new Preloader().elem;
+    const preloader = new Preloader(true).elem;
     words.append(preloader);
     const userData: null | SignInResponse = storageService.getLocal('user');
     if (userData) {

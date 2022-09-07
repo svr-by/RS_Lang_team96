@@ -33,13 +33,21 @@
 
   &__audio-challenge,
   &__sprint{
-    margin-top: 3rem;
-    border-radius: 0.5rem;
+    margin: 0;
+    border: none;
+    background-color: transparent;
+    text-transform: uppercase;
+    font-weight: bold;
     color: $color-blue;
 
     &:hover{
       cursor: pointer;
       color: $color-green;
+    }
+
+    &:disabled {
+      cursor: auto;
+      color: $color-grey;
     }
   }
 }
