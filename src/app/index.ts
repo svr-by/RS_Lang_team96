@@ -1,5 +1,5 @@
 import { layoutService } from '../shared/services/layoutService';
-import { api } from '../api/api';
+import { userApiService } from '../api/userApiService';
 import { Header } from '../shared/components/header';
 import { Footer } from '../shared/components/footer';
 import { Views } from '../shared/enums';
@@ -68,11 +68,11 @@ class App {
       case Views.start:
       default:
         mainContent = this.startPage.render();
+        userApiService.getNewTokens();
         this.footer.elem.hidden = false;
         break;
     }
     this.main.append(mainContent as HTMLElement);
-    api.getNewTokens();
   }
 }
 

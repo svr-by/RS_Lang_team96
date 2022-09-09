@@ -1,8 +1,7 @@
 import { storageService } from '../shared/services/storageService';
 import { SignInResponse } from '../shared/types';
 import { userService } from '../shared/services/userService';
-import { AxiosRequestConfigExt } from './interface';
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosError, AxiosInstance } from 'axios';
 
 class API {
   base: string;
@@ -37,66 +36,21 @@ class API {
       (res) => {
         return res;
       },
-      async (err) => {
-        const originalConfig: AxiosRequestConfigExt = err.config;
-        if (err.response) {
-          if (err.message === 'Network Error') {
-            userService.showServerDownMess();
-          } else if (err.response.status === 401 && !originalConfig._retry) {
-            originalConfig._retry = true;
-            await this.getNewTokens();
-            const newToken = this.getLocalToken();
-            originalConfig.headers['Authorization'] = `Bearer ${newToken}`;
-            return this.axiosInstance(originalConfig);
-          } else if (err.response.status === 401 && originalConfig._retry) {
-            userService.showAuthorizationMess();
-          }
+      (err: AxiosError) => {
+        if (err.message === 'Network Error') {
+          userService.showServerDownMess();
+        } else if (err?.response?.status === 401) {
+          userService.showAuthorizationMess();
         }
         return err;
       }
     );
   }
 
-  getLocalToken(): string {
+  private getLocalToken(): string {
     const user = storageService.getLocal<SignInResponse>('user');
     const token = user ? user.token : '';
     return token;
-  }
-
-  getLocalRefreshToken() {
-    const user = storageService.getLocal<SignInResponse>('user');
-    const refreshToken = user ? user.refreshToken : '';
-    return refreshToken;
-  }
-
-  getLocalUserId() {
-    const user = storageService.getLocal<SignInResponse>('user');
-    const userId = user ? user.userId : '';
-    return userId;
-  }
-
-  async getNewTokens() {
-    const user = storageService.getLocal<SignInResponse>('user');
-    if (user) {
-      const response = await axios
-        .get(`${this.usersEndpoint}/${user.userId}/tokens`, {
-          headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${user.refreshToken}`,
-          },
-        })
-        .catch(() => null);
-      if (response) this.updateLocalTokens(response.data);
-    }
-  }
-
-  private async updateLocalTokens(data: SignInResponse) {
-    const user = storageService.getLocal<SignInResponse>('user');
-    if (user) {
-      user.token = data.token;
-      user.refreshToken = data.refreshToken;
-      storageService.setLocal<SignInResponse>('user', user);
-    }
   }
 }
 
