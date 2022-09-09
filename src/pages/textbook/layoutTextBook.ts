@@ -235,7 +235,7 @@ class LayoutTextBook {
 
   async addWords(page: number, group: number, textBook: HTMLElement) {
     const words = textBook.querySelector('#words') as HTMLElement;
-    const preloader = new Preloader(true).elem;
+    const preloader = new Preloader().render();
     words.append(preloader);
     const userData: null | SignInResponse = storageService.getLocal('user');
     if (userData) {

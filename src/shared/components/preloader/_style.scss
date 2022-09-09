@@ -1,7 +1,45 @@
+.preloader {
+  width: 100%;
+
+  &.preloader--full {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: 100vw;
+    height: 100vh;
+    overflow-y: auto;
+    @include flex(center, center);
+    background: rgba(41, 41, 41, 0.5);
+
+    & .sk-circle {
+      width: 100px;
+      height: 100px;
+    }
+
+    & .sk-circle .sk-child:before {
+      background-color: #fff;
+    }
+  }
+
+  &.preloader--inner {
+    width: 100%;
+
+    & .sk-circle {
+      width: 60px;
+      height: 60px;
+    }
+
+    & .sk-circle .sk-child:before {
+      background-color: #333;
+    }
+  }
+
+
+}
+
 .sk-circle {
   margin: 100px auto;
-  width: 60px;
-  height: 60px;
   position: relative;
 }
 
@@ -19,7 +57,6 @@
   margin: 0 auto;
   width: 15%;
   height: 15%;
-  background-color: #333;
   border-radius: 100%;
   -webkit-animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
           animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
@@ -123,29 +160,3 @@
   }
 }
 
-.preloader {
-  width: 100%;
-
-  &.preloader--full {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    width: 100vw;
-    height: 100vh;
-    overflow-y: auto;
-    @include flex(center, center);
-    background: rgba(41, 41, 41, 0.5);
-
-    & .sk-circle {
-      width: 100px;
-      height: 100px;
-    }
-
-    & .sk-circle .sk-child:before {
-      background-color: #fff;
-    }
-  }
-
-
-}

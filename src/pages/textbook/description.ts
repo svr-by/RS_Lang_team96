@@ -16,7 +16,7 @@ class Description {
   async appendTo(parent: HTMLElement, id: string) {
     parent.innerHTML = '';
     parent.className = 'dictionary__description';
-    const preloader = new Preloader().elem;
+    const preloader = new Preloader('inner').render();
     parent.append(preloader);
 
     const item = await wordsApiService.getWord(id);

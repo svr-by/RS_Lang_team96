@@ -39,7 +39,7 @@ export default class AudioChallangeLvl {
       this.isPush = true;
       if (target && target.tagName === 'DIV') {
         if (target.dataset.group) {
-          const preloader = new Preloader(true).elem;
+          const preloader = new Preloader().render();
           this.audioChallangeLvl.append(preloader);
           const arrPromisesFromPages30: Promise<IWord[]>[] = [];
           for (let i = 0; i < 30; i += 1) {

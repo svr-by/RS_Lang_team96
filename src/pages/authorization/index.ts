@@ -54,7 +54,7 @@ export class Authorization {
       const button = this.elem.querySelector('#authBtn') as HTMLElement;
       if (button) {
         let isSuccess: boolean;
-        const preloader = new Preloader(true).elem;
+        const preloader = new Preloader().render();
         document.body.append(preloader);
         switch (button.dataset.func) {
           case 'login':

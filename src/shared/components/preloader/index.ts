@@ -1,11 +1,15 @@
 import { layoutService } from '../../services/layoutService';
 
 export class Preloader {
-  elem: HTMLElement;
+  private elem: HTMLElement;
 
-  constructor(isFullScreen = false) {
+  constructor(size = 'fullscreen') {
     this.elem = layoutService.createElement({ tag: 'div', classes: ['preloader'] });
-    if (isFullScreen) this.elem.classList.add('preloader--full');
+    if (size === 'fullscreen') this.elem.classList.add('preloader--full');
+    if (size === 'inner') this.elem.classList.add('preloader--inner');
+  }
+
+  render() {
     this.elem.innerHTML = `
       <div class="sk-circle">
         <div class="sk-circle1 sk-child"></div>
@@ -22,5 +26,6 @@ export class Preloader {
         <div class="sk-circle12 sk-child"></div>
       </div>
     `;
+    return this.elem;
   }
 }
