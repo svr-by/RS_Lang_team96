@@ -4,7 +4,7 @@ import CardBox from '../../games/sprint/components/sprint-cardBox';
 import ResultSprint from '../../games/sprint/components/sprint-result';
 import { api } from '../../../api/api';
 import { UserStatistics } from '../../../shared/types';
-import { IWord, IStorage } from '../../../shared/interfaces';
+import { IWord, IAggregatedWord, IStorage } from '../../../shared/interfaces';
 import { userService } from '../../../shared/services/userService';
 import { wordsApiService } from '../../../api/wordsApiService';
 import { statisticApiService } from '../../../api/statisticApiService';
@@ -14,13 +14,13 @@ export default class Sprint {
   sprint: HTMLElement;
   container: HTMLElement;
   buttonsBox: HTMLElement;
-  currentWord: IWord;
+  currentWord: IWord | IAggregatedWord;
   isPush: boolean;
   timer: NodeJS.Timer;
 
   constructor(
     private readonly root: HTMLElement,
-    public wordsInGroup: IWord[],
+    public wordsInGroup: IWord[] | IAggregatedWord[],
     public storage: IStorage,
     public seconds: number
   ) {
@@ -31,7 +31,7 @@ export default class Sprint {
     this.isPush = false;
     this.timer = setInterval(() => {
       const timerShow: HTMLElement | null = document.querySelector('.sprint__timer');
-      if (this.seconds <= 0) {
+      if (this.seconds <= 0 || this.currentWord === undefined) {
         clearInterval(this.timer);
         document.removeEventListener('keydown', this.findButton);
         this.sprint.innerHTML = '';
@@ -47,9 +47,9 @@ export default class Sprint {
     }, 100);
   }
 
-  getRandomWordInGroup() {
-    const randomWord = Math.floor(Math.random() * 600);
-    return this.wordsInGroup[randomWord];
+  getRandomWordInGroup(): IWord | IAggregatedWord {
+    const randomIndex = Math.floor(Math.random() * this.wordsInGroup.length);
+    return this.wordsInGroup.splice(randomIndex, 1)[0];
   }
 
   pushBtnSound = () => {
@@ -236,112 +236,114 @@ export default class Sprint {
     this.root.innerHTML = '';
     this.root.appendChild(this.sprint);
     this.sprint.classList.add('sprint');
-    new BaseComponent(this.sprint, 'h2', ['sprint__timer'], `${Math.trunc(this.seconds / 10)}`).render();
 
-    this.sprint.appendChild(this.container);
-    this.container.classList.add('sprint__container');
+    if (this.currentWord) {
+      new BaseComponent(this.sprint, 'h2', ['sprint__timer'], `${Math.trunc(this.seconds / 10)}`).render();
 
-    new BaseComponent(this.container, 'h2', ['sprint__score'], `${this.storage.score}`).render();
-    new CardBox(this.container, this.wordsInGroup, this.currentWord).render();
+      this.sprint.appendChild(this.container);
+      this.container.classList.add('sprint__container');
 
-    this.sprint.appendChild(this.buttonsBox);
-    this.buttonsBox.classList.add('sprint__buttons-box');
+      new BaseComponent(this.container, 'h2', ['sprint__score'], `${this.storage.score}`).render();
+      new CardBox(this.container, this.wordsInGroup, this.currentWord).render();
 
-    new BaseComponent(this.buttonsBox, 'button', ['sprint__button-false'], 'false').render();
-    new BaseComponent(this.buttonsBox, 'button', ['sprint__button-true'], 'true').render();
+      this.sprint.appendChild(this.buttonsBox);
+      this.buttonsBox.classList.add('sprint__buttons-box');
 
-    playSound(this.currentWord);
+      new BaseComponent(this.buttonsBox, 'button', ['sprint__button-false'], 'false').render();
+      new BaseComponent(this.buttonsBox, 'button', ['sprint__button-true'], 'true').render();
 
-    const imgBox = document.querySelector('.sprint__img-box');
-    if (imgBox) {
-      imgBox.innerHTML = '+10';
-      if (this.storage.inRow > 2 && this.storage.inRow <= 5) {
-        imgBox.innerHTML = '+20';
+      playSound(this.currentWord);
+
+      const imgBox = document.querySelector('.sprint__img-box');
+      if (imgBox) {
+        imgBox.innerHTML = '+10';
+        if (this.storage.inRow > 2 && this.storage.inRow <= 5) {
+          imgBox.innerHTML = '+20';
+        }
+        if (this.storage.inRow > 5 && this.storage.inRow <= 8) {
+          imgBox.innerHTML = '+40';
+        }
+        if (this.storage.inRow >= 9) {
+          imgBox.innerHTML = '+80';
+        }
       }
-      if (this.storage.inRow > 5 && this.storage.inRow <= 8) {
-        imgBox.innerHTML = '+40';
+
+      const marks = document.querySelectorAll('.mark');
+      if (this.storage.inRow > 0 && this.storage.inRow <= 3) {
+        marks[this.storage.inRow - 1].setAttribute('style', 'background-color: #96ebb3');
       }
-      if (this.storage.inRow >= 9) {
-        imgBox.innerHTML = '+80';
+      if (this.storage.inRow >= 4 && this.storage.inRow <= 6) {
+        marks[this.storage.inRow % 4].setAttribute('style', 'background-color: #4dbb73');
       }
-    }
+      if (this.storage.inRow >= 7 && this.storage.inRow <= 9) {
+        marks[this.storage.inRow % 7].setAttribute('style', 'background-color: #0f8739');
+      }
 
-    const marks = document.querySelectorAll('.mark');
-    if (this.storage.inRow > 0 && this.storage.inRow <= 3) {
-      marks[this.storage.inRow - 1].setAttribute('style', 'background-color: #96ebb3');
-    }
-    if (this.storage.inRow >= 4 && this.storage.inRow <= 6) {
-      marks[this.storage.inRow % 4].setAttribute('style', 'background-color: #4dbb73');
-    }
-    if (this.storage.inRow >= 7 && this.storage.inRow <= 9) {
-      marks[this.storage.inRow % 7].setAttribute('style', 'background-color: #0f8739');
-    }
-
-    const userId = userService.getStoredUserId();
-    if (userId) {
-      const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
-      if (!userWord) {
-        const body = {
-          difficulty: 'easy',
-          optional: {
-            games: {
-              audioCall: {
-                right: 0,
-                wrong: 0,
-              },
-              sprint: {
-                right: 0,
-                wrong: 0,
-              },
-            },
-          },
-        };
-        this.storage.newWords += 1;
-        await wordsApiService.addUserWord(userId, this.currentWord.id, body);
-
-        const userStatObj = await statisticApiService.getUserStatistics(userId);
-        if (!userStatObj) {
-          const defaultUserStatObj: UserStatistics = {
-            learnedWords: 0,
+      const userId = userService.getStoredUserId();
+      if (userId) {
+        const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
+        if (!userWord) {
+          const body = {
+            difficulty: 'easy',
             optional: {
-              [dateToday]: 0,
+              games: {
+                audioCall: {
+                  right: 0,
+                  wrong: 0,
+                },
+                sprint: {
+                  right: 0,
+                  wrong: 0,
+                },
+              },
             },
           };
-          await statisticApiService.saveUserStatistics(userId, defaultUserStatObj);
-        } else {
-          if (userStatObj.optional) {
-            if (Object.keys(userStatObj.optional).some((el) => el === dateToday)) {
-              userStatObj.optional[dateToday] += 1;
-            } else {
-              userStatObj.optional[dateToday] = 1;
+          this.storage.newWords += 1;
+          await wordsApiService.addUserWord(userId, this.currentWord.id, body);
+
+          const userStatObj = await statisticApiService.getUserStatistics(userId);
+          if (!userStatObj) {
+            const defaultUserStatObj: UserStatistics = {
+              learnedWords: 0,
+              optional: {
+                [dateToday]: 0,
+              },
+            };
+            await statisticApiService.saveUserStatistics(userId, defaultUserStatObj);
+          } else {
+            if (userStatObj.optional) {
+              if (Object.keys(userStatObj.optional).some((el) => el === dateToday)) {
+                userStatObj.optional[dateToday] += 1;
+              } else {
+                userStatObj.optional[dateToday] = 1;
+              }
+
+              userStatObj.learnedWords += 1;
+              delete userStatObj.id;
+
+              await statisticApiService.saveUserStatistics(userId, userStatObj);
             }
-
-            userStatObj.learnedWords += 1;
-            delete userStatObj.id;
-
-            await statisticApiService.saveUserStatistics(userId, userStatObj);
           }
         }
       }
+
+      const btnSound = this.sprint.querySelector('.sprint__button-sound');
+      if (btnSound) {
+        btnSound.addEventListener('click', this.pushBtnSound);
+      }
+
+      const btnFalse = this.sprint.querySelector('.sprint__button-false');
+      if (btnFalse) {
+        btnFalse.addEventListener('click', this.pressLeft, { once: true });
+      }
+
+      const btnTrue = this.sprint.querySelector('.sprint__button-true');
+      if (btnTrue) {
+        btnTrue.addEventListener('click', this.pressRight, { once: true });
+      }
+
+      document.addEventListener('keydown', this.findButton);
     }
-
-    const btnSound = this.sprint.querySelector('.sprint__button-sound');
-    if (btnSound) {
-      btnSound.addEventListener('click', this.pushBtnSound);
-    }
-
-    const btnFalse = this.sprint.querySelector('.sprint__button-false');
-    if (btnFalse) {
-      btnFalse.addEventListener('click', this.pressLeft, { once: true });
-    }
-
-    const btnTrue = this.sprint.querySelector('.sprint__button-true');
-    if (btnTrue) {
-      btnTrue.addEventListener('click', this.pressRight, { once: true });
-    }
-
-    document.addEventListener('keydown', this.findButton);
-
     return this.sprint;
   }
 }
