@@ -258,6 +258,7 @@ class LayoutTextBook {
       }
     } else {
       const data = await wordsApiService.getWords(group, page);
+      storageService.setSession('wordsData', data);
       if (Array.isArray(data)) {
         words.innerHTML = '';
         data.forEach((item: IWord, index: number) => {
