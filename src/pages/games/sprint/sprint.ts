@@ -89,7 +89,7 @@ export default class Sprint {
 
           const userId = userService.getStoredUserId();
           if (userId) {
-            const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
+            const userWord = await wordsApiService.getUserWordByID(userId, (this.currentWord as IAggregatedWord)._id);
             if (userWord && userWord.optional) {
               const bodyUserWord = {
                 difficulty: userWord.difficulty,
@@ -99,7 +99,7 @@ export default class Sprint {
               const sum: number = userWord.optional.games.sprint.right + 1;
               bodyUserWord.optional.games.sprint.right = sum;
 
-              await wordsApiService.updateUserWord(userId, this.currentWord.id, bodyUserWord);
+              await wordsApiService.updateUserWord(userId, (this.currentWord as IAggregatedWord)._id, bodyUserWord);
             }
           }
         } else {
@@ -114,7 +114,7 @@ export default class Sprint {
 
           const userId = userService.getStoredUserId();
           if (userId) {
-            const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
+            const userWord = await wordsApiService.getUserWordByID(userId, (this.currentWord as IAggregatedWord)._id);
             if (userWord && userWord.optional) {
               const bodyUserWord = {
                 difficulty: userWord.difficulty,
@@ -123,7 +123,7 @@ export default class Sprint {
               const sum: number = userWord.optional.games.sprint.wrong + 1;
               bodyUserWord.optional.games.sprint.wrong = sum;
 
-              await wordsApiService.updateUserWord(userId, this.currentWord.id, bodyUserWord);
+              await wordsApiService.updateUserWord(userId, (this.currentWord as IAggregatedWord)._id, bodyUserWord);
             }
           }
         }
@@ -172,7 +172,7 @@ export default class Sprint {
 
           const userId = userService.getStoredUserId();
           if (userId) {
-            const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
+            const userWord = await wordsApiService.getUserWordByID(userId, (this.currentWord as IAggregatedWord)._id);
             if (userWord && userWord.optional) {
               const bodyUserWord = {
                 difficulty: userWord.difficulty,
@@ -182,7 +182,7 @@ export default class Sprint {
               const sum: number = userWord.optional.games.sprint.right + 1;
               bodyUserWord.optional.games.sprint.right = sum;
 
-              await wordsApiService.updateUserWord(userId, this.currentWord.id, bodyUserWord);
+              await wordsApiService.updateUserWord(userId, (this.currentWord as IAggregatedWord)._id, bodyUserWord);
             }
           }
         } else {
@@ -197,7 +197,7 @@ export default class Sprint {
 
           const userId = userService.getStoredUserId();
           if (userId) {
-            const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
+            const userWord = await wordsApiService.getUserWordByID(userId, (this.currentWord as IAggregatedWord)._id);
             if (userWord && userWord.optional) {
               const bodyUserWord = {
                 difficulty: userWord.difficulty,
@@ -207,7 +207,7 @@ export default class Sprint {
               const sum: number = userWord.optional.games.sprint.wrong + 1;
               bodyUserWord.optional.games.sprint.wrong = sum;
 
-              await wordsApiService.updateUserWord(userId, this.currentWord.id, bodyUserWord);
+              await wordsApiService.updateUserWord(userId, (this.currentWord as IAggregatedWord)._id, bodyUserWord);
             }
           }
         }
@@ -281,7 +281,7 @@ export default class Sprint {
 
       const userId = userService.getStoredUserId();
       if (userId) {
-        const userWord = await wordsApiService.getUserWordByID(userId, this.currentWord.id);
+        const userWord = (this.currentWord as IAggregatedWord).userWord;
         if (!userWord) {
           const body = {
             difficulty: 'easy',
@@ -299,7 +299,7 @@ export default class Sprint {
             },
           };
           this.storage.newWords += 1;
-          await wordsApiService.addUserWord(userId, this.currentWord.id, body);
+          await wordsApiService.addUserWord(userId, (this.currentWord as IAggregatedWord)._id, body);
 
           const userStatObj = await statisticApiService.getUserStatistics(userId);
           if (!userStatObj) {
