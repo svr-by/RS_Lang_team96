@@ -3,6 +3,7 @@ import { wordsApiService } from '../../api/wordsApiService';
 import { storageService } from '../../shared/services/storageService';
 import { SignInResponse } from '../../shared/types';
 import { Preloader } from '../../shared/components/preloader';
+import { IWord } from '../../shared/interfaces';
 
 class Description {
   private svg: Svg;
@@ -19,13 +20,15 @@ class Description {
     const preloader = new Preloader('inner').render();
     parent.append(preloader);
 
-    const item = await wordsApiService.getWord(id);
-    parent.innerHTML = '';
+    const wordData: IWord[] | null = storageService.getSession('wordsData');
+    if (wordData) {
+      const item = wordData.find((item) => item.id === id);
+      parent.innerHTML = '';
 
-    if (typeof item !== 'string' && item) {
-      const newDescription = document.createElement('div');
-      newDescription.className = 'content';
-      newDescription.innerHTML = `
+      if (item) {
+        const newDescription = document.createElement('div');
+        newDescription.className = 'content';
+        newDescription.innerHTML = `
         <img class='content__image' src='https://rslang-team96.herokuapp.com/${item.image}' alt=${item.word}>
         <div class='${storageService.getLocal('user') ? 'buttons' : 'display-none'}'>
           <button class='${
@@ -63,9 +66,10 @@ class Description {
           </div>
         </div>
       `;
-      parent.append(newDescription);
-    } else {
-      throw new Error(`Error ${item}`);
+        parent.append(newDescription);
+      } else {
+        throw new Error(`Error ${item}`);
+      }
     }
 
     (parent.querySelector('#playSvg') as HTMLElement).addEventListener('click', () => {
