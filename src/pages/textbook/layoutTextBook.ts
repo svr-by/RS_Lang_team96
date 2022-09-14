@@ -244,8 +244,10 @@ class LayoutTextBook {
       const learnedWords = await this.getLearnedWords();
 
       const data = await wordsApiService.getAggregatedUserWords(userData.userId, page, group, 20);
+
       if (Array.isArray(data)) {
         const wordsData = data[0].paginatedResults;
+        storageService.setSession('wordsData', wordsData);
         words.innerHTML = '';
         wordsData.forEach((item: IAggregatedWord, index: number) => {
           if (index === 0) {
@@ -261,13 +263,14 @@ class LayoutTextBook {
       storageService.setSession('wordsData', data);
       if (Array.isArray(data)) {
         words.innerHTML = '';
+        console.log('2', storageService.getSession('wordsData'));
         data.forEach((item: IWord, index: number) => {
           if (index === 0) {
             const description = textBook.querySelector('#description') as HTMLElement;
-            this.description.appendTo(description, item.id);
+            if (item.id) this.description.appendTo(description, item.id);
             storageService.setSession('chosenWordId', item.id);
           }
-          new Word(item.id, item.word, item.wordTranslate).appendTo(words);
+          if (item.id) new Word(item.id, item.word, item.wordTranslate).appendTo(words);
         });
       }
     }

@@ -1,7 +1,8 @@
 import { UserWordParams } from '../types';
 
 export interface IWord {
-  id: string;
+  id?: string;
+  _id?: string;
   group: number;
   page: number;
   word: string;
