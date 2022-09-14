@@ -67,6 +67,16 @@ class WordsApiService {
     return this.getAggregatedWords(userId, { wordsPerPage: 600, filter: targetPage });
   }
 
+  async getUserUnlearnedWords(
+    userId: string,
+    page: number,
+    group: number
+  ): Promise<AggregatedWordsResponse[] | undefined> {
+    const targetPage = `{"$and":[{"userWord.difficulty":{"$ne":"learned"}},{"page":{"$lte":${page}}},{"group":${group}}]}`;
+    const allUnlearnedWords = await this.getAggregatedWords(userId, { wordsPerPage: 600, filter: targetPage });
+    return allUnlearnedWords?.slice(-20);
+  }
+
   async getAggregatedWordsById(userId: string, wordId: string): Promise<IAggregatedWord[] | undefined> {
     const response = await api.axiosInstance.get(`${api.usersEndpoint}/${userId}/aggregatedWords/${wordId}`);
     return response.data;

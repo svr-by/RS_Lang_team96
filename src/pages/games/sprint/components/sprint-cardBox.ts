@@ -32,7 +32,7 @@ export default class CardBox {
         this.cardBox,
         'h3',
         ['sprint__translate'],
-        `${this.wordsInGroup[randomNum]?.wordTranslate}`
+        `${this.wordsInGroup[randomNum]?.wordTranslate || 'неопределенность'}`
       ).render();
     } else {
       new BaseComponent(this.cardBox, 'h3', ['sprint__translate'], `${this.currentWord?.wordTranslate}`).render();

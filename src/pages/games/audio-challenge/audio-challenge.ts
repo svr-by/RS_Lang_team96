@@ -49,7 +49,7 @@ export default class AudioChallange {
       const main: HTMLElement | null = document.querySelector('.main__games');
       if (audioChallange && main) {
         this.currentCountWord = (+this.currentCountWord + 1).toString();
-        if (+this.currentCountWord > 20 || this.currentWord === undefined) {
+        if (+this.currentCountWord > 20 || this.currentWord === undefined || this.wordsInGroup.length < 5) {
           this.audioChallange.innerHTML = '';
           const result = new Result(this.storage).render();
           this.audioChallange.append(result);

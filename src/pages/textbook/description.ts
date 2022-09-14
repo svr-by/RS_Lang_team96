@@ -37,7 +37,7 @@ class Description {
           }' id='in-difficult'>В сложные слова</button>
           <button class='${
             storageService.getSession('sect') === 'studied words' ? 'display-none' : 'buttons__difficult-button'
-          }' id='in-learning'>Слово изученно</button>
+          }' id='in-learning'>В изученные слова</button>
         </div>
         <p class='content__word'>${item.word}</p>
         <p class='content__word-translate russian'>${item.wordTranslate}</p>
@@ -57,12 +57,12 @@ class Description {
         <div class=${storageService.getLocal('user') ? 'gaming-response' : 'display-none'}>
           <div class='audio-call game'>
             <p class='game__name'>Аудио-вызов: 
-            <span id='audio-call-correct'>0</span> из <span id='audio-call-was-wrong'>0</span>
+            <span id='audio-call-correct'>0</span> | <span id='audio-call-was-wrong'>0</span>
             </p>
           </div>
           <div class='sprint-results game'>
             <p class='game__name'>Спринт: 
-              <span id='sprint-correct'>0</span> из <span id='sprint-was-wrong'>0</span>
+              <span id='sprint-correct'>0</span> | <span id='sprint-was-wrong'>0</span>
             </p>
           </div>
         </div>
