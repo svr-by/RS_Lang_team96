@@ -263,7 +263,6 @@ class LayoutTextBook {
       storageService.setSession('wordsData', data);
       if (Array.isArray(data)) {
         words.innerHTML = '';
-        console.log('2', storageService.getSession('wordsData'));
         data.forEach((item: IWord, index: number) => {
           if (index === 0) {
             const description = textBook.querySelector('#description') as HTMLElement;
