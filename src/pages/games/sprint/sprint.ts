@@ -236,7 +236,6 @@ export default class Sprint {
     this.root.innerHTML = '';
     this.root.appendChild(this.sprint);
     this.sprint.classList.add('sprint');
-
     if (this.currentWord) {
       new BaseComponent(this.sprint, 'h2', ['sprint__timer'], `${Math.trunc(this.seconds / 10)}`).render();
 
