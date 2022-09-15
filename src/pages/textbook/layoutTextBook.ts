@@ -245,6 +245,7 @@ class LayoutTextBook {
           new Word(item._id, item.word, item.wordTranslate, hardWords, learnedWords).appendTo(words);
         });
       }
+      this.description.addStyleForPage();
     } else {
       const data = await wordsApiService.getWords(group, page);
       storageService.setSession('wordsData', data);
