@@ -21,9 +21,16 @@ class Description {
     parent.append(preloader);
 
     const wordData: IWord[] | null = storageService.getSession('wordsData');
-
     if (wordData) {
-      const item = wordData.find((item) => item.id || item._id === id);
+      const item = wordData.find((item) => {
+        if (item.id) {
+          return item.id === id;
+        }
+        if (item._id) {
+          return item._id === id;
+        }
+      });
+
       parent.innerHTML = '';
 
       if (item) {

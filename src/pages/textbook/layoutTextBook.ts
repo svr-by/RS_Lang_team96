@@ -141,6 +141,7 @@ class LayoutTextBook {
     }
     const words = textBook.querySelector('#words') as HTMLElement;
     const hardWords = await this.getHardWords();
+    storageService.setSession('wordsData', hardWords);
     if (hardWords) {
       words.innerHTML = '';
       hardWords.forEach((item: IAggregatedWord, index: number) => {
@@ -159,6 +160,7 @@ class LayoutTextBook {
     }
     const words = textBook.querySelector('#words') as HTMLElement;
     const learnedWords = await this.getLearnedWords();
+    storageService.setSession('wordsData', learnedWords);
     if (learnedWords) {
       words.innerHTML = '';
       learnedWords.forEach((item: IAggregatedWord, index: number) => {
@@ -288,6 +290,7 @@ class LayoutTextBook {
     (textBook.querySelector('#settings-modal') as HTMLElement).classList.remove('display-none');
     (textBook.querySelector('#toggle') as HTMLInputElement).addEventListener('change', (event) => {
       event.stopPropagation();
+      event.stopImmediatePropagation();
       document.querySelectorAll('.russian').forEach((item) => {
         item.classList.toggle('display-none');
       });
