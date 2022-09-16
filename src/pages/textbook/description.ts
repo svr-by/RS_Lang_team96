@@ -3,7 +3,7 @@ import { wordsApiService } from '../../api/wordsApiService';
 import { storageService } from '../../shared/services/storageService';
 import { SignInResponse } from '../../shared/types';
 import { Preloader } from '../../shared/components/preloader';
-import { IWord } from '../../shared/interfaces';
+import { IWord, IAggregatedWord } from '../../shared/interfaces';
 
 class Description {
   private svg: Svg;
@@ -20,7 +20,7 @@ class Description {
     const preloader = new Preloader('inner').render();
     parent.append(preloader);
 
-    const wordData: IWord[] | null = storageService.getSession('wordsData');
+    const wordData: IAggregatedWord[] | IWord[] | null = storageService.getSession('wordsData');
     if (wordData) {
       const item = wordData.find((item) => {
         if (item.id) {
@@ -30,7 +30,6 @@ class Description {
           return item._id === id;
         }
       });
-
       parent.innerHTML = '';
 
       if (item) {
@@ -78,46 +77,46 @@ class Description {
       } else {
         throw new Error(`Error ${item}`);
       }
+
+      (parent.querySelector('#playSvg') as HTMLElement).addEventListener('click', () => {
+        const sound = (document.getElementById('sound') as HTMLAudioElement) || null;
+        const audioMeaning = (document.getElementById('audioMeaning') as HTMLAudioElement) || null;
+        const audioExample = (document.getElementById('audioExample') as HTMLAudioElement) || null;
+
+        sound &&
+          sound.addEventListener('ended', () => {
+            audioMeaning && audioMeaning.play();
+          });
+
+        audioMeaning &&
+          audioMeaning.addEventListener('ended', () => {
+            audioExample && audioExample.play();
+          });
+
+        if (sound) sound.play();
+      });
+
+      const buttonInDifficult = parent.querySelector('#in-difficult');
+      buttonInDifficult &&
+        buttonInDifficult.addEventListener('click', () => {
+          this.addToDifficultWords(id, item as IAggregatedWord);
+        });
+
+      const buttonInLearning = parent.querySelector('#in-learning');
+      buttonInLearning &&
+        buttonInLearning.addEventListener('click', () => {
+          this.addToLearningWords(id, item as IAggregatedWord);
+        });
+
+      this.addStyleForPage();
+      this.addWinsMistaces(id);
     }
-
-    (parent.querySelector('#playSvg') as HTMLElement).addEventListener('click', () => {
-      const sound = (document.getElementById('sound') as HTMLAudioElement) || null;
-      const audioMeaning = (document.getElementById('audioMeaning') as HTMLAudioElement) || null;
-      const audioExample = (document.getElementById('audioExample') as HTMLAudioElement) || null;
-
-      sound &&
-        sound.addEventListener('ended', () => {
-          audioMeaning && audioMeaning.play();
-        });
-
-      audioMeaning &&
-        audioMeaning.addEventListener('ended', () => {
-          audioExample && audioExample.play();
-        });
-
-      if (sound) sound.play();
-    });
-
-    const buttonInDifficult = parent.querySelector('#in-difficult');
-    buttonInDifficult &&
-      buttonInDifficult.addEventListener('click', () => {
-        this.addToDifficultWords(id);
-      });
-
-    const buttonInLearning = parent.querySelector('#in-learning');
-    buttonInLearning &&
-      buttonInLearning.addEventListener('click', () => {
-        this.addToLearningWords(id);
-      });
-
-    this.addStyleForPage();
-    this.addWinsMistaces(id);
   }
 
-  addToDifficultWords(id: string) {
+  addToDifficultWords(id: string, item: IAggregatedWord) {
     const word = document.getElementById(id);
     if (word) {
-      if (word.classList.contains('learned-word')) {
+      if (item.userWord?.difficulty === 'learned') {
         this.userData && wordsApiService.updateUserWord(this.userData.userId, id, { difficulty: 'hard' });
         document.querySelectorAll('.word').forEach((item) => {
           if (item.id === id) {
@@ -125,7 +124,14 @@ class Description {
             item.classList.add('hard-word');
           }
         });
-      } else {
+      } else if (item.userWord) {
+        this.userData && wordsApiService.updateUserWord(this.userData.userId, id, { difficulty: 'hard' });
+        document.querySelectorAll('.word').forEach((item) => {
+          if (item.id === id) {
+            item.classList.add('hard-word');
+          }
+        });
+      } else if (!item.userWord) {
         this.userData && wordsApiService.addUserWord(this.userData.userId, id, { difficulty: 'hard' });
         document.querySelectorAll('.word').forEach((item) => {
           if (item.id === id) {
@@ -146,10 +152,10 @@ class Description {
     }
   }
 
-  addToLearningWords(id: string) {
+  addToLearningWords(id: string, item: IAggregatedWord) {
     const word = document.getElementById(id);
     if (word) {
-      if (word.classList.contains('hard-word')) {
+      if (item.userWord?.difficulty === 'hard') {
         this.userData && wordsApiService.updateUserWord(this.userData.userId, id, { difficulty: 'learned' });
         document.querySelectorAll('.word').forEach((item) => {
           if (item.id === id) {
@@ -157,7 +163,14 @@ class Description {
             item.classList.add('learned-word');
           }
         });
-      } else {
+      } else if (item.userWord) {
+        this.userData && wordsApiService.updateUserWord(this.userData.userId, id, { difficulty: 'learned' });
+        document.querySelectorAll('.word').forEach((item) => {
+          if (item.id === id) {
+            item.classList.add('learned-word');
+          }
+        });
+      } else if (!item.userWord) {
         this.userData && wordsApiService.addUserWord(this.userData.userId, id, { difficulty: 'learned' });
         document.querySelectorAll('.word').forEach((item) => {
           if (item.id === id) {

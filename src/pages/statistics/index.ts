@@ -144,7 +144,7 @@ class StatsPage {
         data: words,
       },
       {
-        label: 'Сумма новых слов',
+        label: 'Всего новых слов',
         barPercentage: 1,
         categoryPercentage: 1,
         backgroundColor: `#74fea4`,
