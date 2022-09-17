@@ -38,7 +38,6 @@ class UserService {
 
   signOut() {
     storageService.removeLocal('user');
-    storageService.removeSession('StatByGames');
     storageService.setSession('sect', 'text-book');
     app.header.renderloginElem();
     app.renderMain();

@@ -164,7 +164,7 @@ export default class AudioChallange {
         this.audioChallange,
         'div',
         ['main__games__audio-challange-buttonSkip'],
-        'SKIP &#10162'
+        'ДАЛЕЕ &#10162'
       ).render();
       new AnswerBox(this.audioChallange).render();
 

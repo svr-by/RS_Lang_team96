@@ -32,7 +32,7 @@ export default class SprintLvl {
       score: 0,
       newWords: 0,
     };
-    this.seconds = 600;
+    this.seconds = 300;
     this.isPush = false;
   }
 
