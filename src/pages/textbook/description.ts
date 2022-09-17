@@ -1,4 +1,5 @@
 import Svg from './svg';
+import { api } from '../../api/api';
 import { wordsApiService } from '../../api/wordsApiService';
 import { storageService } from '../../shared/services/storageService';
 import { SignInResponse } from '../../shared/types';
@@ -36,7 +37,7 @@ class Description {
         const newDescription = document.createElement('div');
         newDescription.className = 'content';
         newDescription.innerHTML = `
-        <img class='content__image' src='https://rslang-team96.herokuapp.com/${item.image}' alt=${item.word}>
+        <img class='content__image' src='${api.base}/${item.image}' alt=${item.word}>
         <div class='${storageService.getLocal('user') ? 'buttons' : 'display-none'}'>
           <button class='${
             storageService.getSession('sect') === 'difficult words' ? 'display-none' : 'buttons__difficult-button'
@@ -44,14 +45,17 @@ class Description {
           <button class='${
             storageService.getSession('sect') === 'studied words' ? 'display-none' : 'buttons__difficult-button'
           }' id='in-learning'>В изученные слова</button>
+          <button class='${
+            storageService.getSession('sect') === 'text-book' ? 'display-none' : 'buttons__difficult-button'
+          }' id='toEasyBtn'>В простые слова</button>
         </div>
         <p class='content__word'>${item.word}</p>
         <p class='content__word-translate russian'>${item.wordTranslate}</p>
         <div class='transcription'>
           <p class='transcription__value'>${item.transcription}</p>
-          <audio class='sound' src='https://rslang-team96.herokuapp.com/${item.audio}' id='sound'></audio>
-          <audio class='sound' src='https://rslang-team96.herokuapp.com/${item.audioExample}' id='audioExample'></audio>
-          <audio class='sound' src='https://rslang-team96.herokuapp.com/${item.audioMeaning}' id='audioMeaning'></audio>
+          <audio class='sound' src='${api.base}/${item.audio}' id='sound'></audio>
+          <audio class='sound' src='${api.base}/${item.audioExample}' id='audioExample'></audio>
+          <audio class='sound' src='${api.base}/${item.audioMeaning}' id='audioMeaning'></audio>
           ${this.svg.playSvg('#8f8e8e', 'transcription__play')}
         </div>
         <h3 class='content__header'>Значение</h3>
@@ -106,6 +110,12 @@ class Description {
       buttonInLearning &&
         buttonInLearning.addEventListener('click', () => {
           this.addToLearningWords(id, item as IAggregatedWord);
+        });
+
+      const buttonInEasy = parent.querySelector('#toEasyBtn');
+      buttonInEasy &&
+        buttonInEasy.addEventListener('click', () => {
+          this.addToEasyWords(id, item as IAggregatedWord);
         });
 
       this.addStyleForPage();
@@ -188,6 +198,17 @@ class Description {
           item.classList.add('display-none');
         }
       });
+    }
+  }
+
+  addToEasyWords(id: string, item: IAggregatedWord) {
+    const word = document.getElementById(id);
+    if (word && item.userWord) {
+      this.userData && wordsApiService.updateUserWord(this.userData.userId, id, { difficulty: 'easy' });
+      word.classList.remove('hard-word');
+      word.classList.remove('learned-word');
+      word.classList.add('display-none');
+      this.addStyleForPage();
     }
   }
 
