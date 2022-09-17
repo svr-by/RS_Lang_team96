@@ -1,6 +1,7 @@
 import { layoutService } from '../../shared/services/layoutService';
 import { userService } from '../../shared/services/userService';
 import { Modal } from '../../shared/components/modal';
+import { Preloader } from '../../shared/components/preloader';
 
 export class Authorization {
   elem: HTMLElement;
@@ -53,6 +54,8 @@ export class Authorization {
       const button = this.elem.querySelector('#authBtn') as HTMLElement;
       if (button) {
         let isSuccess: boolean;
+        const preloader = new Preloader().render();
+        document.body.append(preloader);
         switch (button.dataset.func) {
           case 'login':
             event.preventDefault();
@@ -65,6 +68,7 @@ export class Authorization {
             if (isSuccess) this.modal.closeModal();
             break;
         }
+        preloader.remove();
       }
     });
   }

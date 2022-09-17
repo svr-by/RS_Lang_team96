@@ -68,6 +68,7 @@
     border-radius: 1rem;
     cursor: pointer;
     color: $color-white;
+    flex-grow: 1;
 
     &:hover {
       background-color: $color-blue;
@@ -107,6 +108,7 @@
     margin: 0;
     font-size: 1rem;
     color: $color-white;
+
   }
 
   @media screen and (max-width: $tablet) {
@@ -114,6 +116,16 @@
       width: 100%;
     }
   }
+}
+
+#sprint-was-wrong,
+#audio-call-was-wrong {
+  color: $color-yellow;
+}
+
+#sprint-correct,
+#audio-call-correct {
+  color: $color-green;
 }
 
 .display-none {

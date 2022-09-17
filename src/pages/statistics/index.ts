@@ -21,7 +21,7 @@ class StatsPage {
     this.canvas = document.createElement('canvas');
     this.canvas.id = 'myChart';
     this.chartConfig = {
-      type: 'bar',
+      type: 'line',
       data: {
         labels: [],
         datasets: [
@@ -40,10 +40,10 @@ class StatsPage {
     let allGamesRightPercent = 0;
     const sprintStats: GameStats = { words: 0, right: 0, series: 0 };
     const audiocallStats: GameStats = { words: 0, right: 0, series: 0 };
-    const isUserSigin = storageService.getLocal<SignInResponse>('user') ? true : false;
+    const user = this.isUserAuthorized();
     const stats = storageService.getSession<IStatByGames>('StatByGames');
 
-    if (isUserSigin && stats) {
+    if (user && stats) {
       if (dateToday === stats.date) {
         allNewWords = stats.allNewWords;
         const audioCallBest = stats.games.audioCall.bestSeries;
@@ -57,7 +57,7 @@ class StatsPage {
         audiocallStats.right = stats.games.audioCall.right;
         audiocallStats.series = stats.games.audioCall.bestSeries;
       }
-    } else if (!isUserSigin) {
+    } else if (!user) {
       this.showAuthorizationMess();
     }
 
@@ -80,18 +80,18 @@ class StatsPage {
             </div>
           </div>
           <div class="stats__games">
-            ${this.renderGameStats('Спринт', isUserSigin, sprintStats)}
-            ${this.renderGameStats('Аудиовызов', isUserSigin, audiocallStats)}
+            ${this.renderGameStats('Спринт', user, sprintStats)}
+            ${this.renderGameStats('Аудиовызов', user, audiocallStats)}
           </div>
         </div>
       </section>
     `;
-    if (isUserSigin) this.renderChart();
+    if (user) this.renderChart();
     return this.elem;
   }
 
-  private renderGameStats(name: string, isUserSigin: boolean, stats: GameStats) {
-    const titleClass = isUserSigin ? 'game-stat__name active' : 'game-stat__name';
+  private renderGameStats(name: string, user: boolean, stats: GameStats) {
+    const titleClass = user ? 'game-stat__name active' : 'game-stat__name';
     return `
     <div class="game-stat">
       <h4 class="${titleClass}">${name}</h4>
@@ -128,17 +128,36 @@ class StatsPage {
     const userStats = await statisticApiService.getUserStatistics(userId);
     const dates = userStats?.optional ? Object.keys(userStats.optional) : [];
     const words = userStats?.optional ? Object.values(userStats.optional) : [];
+    const agrLearnWords = words.reduce(
+      (acc: number[], el: number, ind: number) => (ind === 0 ? acc.concat([el]) : acc.concat([el + acc[ind - 1]])),
+      []
+    );
 
     this.chartConfig.data.labels = dates;
     this.chartConfig.data.datasets = [
       {
-        label: 'Количество новых слов',
+        label: 'Новые слова',
+        barPercentage: 0.8,
+        categoryPercentage: 1,
         backgroundColor: `#16b0e8`,
+        fill: true,
         data: words,
+      },
+      {
+        label: 'Всего новых слов',
+        barPercentage: 1,
+        categoryPercentage: 1,
+        backgroundColor: `#74fea4`,
+        pointRadius: 10,
+        data: agrLearnWords,
       },
     ];
 
-    this.elem.append(longStats);
+    if (this.isUserAuthorized()) this.elem.append(longStats);
+  }
+
+  private isUserAuthorized() {
+    return storageService.getLocal<SignInResponse>('user') ? true : false;
   }
 }
 

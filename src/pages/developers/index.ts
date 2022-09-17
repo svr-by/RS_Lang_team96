@@ -18,7 +18,7 @@ class DevsPage {
     this.team = [
       new TeamMember({
         name: 'Сергей Рачковский',
-        pesp: 'Интеграция с бэкендом, архитектура, дизайн, авторизация',
+        pesp: 'Интеграция с бэкендом, архитектура, статистика, авторизация, дизайн',
         title: 'teamlead, developer',
         githubLink: 'svr-by',
       }),
@@ -30,7 +30,7 @@ class DevsPage {
       }),
       new TeamMember({
         name: 'Игорь Левачков',
-        pesp: 'Мини-игры "Аудиовызов" и "Спринт", сбор и отображение статистики',
+        pesp: 'Мини-игра "Аудиовызов", мини-игра "Спринт", сбор статистики',
         title: 'developer',
         githubLink: 'brombom',
       }),

@@ -118,7 +118,7 @@
 
 .hard-word {
   border: 6px solid #d3d3d3;
-  background-image: url(assets/img/hard.png);
+  background-image: url('assets/img/hard.png');
   background-size: 2rem;
   background-repeat: no-repeat;
   background-position: top right;
@@ -127,10 +127,13 @@
 
 .learned-word {
   border: 6px solid #99e4ff;
+  background-image: url('assets/img/done.png');
+  background-size: 2rem;
+  background-repeat: no-repeat;
+  background-position: top right;
 }
 
 .learned-words-background {
-  padding: 0.5rem;
   margin-top: 1rem;
   background: #d7ffff;
   border-radius: 0.5rem;

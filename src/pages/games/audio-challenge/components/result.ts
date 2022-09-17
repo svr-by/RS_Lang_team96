@@ -1,5 +1,4 @@
 import BaseComponent from '../../../../shared/components/base_component';
-import { Modal } from '../../../../shared/components/modal';
 import StatWordsWrong from './result-wrong';
 import StatWordsAnswer from './result-answer';
 import { IStorage, IStatByGames } from '../../../../shared/interfaces';
@@ -115,6 +114,6 @@ export default class Result {
         storageService.setSession('StatByGames', userStatLS);
       }
     }
-    new Modal().showModal(this.result);
+    return this.result;
   }
 }

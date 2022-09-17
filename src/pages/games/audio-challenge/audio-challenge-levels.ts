@@ -1,12 +1,15 @@
 import BaseComponent from '../../../shared/components/base_component';
 import AudioChallange from '../audio-challenge/audio-challenge';
-import { IWord, IStorage } from '../../../shared/interfaces';
+import { IWord, IAggregatedWord, IStorage } from '../../../shared/interfaces';
+import { AggregatedWordsResponse } from '../../../shared/types';
 import { wordsApiService } from '../../../api/wordsApiService';
+import { Preloader } from '../../../shared/components/preloader';
+import { userService } from '../../../shared/services/userService';
 
 export default class AudioChallangeLvl {
   audioChallangeLvl: HTMLElement;
   container: HTMLElement;
-  wordsInGroup: IWord[];
+  wordsInGroup: IWord[] | IAggregatedWord[];
   storage: IStorage;
   currentCountWord: string;
   isPush: boolean;
@@ -14,7 +17,7 @@ export default class AudioChallangeLvl {
   constructor(private readonly root: HTMLElement) {
     this.audioChallangeLvl = document.createElement('div');
     this.container = document.createElement('section');
-    this.wordsInGroup = [] as IWord[];
+    this.wordsInGroup = [];
     this.storage = {
       countAnswerCorrect: 0,
       namesAnswerCorrect: [],
@@ -38,13 +41,37 @@ export default class AudioChallangeLvl {
       this.isPush = true;
       if (target && target.tagName === 'DIV') {
         if (target.dataset.group) {
-          const arrPromisesFromPages30: Promise<IWord[]>[] = [];
-          for (let i = 0; i < 30; i += 1) {
-            const promiseFromPage = wordsApiService.getWords(+target.dataset.group, i) as Promise<IWord[]>;
-            arrPromisesFromPages30.push(promiseFromPage);
+          const preloader = new Preloader().render();
+          this.audioChallangeLvl.append(preloader);
+
+          const arrPromisesFromPages3: Promise<IWord[] | AggregatedWordsResponse[]>[] = [];
+          const userId = userService.getStoredUserId();
+          let arrOfArrsWords: IWord[][] | IAggregatedWord[][];
+
+          if (!userId) {
+            for (let i = 0; i < 3; i += 1) {
+              const randomPage = Math.floor(Math.random() * 30);
+              const promiseFromPage = wordsApiService.getWords(+target.dataset.group, randomPage) as Promise<IWord[]>;
+              arrPromisesFromPages3.push(promiseFromPage);
+            }
+            arrOfArrsWords = (await Promise.all(arrPromisesFromPages3)) as IWord[][];
+          } else {
+            for (let i = 0; i < 3; i += 1) {
+              const randomPage = Math.floor(Math.random() * 30);
+              const promiseFromPage = wordsApiService.getAggregatedUserWords(
+                userId,
+                randomPage,
+                +target.dataset.group,
+                20
+              ) as Promise<AggregatedWordsResponse[]>;
+              arrPromisesFromPages3.push(promiseFromPage);
+            }
+            const arrOfAgrResp = (await Promise.all(arrPromisesFromPages3)) as AggregatedWordsResponse[][];
+            arrOfArrsWords = arrOfAgrResp.map((resp) => resp[0].paginatedResults);
           }
-          const arrOfArrsWords = await Promise.all(arrPromisesFromPages30);
-          this.wordsInGroup = arrOfArrsWords.reduce((a, b) => a.concat(b));
+
+          preloader.remove();
+          this.wordsInGroup = arrOfArrsWords.flat();
           this.audioChallangeLvl.remove();
           new AudioChallange(this.root, this.wordsInGroup, this.currentCountWord, this.storage).render();
         }

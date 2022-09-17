@@ -26,16 +26,16 @@ export default class CardBox {
     new BaseComponent(this.cardBox, 'div', ['sprint__button-sound']).render();
     new BaseComponent(this.cardBox, 'h3', ['sprint__word'], `${this.currentWord.word}`).render();
 
-    const randomNum = Math.floor(Math.random() * 600);
+    const randomNum = Math.floor(Math.random() * this.wordsInGroup.length);
     if (randomNum === 0 || randomNum % 2 === 0) {
       new BaseComponent(
         this.cardBox,
         'h3',
         ['sprint__translate'],
-        `${this.wordsInGroup[randomNum].wordTranslate}`
+        `${this.wordsInGroup[randomNum]?.wordTranslate || 'неопределенность'}`
       ).render();
     } else {
-      new BaseComponent(this.cardBox, 'h3', ['sprint__translate'], `${this.currentWord.wordTranslate}`).render();
+      new BaseComponent(this.cardBox, 'h3', ['sprint__translate'], `${this.currentWord?.wordTranslate}`).render();
     }
 
     return this.cardBox;

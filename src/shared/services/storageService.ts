@@ -20,6 +20,10 @@ class StorageService {
   setSession<T>(key: string, value: T) {
     sessionStorage.setItem(key, JSON.stringify(value));
   }
+
+  removeSession(key: string) {
+    sessionStorage.removeItem(key);
+  }
 }
 
 export const storageService = new StorageService();

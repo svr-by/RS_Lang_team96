@@ -12,13 +12,15 @@ import { SignInResponse } from '../../shared/types';
 import AudioChallange from '../games/audio-challenge/audio-challenge';
 import Sprint from '../games/sprint/sprint';
 import { Views } from '../../shared/enums';
+import { Preloader } from '../../shared/components/preloader';
+import { Modal } from '../../shared/components/modal';
+import { layoutService } from '../../shared/services/layoutService';
 
 class LayoutTextBook {
   private svg: Svg;
   private groupNumber: { name: string; numbers: string; id: string }[];
   private description: Description;
   private wordsInGroup: IWord[];
-  private storage: IStorage;
   private currentCountWord: string;
 
   constructor() {
@@ -26,20 +28,6 @@ class LayoutTextBook {
     this.groupNumber = dataLevels;
     this.description = new Description();
     this.wordsInGroup = [] as IWord[];
-    this.storage = {
-      countAnswerCorrect: 0,
-      namesAnswerCorrect: [],
-      namesAnswerCorrectTranslate: [],
-      namesAnswerCorrectSound: [],
-      inRow: 0,
-      setInRow: new Set(),
-      countAnswerWrong: 0,
-      namesAnswerWrong: [],
-      namesAnswerWrongTranslate: [],
-      namesAnswerWrongSound: [],
-      score: 0,
-      newWords: 0,
-    };
     this.currentCountWord = '1';
   }
 
@@ -48,7 +36,7 @@ class LayoutTextBook {
     textBook.className = 'textBook';
     textBook.id = 'textBook';
     textBook.innerHTML = `
-      <div class='wrapper'>
+      <div class='wrapper wrapper-textbook'>
         <div class='header-and-settings' id='header-and-settings'>
           <h2 class='header-and-settings__header' id='textbook-words'>Учебник</h2>
           <h2 class='${
@@ -65,16 +53,16 @@ class LayoutTextBook {
           <h2 class='words__header'>Слова</h2>
           <div class='dictionary'>
             <div class='dictionary__value' id='words'></div>
-            <div class='dictionary__description' id='description'></div>
+            <div id='description'></div>
           </div>
         </div>
         <div class='page-navigation' id='pagination'></div>
 
-        <div class='${storageService.getLocal('user') ? 'games' : 'display-none'}'>
-          <p class='games__description'>Закрепи новые слова при помощи игр 
-            <span class='links__audio-challenge' id='links-to-audio-challenge'>Аудиовызов</span>
+        <div class='games'>
+          <p class='games__description'>Закрепите новые слова при помощи игр 
+            <button class='links__audio-challenge' id='links-to-audio-challenge'>Аудиовызов</button>
             и 
-            <span class='links__audio-challenge' id='links-to-sprint'>Спринт</span>
+            <button class='links__audio-challenge' id='links-to-sprint'>Спринт</button>
           </p>
         </div>
       </div>
@@ -117,12 +105,12 @@ class LayoutTextBook {
 
     const linksToAudioChallenge = textBook.querySelector('#links-to-audio-challenge');
     if (linksToAudioChallenge) {
-      linksToAudioChallenge.addEventListener('click', () => this.linksToGame('AudioChalenge'), { once: true });
+      linksToAudioChallenge.addEventListener('click', () => this.linksToGame('AudioChalenge'));
     }
 
     const linksToSprint = textBook.querySelector('#links-to-sprint');
     if (linksToSprint) {
-      linksToSprint.addEventListener('click', () => this.linksToGame('Sprint'), { once: true });
+      linksToSprint.addEventListener('click', () => this.linksToGame('Sprint'));
     }
 
     return textBook;
@@ -153,6 +141,7 @@ class LayoutTextBook {
     }
     const words = textBook.querySelector('#words') as HTMLElement;
     const hardWords = await this.getHardWords();
+    storageService.setSession('wordsData', hardWords);
     if (hardWords) {
       words.innerHTML = '';
       hardWords.forEach((item: IAggregatedWord, index: number) => {
@@ -171,6 +160,7 @@ class LayoutTextBook {
     }
     const words = textBook.querySelector('#words') as HTMLElement;
     const learnedWords = await this.getLearnedWords();
+    storageService.setSession('wordsData', learnedWords);
     if (learnedWords) {
       words.innerHTML = '';
       learnedWords.forEach((item: IAggregatedWord, index: number) => {
@@ -234,41 +224,46 @@ class LayoutTextBook {
 
   async addWords(page: number, group: number, textBook: HTMLElement) {
     const words = textBook.querySelector('#words') as HTMLElement;
+    const preloader = new Preloader().render();
+    words.append(preloader);
     const userData: null | SignInResponse = storageService.getLocal('user');
     if (userData) {
       const hardWords = await this.getHardWords();
 
       const learnedWords = await this.getLearnedWords();
 
-      wordsApiService.getAggregatedUserWords(userData.userId, page, group, 20).then((data) => {
-        if (Array.isArray(data)) {
-          const wordsData = data[0].paginatedResults;
-          words.innerHTML = '';
-          wordsData.forEach((item: IAggregatedWord, index: number) => {
-            if (index === 0) {
-              const description = textBook.querySelector('#description') as HTMLElement;
-              this.description.appendTo(description, item._id);
-              storageService.setSession('chosenWordId', item._id);
-            }
-            new Word(item._id, item.word, item.wordTranslate, hardWords, learnedWords).appendTo(words);
-          });
-        }
-      });
+      const data = await wordsApiService.getAggregatedUserWords(userData.userId, page, group, 20);
+
+      if (Array.isArray(data)) {
+        const wordsData = data[0].paginatedResults;
+        storageService.setSession('wordsData', wordsData);
+        words.innerHTML = '';
+        wordsData.forEach((item: IAggregatedWord, index: number) => {
+          if (index === 0) {
+            const description = textBook.querySelector('#description') as HTMLElement;
+            this.description.appendTo(description, item._id);
+            storageService.setSession('chosenWordId', item._id);
+          }
+          new Word(item._id, item.word, item.wordTranslate, hardWords, learnedWords).appendTo(words);
+        });
+      }
+      this.description.addStyleForPage();
     } else {
-      wordsApiService.getWords(group, page).then((data) => {
-        if (Array.isArray(data)) {
-          words.innerHTML = '';
-          data.forEach((item: IWord, index: number) => {
-            if (index === 0) {
-              const description = textBook.querySelector('#description') as HTMLElement;
-              this.description.appendTo(description, item.id);
-              storageService.setSession('chosenWordId', item.id);
-            }
-            new Word(item.id, item.word, item.wordTranslate).appendTo(words);
-          });
-        }
-      });
+      const data = await wordsApiService.getWords(group, page);
+      storageService.setSession('wordsData', data);
+      if (Array.isArray(data)) {
+        words.innerHTML = '';
+        data.forEach((item: IWord, index: number) => {
+          if (index === 0) {
+            const description = textBook.querySelector('#description') as HTMLElement;
+            if (item.id) this.description.appendTo(description, item.id);
+            storageService.setSession('chosenWordId', item.id);
+          }
+          if (item.id) new Word(item.id, item.word, item.wordTranslate).appendTo(words);
+        });
+      }
     }
+    preloader.remove();
   }
 
   highlightSelectedPartition(textBook: HTMLElement) {
@@ -295,6 +290,7 @@ class LayoutTextBook {
     (textBook.querySelector('#settings-modal') as HTMLElement).classList.remove('display-none');
     (textBook.querySelector('#toggle') as HTMLInputElement).addEventListener('change', (event) => {
       event.stopPropagation();
+      event.stopImmediatePropagation();
       document.querySelectorAll('.russian').forEach((item) => {
         item.classList.toggle('display-none');
       });
@@ -325,19 +321,43 @@ class LayoutTextBook {
   }
 
   async linksToGame(game: string) {
-    const arrPromisesFromPages30: Promise<IWord[]>[] = [];
-    const group = storageService.getSession('level');
-    for (let i = 0; i < 30; i += 1) {
-      if (group) {
-        const promiseFromPage = wordsApiService.getWords(+group, i) as Promise<IWord[]>;
-        arrPromisesFromPages30.push(promiseFromPage);
-      }
+    const group = storageService.getSession<string>('level') || '0';
+    const page = storageService.getSession<string>('pageNumber') || '0';
+    const userData: null | SignInResponse = storageService.getLocal('user');
+    if (userData) {
+      const arrOfAgrResp = (await wordsApiService.getUserUnlearnedWords(userData.userId, +page, +group)) || [];
+      this.wordsInGroup = arrOfAgrResp[0].paginatedResults;
+    } else {
+      this.wordsInGroup = (await wordsApiService.getWords(+group, +page)) || [];
     }
-    const arrOfArrsWords = await Promise.all(arrPromisesFromPages30);
-    this.wordsInGroup = arrOfArrsWords.reduce((a, b) => a.concat(b));
+
+    if (this.wordsInGroup.length <= 4) {
+      const mess = layoutService.createElement({
+        tag: 'h3',
+        text: 'Слишком мало неизученных слов для игры. Попробуйте другую страницу.',
+      });
+      new Modal().showModal(mess);
+      return;
+    }
+
+    const storage: IStorage = {
+      countAnswerCorrect: 0,
+      namesAnswerCorrect: [],
+      namesAnswerCorrectTranslate: [],
+      namesAnswerCorrectSound: [],
+      inRow: 0,
+      setInRow: new Set(),
+      countAnswerWrong: 0,
+      namesAnswerWrong: [],
+      namesAnswerWrongTranslate: [],
+      namesAnswerWrongSound: [],
+      score: 0,
+      newWords: 0,
+    };
 
     const textBook: HTMLElement | null = document.querySelector('#textBook');
     if (textBook) textBook.remove();
+
     const main: HTMLElement | null = document.querySelector('.main');
     if (main && game === 'AudioChalenge') {
       main.innerHTML = '';
@@ -345,7 +365,7 @@ class LayoutTextBook {
       const mainGames = document.createElement('div');
       mainGames.classList.add('main__games');
       main.append(mainGames);
-      await new AudioChallange(mainGames, this.wordsInGroup, this.currentCountWord, this.storage).render();
+      await new AudioChallange(mainGames, this.wordsInGroup, this.currentCountWord, storage).render();
     }
     if (main && game === 'Sprint') {
       main.innerHTML = '';
@@ -353,7 +373,7 @@ class LayoutTextBook {
       const mainGames = document.createElement('div');
       mainGames.classList.add('main__games');
       main.append(mainGames);
-      await new Sprint(mainGames, this.wordsInGroup, this.storage, 600).render();
+      await new Sprint(mainGames, this.wordsInGroup, storage, 300).render();
     }
   }
 }

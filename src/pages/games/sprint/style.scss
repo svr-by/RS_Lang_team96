@@ -7,14 +7,25 @@
 }
 
 .sprint__timer {
-  width: 5rem;
-  height: 5rem;
+  display: flex;
+  align-items: center;
   margin: 0;
   padding: 1rem;
   font-size: 2rem;
   text-align: center;
-  background-color: $color-green;
-  border-radius: 50%;
+  border: 1px solid $color-black;
+  border-radius: 1rem;
+
+  &::before {
+    content: '';
+    width: 3rem;
+    height: 3rem;
+    margin-right: 0.5rem;
+    display: inline-block;
+    background-image: url('assets/img/alarm-clock.png');
+    background-size: cover;
+    background-position: center;
+  }
 }
 
 .sprint__container {
@@ -64,7 +75,7 @@
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  background-color: $color-blue;
+  border: 1px solid $color-black;
 }
 
 .sprint__img-box {
@@ -100,7 +111,6 @@
   text-align: center;
   border: none;
   border-radius: 10px;
-  // box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
   cursor: pointer;
 }
 
@@ -112,7 +122,6 @@
   text-align: center;
   border: none;
   border-radius: 10px;
-  // box-shadow: 10px 10px 10px -5px rgba(34, 60, 80, 0.55);
   cursor: pointer;
 }
 
@@ -120,12 +129,10 @@
 .sprint__button-true:hover {
   transform: scale(1.1);
   transition: 0.4s;
-  // box-shadow: 10px 10px 10px 0px rgba(34, 60, 80, 0.55);
 }
 
 .sprint__button-false:active,
 .sprint__button-true:active {
   transform: scale(1.1);
   transition: 0.1s;
-  // box-shadow: 0px 0px 0px 0px rgba(34, 60, 80, 0.55);
 }

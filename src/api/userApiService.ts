@@ -60,6 +60,28 @@ class UserApiService {
     storageService.setLocal<SignInResponse>('user', user);
     return user;
   }
+
+  async getNewTokens() {
+    const user = storageService.getLocal<SignInResponse>('user');
+    if (user) {
+      const response = await axios.get(`${api.usersEndpoint}/${user.userId}/tokens`, {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${user.refreshToken}`,
+        },
+      });
+      if (response) this.updateLocalTokens(response.data);
+    }
+  }
+
+  private async updateLocalTokens(data: SignInResponse) {
+    const user = storageService.getLocal<SignInResponse>('user');
+    if (user) {
+      user.token = data.token;
+      user.refreshToken = data.refreshToken;
+      storageService.setLocal<SignInResponse>('user', user);
+    }
+  }
 }
 
 export const userApiService = new UserApiService();

@@ -1,12 +1,15 @@
 import BaseComponent from '../../../shared/components/base_component';
 import Sprint from './sprint';
-import { IWord, IStorage } from '../../../shared/interfaces';
+import { IWord, IAggregatedWord, IStorage } from '../../../shared/interfaces';
+import { AggregatedWordsResponse } from '../../../shared/types';
 import { wordsApiService } from '../../../api/wordsApiService';
+import { Preloader } from '../../../shared/components/preloader';
+import { userService } from '../../../shared/services/userService';
 
 export default class SprintLvl {
   readonly sprintLvl: HTMLElement;
   readonly container: HTMLElement;
-  public wordsInGroup: IWord[];
+  public wordsInGroup: IWord[] | IAggregatedWord[];
   public storage: IStorage;
   public seconds: number;
   isPush: boolean;
@@ -14,7 +17,7 @@ export default class SprintLvl {
   constructor(private readonly root: HTMLElement) {
     this.sprintLvl = document.createElement('div');
     this.container = document.createElement('section');
-    this.wordsInGroup = [] as IWord[];
+    this.wordsInGroup = [] as IWord[] | IAggregatedWord[];
     this.storage = {
       countAnswerCorrect: 0,
       namesAnswerCorrect: [],
@@ -29,7 +32,7 @@ export default class SprintLvl {
       score: 0,
       newWords: 0,
     };
-    this.seconds = 600;
+    this.seconds = 300;
     this.isPush = false;
   }
 
@@ -38,13 +41,36 @@ export default class SprintLvl {
       this.isPush = true;
       if (target && target.tagName === 'DIV') {
         if (target.dataset.group) {
-          const arrPromisesFromPages30: Promise<IWord[]>[] = [];
-          for (let i = 0; i < 30; i += 1) {
-            const promiseFromPage = wordsApiService.getWords(+target.dataset.group, i) as Promise<IWord[]>;
-            arrPromisesFromPages30.push(promiseFromPage);
+          const preloader = new Preloader().render();
+          this.sprintLvl.append(preloader);
+          const arrPromisesFromPages3: Promise<IWord[] | AggregatedWordsResponse[]>[] = [];
+          const userId = userService.getStoredUserId();
+          let arrOfArrsWords: IWord[][] | IAggregatedWord[][];
+
+          if (!userId) {
+            for (let i = 0; i < 3; i += 1) {
+              const randomPage = Math.floor(Math.random() * 30);
+              const promiseFromPage = wordsApiService.getWords(+target.dataset.group, randomPage) as Promise<IWord[]>;
+              arrPromisesFromPages3.push(promiseFromPage);
+            }
+            arrOfArrsWords = (await Promise.all(arrPromisesFromPages3)) as IWord[][];
+          } else {
+            for (let i = 0; i < 3; i += 1) {
+              const randomPage = Math.floor(Math.random() * 30);
+              const promiseFromPage = wordsApiService.getAggregatedUserWords(
+                userId,
+                randomPage,
+                +target.dataset.group,
+                20
+              ) as Promise<AggregatedWordsResponse[]>;
+              arrPromisesFromPages3.push(promiseFromPage);
+            }
+            const arrOfAgrResp = (await Promise.all(arrPromisesFromPages3)) as AggregatedWordsResponse[][];
+            arrOfArrsWords = arrOfAgrResp.map((resp) => resp[0].paginatedResults);
           }
-          const arrOfArrsWords = await Promise.all(arrPromisesFromPages30);
-          this.wordsInGroup = arrOfArrsWords.reduce((a, b) => a.concat(b));
+
+          preloader.remove();
+          this.wordsInGroup = arrOfArrsWords.flat();
           this.sprintLvl.remove();
           new Sprint(this.root, this.wordsInGroup, this.storage, this.seconds).render();
         }
