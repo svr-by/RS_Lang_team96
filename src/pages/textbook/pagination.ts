@@ -24,7 +24,11 @@ class Pagination {
     const count: number | null = storageService.getSession('pageNumber');
 
     if (count !== null) {
-      if ((event.target as HTMLElement).id === 'pagination-arrow-left' && count > 0) {
+      if (
+        ((event.target as HTMLElement).id === 'pagination-arrow-left' ||
+          ((event.target as HTMLElement).parentElement as HTMLElement).id === 'pagination-arrow-left') &&
+        count > 0
+      ) {
         storageService.setSession('pageNumber', +count - 1);
       }
       if ((event.target as HTMLElement).id === 'pagination-first') {
