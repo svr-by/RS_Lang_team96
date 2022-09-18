@@ -1,0 +1,137 @@
+@import "src/scss/variables";
+
+.header-and-settings {
+  margin: 2rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  text-align: center;
+  position: relative;
+
+
+  &__header {
+    margin: 0 1rem 0 0;
+    padding-right: 1rem;
+    font-family: Fira Sans, sans-serif;
+    font-size: 2rem;
+    border-right: solid 4px $color-grey-l;
+    cursor: pointer;
+
+    &:first-child {
+      color: $dark-grey;
+      &:hover {
+        color: $color-black;
+      }
+    }
+    &:nth-child(2) {
+      color: $dark-grey;
+      &:hover {
+        color: $color-black;
+      }
+    }
+    &:nth-child(3) {
+      color: $dark-grey;
+      &:hover {
+        color: $color-black;
+      }
+    }
+
+    @media screen and (max-width: $mobile) {
+      & {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  &__settings {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    margin-left: 1rem;
+    cursor: pointer;
+    fill: $color-white;
+    border-radius: 0.5rem;
+
+    &:hover {
+      fill: $color-grey-l;
+    }
+  }
+}
+
+.page-navigation {
+  display: flex;
+  justify-content: center;
+}
+
+.textBook {
+  position: relative;
+  height: 100%;
+}
+
+.settings-modal {
+  position: absolute;
+  width: 200px;
+  border-radius: 1rem;
+  top: 80px;
+  left: 170px;
+  background-color: $yellow-vocabulary;
+
+  &__header {
+    margin: 1rem 0 1rem 1rem;
+  }
+}
+
+.russian-on-off {
+  display: flex;
+  margin: 1rem;
+
+  &__description {
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.1rem;
+    border-radius: 0.5rem;
+  }
+
+  &__checkbox {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+    &+label {
+      display: inline-flex;
+      align-items: center;
+      user-select: none;
+      cursor: pointer;
+      &:before {
+        content: '';
+        display: inline-block;
+        width: 1.5em;
+        height: 1.5em;
+        flex-shrink: 0;
+        flex-grow: 0;
+        border: 1px solid #adb5bd;
+        border-radius: 0.25em;
+        margin-right: 0.5em;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: 50% 50%;
+      }
+    }
+    
+    &:checked+label::before{
+      border-color: #0b76ef;
+      background-color: #0b76ef;
+    }
+  }
+}
+
+.display-none {
+  display: none;
+}
+
+.wrapper-textbook {
+  display: flex;
+  flex-direction: column;
+}
+
+.words {
+  flex-grow: 1;
+}

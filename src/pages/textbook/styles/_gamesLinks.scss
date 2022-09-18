@@ -1,0 +1,53 @@
+@import "src/scss/variables";
+
+.games {
+  &__header {
+    margin: 1rem 0;
+    font-family: Fira Sans, sans-serif;
+    font-size: 2rem;
+    width: 100%;
+  }
+
+  &__description {
+    color: $color-black-l;
+    margin: 0.5rem 0 1rem;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+
+  }
+}
+
+.links {
+  display: flex;
+  position: relative;
+  gap: 2rem;
+
+  &__unactive {
+    position: absolute;
+    opacity: 0.1;
+    width: 435px;
+    height: 250px;
+    z-index: 1;
+  }
+
+  &__audio-challenge,
+  &__sprint{
+    margin: 0;
+    border: none;
+    background-color: transparent;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: $color-blue;
+
+    &:hover{
+      cursor: pointer;
+      color: $color-green;
+    }
+
+    &:disabled {
+      cursor: auto;
+      color: $color-grey;
+    }
+  }
+}

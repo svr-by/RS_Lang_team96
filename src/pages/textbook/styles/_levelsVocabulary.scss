@@ -1,0 +1,112 @@
+@import "src/scss/variables";
+
+.levels-header {
+  margin: 0.5rem 0 1rem;
+  text-align: left;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.levels {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+
+.level {
+  width: 15%;
+  display: flex;
+  min-width: 150px;
+  padding: 0.5rem 0 0.5rem 0.5rem;
+  background-color: $background-book-element;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.5s;
+
+  &:hover &__name {
+    color: $color-black;
+  }
+
+  &.permanent-a1  &__name,
+  &.permanent-a2  &__name,
+  &.permanent-b1  &__name,
+  &.permanent-b2  &__name,
+  &.permanent-c1  &__name,
+  &.permanent-c2  &__name {
+    color: $color-black;
+  }
+
+  &__name {
+    width: 100%;
+    color: $color-grey;
+  }
+
+  &__header {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: bold;
+
+
+  }
+  &__word-number {
+    margin: 0;
+    font-size: 0.8rem;
+    text-align: left;
+  }
+
+  &__value {
+    margin: 0;
+    font-size: 1.3rem;
+    padding: 0.5rem 0 0.5rem 0.5rem;
+    background-color: $color-black-xl;
+    border-radius: 4rem 0.5rem 0.5rem 4rem;
+    align-self: center;
+    text-align: right;
+  }
+
+  @media screen and (max-width: $mobile) {
+    & {
+      width: 45%;
+    }
+  }
+  @media screen and (max-width: $small-screen) {
+    & {
+      width: 100%;
+
+    }
+  }
+}
+
+
+.hover-a1,
+.permanent-a1 .level__value  {
+  background-color: $color-level-a1;
+}
+
+.hover-a2,
+.permanent-a2 .level__value {
+  background-color: $color-level-a2;
+}
+
+.hover-b1,
+.permanent-b1 .level__value {
+  background-color: $color-level-b1;
+}
+
+.hover-b2,
+.permanent-b2 .level__value {
+  background-color: $color-level-b2;
+}
+
+.hover-c1,
+.permanent-c1 .level__value {
+  background-color: $color-level-c1;
+}
+
+.hover-c2,
+.permanent-c2 .level__value {
+  background-color: $color-level-c2;
+}

@@ -1,0 +1,101 @@
+@import "src/scss/variables";
+
+.pagination {
+  display: flex;
+  margin: 2rem auto;
+
+  &__arrow-left,
+  &__arrow-right {
+    width: 2rem;
+    border-radius: 50%;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $color-blue;
+    }
+  }
+
+  &__arrow-right {
+    transform: rotate(180deg);
+  }
+
+  &__page {
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
+    line-height: 2rem;
+    margin: 0 10px;
+    font-size: 1rem;
+    border-radius: 50%;
+    cursor: pointer;
+
+    &:hover {
+      color: $color-white;
+      background-color: $color-blue;
+    }
+  }
+
+  @media screen and (max-width: $small-screen) {
+    &__arrow-left,
+    &__arrow-right {
+      width: 1rem;
+    }
+
+    &__page {
+      width: 1rem;
+      height: 1rem;
+      line-height: 1rem;
+      margin: 0 5px;
+      font-size: 1rem;
+    }
+  }
+}
+
+.selected-page {
+  color: $color-white;
+  background-color: $color-blue;
+}
+
+.pagination__page + .no-page {
+  background-color: $color-white;
+  cursor: default;
+}
+
+.left-inactive,
+.right-inactive {
+  width: 2rem;
+  fill: $secondary-grey;
+
+  @media screen and (max-width: $small-screen) {
+    & {
+      width: 1rem;
+    }
+  }
+}
+
+.right-inactive {
+  transform: rotate(180deg);
+}
+
+.learned-page {
+  display: inline-block;
+  vertical-align: top;
+  width: 2rem;
+  height: 2rem;
+  background: #37caff;
+  position: relative;
+
+  &:before {
+    content: '';
+    opacity: 0.1;
+    position: absolute;
+  }
+
+  &,
+  &:before {
+    -webkit-clip-path: polygon(50% 0%, 66% 27%, 98% 35%, 76% 57%, 79% 91%, 50% 78%, 21% 91%, 24% 57%, 2% 35%, 32% 27%);
+    clip-path: polygon(50% 0%, 66% 27%, 98% 35%, 76% 57%, 79% 91%, 50% 78%, 21% 91%, 24% 57%, 2% 35%, 32% 27%);
+  }
+}
+
+
