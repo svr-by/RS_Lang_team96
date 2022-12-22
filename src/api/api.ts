@@ -11,7 +11,7 @@ class API {
   axiosInstance: AxiosInstance;
 
   constructor() {
-    this.base = 'https://rslang-team96.herokuapp.com';
+    this.base = 'https://rslang.adaptable.app/';
     this.wordsEndpoint = `${this.base}/words`;
     this.usersEndpoint = `${this.base}/users`;
     this.signinEndpoint = `${this.base}/signin`;
